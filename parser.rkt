@@ -1,10 +1,10 @@
 #lang brag
 ;TODO: can probably make things optionally 3D
-a-program : [a-line] (/NEWLINE [a-line])*
-a-line : a-bone-definition | a-connection-definition | a-parameters-definition
+a-program : a-line (/NEWLINE a-line)*
+a-line : [a-bone-definition | a-connection-definition | a-parameters-definition | a-transformation | a-section-definition] [a-comment]
 
 a-parameters-definition : "Parameters" /"=" /"{" [a-parameter-definition] ([/NEWLINE] [/"," a-parameter-definition])* /"}"
-a-parameter-definition : a-variable-id /":" a-expr /"..." a-expr /"=" a-expr  
+a-parameter-definition : a-variable-id /":" a-expr /".." a-expr /"=" a-expr  
 
 a-bone-definition : a-bone-id /"=" a-bone
 a-bone : a-point-expr [/"," a-point-expr]*
@@ -39,9 +39,10 @@ a-number : INTEGER | DECIMAL
 ;TODO: point functions (inc. last)
 a-point-expr: a-point-sum
 a-point-sum: [a-point-sum ("+"|"-")] a-point-product
-a-point-product : a-expr * a-point-neg | a-point-neg * a-expr
+a-point-product : a-expr ("*"|"/") a-point-neg | a-point-neg ("*"|"/") a-expr
 a-point-neg : ["-"] a-point-value
 @a-point-value : a-point | a-point-id | /"(" a-point-expr /")"
 a-point : /"[" a-expr /"," a-expr /"]"
 
-;todo transformations, variables, trapesium, parameters, comments, duplicates?, sections (with scaling)
+@a-comment: /"//" [STRING]
+;todo variables, trapesium, duplicates?, section scaling
