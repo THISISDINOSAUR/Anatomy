@@ -12,9 +12,20 @@ a-bone : a-point-expr [/"," a-point-expr]*
 a-connection-definition : a-bone-id /"~" a-bone-id /"=" a-connection
 a-connection : a-point-expr /"~" a-point-expr /"," a-expr
 
+a-section-definition : a-section-id /"=" /"{" [a-bone-id] ([/NEWLINE] [/"," a-bone-id])* /"}"
+
+a-transformation : a-transformation-dimension | a-transformation-point
+a-transformation-dimension : a-bone-range /"." ("x"|"y") ("+"|"-"|"*"|"/"|"^") /"=" a-expr
+a-transformation-point : a-transformation-point-point | a-transformation-point-scaler
+a-transformation-point-point: a-bone-range ("+"|"-") /"=" a-point-expr
+a-transformation-point-scaler : a-bone-range ("*"|"/") /"=" a-expr
+a-bone-range : a-bone-id /"[" a-integer-range /"]"
+a-integer-range: INTEGER /".." INTEGER
+
 a-variable-id : ID
 a-bone-id : ID
 a-point-id : ID
+a-section-id : ID
 
 a-expr : a-sum
 a-sum : [a-sum ("+"|"-")] a-product
