@@ -1,7 +1,9 @@
 #lang brag
 ;TODO: can probably make things optionally 3D
 a-program : a-line (/NEWLINE a-line)*
-a-line : [a-bone-definition | a-connection-definition | a-parameters-definition | a-transformation | a-section-definition] [a-comment]
+a-line : [a-definition | a-transformation] [a-comment]
+
+a-definition : a-bone-definition | a-connection-definition | a-parameters-definition | a-section-definition | a-variable-definition
 
 a-parameters-definition : "Parameters" /"=" /"{" [a-parameter-definition] ([/NEWLINE] [/"," a-parameter-definition])* /"}"
 a-parameter-definition : a-variable-id /":" a-expr /".." a-expr /"=" a-expr  
@@ -13,6 +15,8 @@ a-connection-definition : a-bone-id /"~" a-bone-id /"=" a-connection
 a-connection : a-point-expr /"~" a-point-expr /"," a-expr
 
 a-section-definition : a-section-id /"=" /"{" [a-bone-id] ([/NEWLINE] [/"," a-bone-id])* /"}"
+
+a-variable-definition : a-variable-id /"=" a-expr
 
 a-transformation : a-transformation-dimension | a-transformation-point
 a-transformation-dimension : a-bone-range /"." ("x"|"y") ("+"|"-"|"*"|"/"|"^") /"=" a-expr
