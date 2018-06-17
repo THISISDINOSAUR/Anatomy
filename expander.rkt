@@ -2,6 +2,8 @@
 
 (provide (matching-identifiers-out #rx"^a-" (all-defined-out)))
 
+(require "point.rkt")
+
 (define-macro (a-module-begin (a-program LINE ...))
    (write #'(LINE ...))
   #'(#%module-begin
@@ -9,6 +11,11 @@
 (provide (rename-out [a-module-begin #%module-begin]))
 
 (define-macro (a-variable-definition ID VAL) #'(define ID VAL))
+(define-macro (a-bone-definition ID VAL) #'(define ID VAL))
+
+(define-macro (a-point X Y) #'(point X Y))
+
+(define-macro (a-points-list VAR ...) #'(list VAR ...))
 
 (define-macro-cases a-sum
   [(_ VAL) #'VAL]

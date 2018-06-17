@@ -19,9 +19,7 @@
    [(:or (:seq (:? digits) "." digits)
          (:seq digits "."))
     (token 'DECIMAL (string->number lexeme))]
-   [(:or (from/to "\"" "\"") (from/to "'" "'"))
-    (token 'STRING
-           (substring lexeme
-                      1 (sub1 (string-length lexeme))))]))
+   ;[(from/to "[" "]") (token 'POINT lexeme)]
+   ))
 
 (provide anatomy-lexer)
