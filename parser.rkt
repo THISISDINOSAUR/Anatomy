@@ -7,9 +7,10 @@ a-program : [a-line] (/NEWLINE [a-line])*
  
 a-bone-definition : a-bone-id /"=" a-bone
 @a-bone : a-points-list
-a-points-list : a-point [/"," a-point]*
+a-points-list : a-point-expr [/"," a-point-expr]*
 
 a-variable-definition : /"var" a-variable-id /"=" a-expr
+;todo point variables?
 
 @a-variable-id : ID
 @a-bone-id : ID
@@ -24,9 +25,10 @@ a-expt : [a-expt "^"] a-value
 @a-number : INTEGER | DECIMAL
 
 
-a-point-expr: a-point-sum
-a-point-sum: [a-point-sum ("+"|"-")] a-point-product
-a-point-product : [a-expr ("*"|"/")] a-point-neg | a-point-neg [("*"|"/") a-expr] ;TODO make sure this enforces left-to-right evaluation. TBH why  do I even allow this?
+@a-point-expr: a-point-sum
+a-point-sum: [a-point-sum ("+"|"-")] a-point-product-left
+a-point-product-left : [a-expr ("*")] a-point-product-right
+a-point-product-right : a-point-neg [("*"|"/") a-expr]
 a-point-neg : ["-"] a-point-value
 @a-point-value : a-point | a-point-id | /"(" a-point-expr /")"
 a-point : /"[" a-expr /"," a-expr [/"," a-expr] /"]" ;points can be specified in 2D or 3D
