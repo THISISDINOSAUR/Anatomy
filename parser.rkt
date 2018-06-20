@@ -11,7 +11,6 @@ a-points-list : a-point-expr [/"," a-point-expr]*
 
 a-variable-definition : /"var" a-variable-id /"=" a-expr
 a-point-definition : /"point" a-point-id /"=" a-point-expr
-;todo point variables?
 
 @a-variable-id : ID
 @a-bone-id : ID
