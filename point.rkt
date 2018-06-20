@@ -2,7 +2,7 @@
 
 (provide (all-defined-out))
 
-(struct point (x y)
+(struct point (x y z)
   #:auto-value 0
   #:transparent
   #:mutable)

@@ -29,7 +29,7 @@ a-point-sum: [a-point-sum ("+"|"-")] a-point-product
 a-point-product : [a-expr ("*"|"/")] a-point-neg | a-point-neg [("*"|"/") a-expr] ;TODO make sure this enforces left-to-right evaluation. TBH why  do I even allow this?
 a-point-neg : ["-"] a-point-value
 @a-point-value : a-point | a-point-id | /"(" a-point-expr /")"
-a-point : /"[" a-expr /"," a-expr /"]"
+a-point : /"[" a-expr /"," a-expr [/"," a-expr] /"]" ;points can be specified in 2D or 3D
 
 
 @a-comment: COMMENT

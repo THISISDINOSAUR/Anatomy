@@ -13,7 +13,9 @@
 (define-macro (a-variable-definition ID VAL) #'(define ID VAL))
 (define-macro (a-bone-definition ID VAL) #'(define ID VAL))
 
-(define-macro (a-point X Y) #'(point X Y))
+(define-macro-cases a-point
+  [(a-point X Y) #'(point X Y 0)]
+  [(a-point X Y Z) #'(point X Y Z)])
 
 (define-macro (a-points-list VAR ...) #'(list VAR ...))
 
@@ -25,7 +27,7 @@
 (define-macro-cases a-product
   [(_ VAL) #'VAL]
   [(_ LEFT "*" RIGHT) #'(* LEFT RIGHT)]
-  [(_ LEFT "/" RIGHT) #'(/ LEFT RIGHT 1.0)] ;TODO: do I want a 1.0 to force a floating-point result here?
+  [(_ LEFT "/" RIGHT) #'(/ LEFT RIGHT)]
   [(_ LEFT "mod" RIGHT) #'(modulo LEFT RIGHT)])
 
 (define-macro-cases a-neg
