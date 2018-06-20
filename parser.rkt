@@ -3,13 +3,14 @@
 a-program : [a-line] (/NEWLINE [a-line])*
 @a-line : [a-definition] [a-comment]
 
-@a-definition : a-variable-definition | a-bone-definition
+@a-definition : a-variable-definition | a-point-definition | a-bone-definition
  
 a-bone-definition : a-bone-id /"=" a-bone
 @a-bone : a-points-list
 a-points-list : a-point-expr [/"," a-point-expr]*
 
 a-variable-definition : /"var" a-variable-id /"=" a-expr
+a-point-definition : /"point" a-point-id /"=" a-point-expr
 ;todo point variables?
 
 @a-variable-id : ID
