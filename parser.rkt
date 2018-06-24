@@ -1,9 +1,11 @@
 #lang brag
 
 a-program : [a-line] (/NEWLINE [a-line])*
-@a-line : [a-definition] [a-comment]
+@a-line : [a-definition | a-print] [a-comment]
 
 @a-definition : a-variable-definition | a-point-definition | a-bone-definition
+a-print : /"print" a-bone-id
+
  
 a-bone-definition : a-bone-id /"=" a-bone
 a-bone : a-points-list

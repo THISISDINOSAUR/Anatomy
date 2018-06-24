@@ -12,5 +12,7 @@ test6 = 4 * [10, 10] / 2.0 + 5 + 6 * [10, 10] //[130, 130] expected
 point test4 = [10, 20]
 bone = test4 * 3, [20, 20]
 
+print illium
+
 //pubis = [22, 4], [53,26], [156, 30], [204, 2], [209, 63], [132, 113], [102, 67], [35, 60], [10, 86]
 //illium~pubis = average(0,last) ~ average(3,4), -70
