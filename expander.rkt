@@ -2,7 +2,8 @@
 
 (provide (matching-identifiers-out #rx"^a-" (all-defined-out)))
 
-(require "point.rkt")
+(require "point.rkt"
+         "bone.rkt")
 
 (define-macro (a-module-begin (a-program LINE ...))
    (write #'(LINE ...))
@@ -13,6 +14,10 @@
 (define-macro (a-variable-definition ID VAL) #'(define ID VAL))
 (define-macro (a-point-definition ID VAL) #'(define ID VAL))
 (define-macro (a-bone-definition ID VAL) #'(define ID VAL))
+
+(define (a-bone point-list)
+  (new bone%
+       [points point-list]))
 
 (define-macro-cases a-sum
   [(_ VAL) #'VAL]
