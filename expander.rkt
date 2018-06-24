@@ -11,8 +11,10 @@
      LINE ...))
 (provide (rename-out [a-module-begin #%module-begin]))
 
-(define-macro (a-print BONE)
-  #'(send BONE print))
+(define-macro (a-print BONE-ID)
+  #'(begin
+      (display 'BONE-ID) (display ": ")
+      (display (send BONE-ID description))))
 
 (define-macro (a-variable-definition ID VAL) #'(define ID VAL))
 (define-macro (a-point-definition ID VAL) #'(define ID VAL))

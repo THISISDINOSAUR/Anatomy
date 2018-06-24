@@ -18,3 +18,6 @@
 
 (define (negate-point point1)
   (point (- (point-x point1)) (- (point-y point1)) (- (point-z point1))))
+
+(define (describe-point point1)
+  (string-append "[" (~a (point-x point1)) ", " (~a (point-y point1)) ", " (~a (point-z point1)) "]"))
