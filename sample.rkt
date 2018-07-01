@@ -1,5 +1,7 @@
 #lang anatomy
 
+//todo parameter structs/ranges 
+
 Parameters = {
 	neckLength: 0.2 > < 1.8 = 1,
 	neckAngle: -30 > < 100 = 45,
