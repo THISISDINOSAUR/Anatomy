@@ -3,26 +3,32 @@
 (provide (matching-identifiers-out #rx"^a-" (all-defined-out)))
 
 (require "point.rkt"
-         "bone.rkt")
+         "bone.rkt"
+         racket/syntax)
 
 (define-macro (a-module-begin (a-program LINE ...))
-   (write #'(LINE ...))
   #'(#%module-begin
      LINE ...))
 (provide (rename-out [a-module-begin #%module-begin]))
 
-(define-macro (a-print BONE-ID)
-  #'(begin
-      (display 'BONE-ID) (display ": ")
-      (display (send BONE-ID description))))
+(define-macro (a-print BONE-ID) #'(display (send BONE-ID description)))
 
 (define-macro (a-variable-definition ID VAL) #'(define ID VAL))
 (define-macro (a-point-definition ID VAL) #'(define ID VAL))
-(define-macro (a-bone-definition ID VAL) #'(define ID VAL))
+(define-macro (a-bone-definition ID VAL)
+  #'(begin
+      (define ID VAL)
+      (set-field! name ID (~a 'ID))
+      ))
+ (define-macro (a-connection-definition BONE-ID1 BONE-ID2 VAL)
+   #'(send BONE-ID1 add-connection BONE-ID2 VAL))
 
 (define (a-bone point-list)
   (new bone%
        [points point-list]))
+
+(define-macro (a-connection POINT1 POINT2 ANGLE)
+  #'(connection POINT1 POINT2 ANGLE))
 
 (define-macro-cases a-sum
   [(_ VAL) #'VAL]

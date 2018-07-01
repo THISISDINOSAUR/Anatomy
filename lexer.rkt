@@ -5,7 +5,7 @@
 
 (define-lex-abbrev identifier (:seq alphabetic (:* (:or alphabetic numeric))))
 
-(define-lex-abbrev reserved-terms (:or "+" "-" "*" "/" "^" "mod" "(" ")" "=" ":" ".." "var" "point" "[" "]" "," "print"))
+(define-lex-abbrev reserved-terms (:or "+" "-" "*" "/" "^" "mod" "(" ")" "=" ":" ".." "var" "point" "[" "]" "," "print" "~"))
 
 (define anatomy-lexer
   (lexer-srcloc

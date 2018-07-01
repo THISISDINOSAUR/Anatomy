@@ -2,7 +2,9 @@
 
 ;This is the complete parser, which is seperated from parser.rkt in order to build up the language gradually
 
-;TODO: can probably make things optionally 3D
+;TODO: extend print to all types, connections strings etc.
+;todo colourer
+;todo better errors?
 a-program : [a-line] (NEWLINE [a-line])*
 a-line : [a-definition | a-transformation] [a-comment]
 

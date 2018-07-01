@@ -3,13 +3,16 @@
 a-program : [a-line] (/NEWLINE [a-line])*
 @a-line : [a-definition | a-print] [a-comment]
 
-@a-definition : a-variable-definition | a-point-definition | a-bone-definition
 a-print : /"print" a-bone-id
 
+@a-definition : a-variable-definition | a-point-definition | a-bone-definition | a-connection-definition
  
 a-bone-definition : a-bone-id /"=" a-bone
 a-bone : a-points-list
 a-points-list : a-point-expr [/"," a-point-expr]*
+
+a-connection-definition : a-bone-id /"~" a-bone-id /"=" a-connection
+a-connection : a-point-expr /"~" a-point-expr /"," a-expr
 
 a-variable-definition : /"var" a-variable-id /"=" a-expr
 a-point-definition : /"point" a-point-id /"=" a-point-expr
