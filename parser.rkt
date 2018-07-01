@@ -5,8 +5,11 @@ a-program : [a-line] (/NEWLINE [a-line])*
 
 a-print : /"print" a-bone-id
 
-@a-definition : a-variable-definition | a-point-definition | a-bone-definition | a-connection-definition
- 
+@a-definition : a-variable-definition | a-point-definition | a-bone-definition | a-connection-definition | a-parameters-definition
+
+@a-parameters-definition : /"Parameters" /"=" /"{" [/NEWLINE] a-parameter-definition (/"," [/NEWLINE] a-parameter-definition)* [/NEWLINE] /"}"
+a-parameter-definition : a-variable-id /":" a-expr /">" /"<" a-expr /"=" a-expr
+
 a-bone-definition : a-bone-id /"=" a-bone
 a-bone : a-points-list
 a-points-list : a-point-expr [/"," a-point-expr]*

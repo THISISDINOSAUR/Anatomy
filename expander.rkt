@@ -20,8 +20,11 @@
       (define ID VAL)
       (set-field! name ID (~a 'ID))
       ))
- (define-macro (a-connection-definition BONE-ID1 BONE-ID2 VAL)
-   #'(send BONE-ID1 add-connection BONE-ID2 VAL))
+(define-macro (a-connection-definition BONE-ID1 BONE-ID2 VAL)
+  #'(send BONE-ID1 add-connection BONE-ID2 VAL))
+
+(define-macro (a-parameter-definition ID LOWER-BOUND UPPER-BOUND VAL)
+  #'(define ID VAL))
 
 (define (a-bone point-list)
   (new bone%
