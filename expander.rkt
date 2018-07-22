@@ -7,24 +7,53 @@
          racket/syntax)
 
 (define-macro (a-module-begin (a-program LINE ...))
+  (with-pattern
+      ([(ID ...) (find-unique-ids #'(LINE ...))])
   #'(#%module-begin
-     LINE ...))
+     (define ID #f) ...
+     ;(define Parameters (make-hash))
+     ;(hash-set! Parameters "test" (parameter 0 0 0))
+     ;(write Parameters)
+     LINE ...)))
 (provide (rename-out [a-module-begin #%module-begin]))
+
+(begin-for-syntax
+  (require racket/list)
+  (define (find-unique-ids line-stxs)
+    (remove-duplicates
+     (for/list ([stx (in-list (stx-flatten line-stxs))]
+                #:when (syntax-property stx 'a-id))
+       stx)
+     #:key syntax->datum)))
 
 (define-macro (a-print BONE-ID) #'(display (send BONE-ID description)))
 
-(define-macro (a-variable-definition ID VAL) #'(define ID VAL))
-(define-macro (a-point-definition ID VAL) #'(define ID VAL))
+(define-macro (a-variable-definition ID VAL) #'(set! ID VAL))
+(define-macro (a-point-definition ID VAL) #'(set! ID VAL))
 (define-macro (a-bone-definition ID VAL)
   #'(begin
-      (define ID VAL)
+      (set! ID VAL)
       (set-field! name ID (~a 'ID))
       ))
 (define-macro (a-connection-definition BONE-ID1 BONE-ID2 VAL)
   #'(send BONE-ID1 add-connection BONE-ID2 VAL))
 
+(define-macro (a-parameters-definition ID PARAMETER ...)
+  #'(begin
+      (set! ID (make-hash))
+      ;(write PARAMETER) ...
+      ;(define Parameters (make-hash))
+      (hash-set! ID (car PARAMETER) (cdr PARAMETER)) ...
+      ;(write (parameter-default (hash-ref ID (car PARAMETER)))) ...
+      ))
+
 (define-macro (a-parameter-definition ID LOWER-BOUND UPPER-BOUND VAL)
-  #'(define ID VAL))
+  #'(begin
+      (set! ID VAL)
+      '(ID (parameter LOWER-BOUND UPPER-BOUND VAL))
+      ;(hash-set! Parameters ID (parameter LOWER-BOUND UPPER-BOUND VAL))
+      
+      ))
 
 (define (a-bone point-list)
   (new bone%

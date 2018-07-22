@@ -52,3 +52,7 @@
 (define (describe-connection connection1)
   (string-append (describe-point (connection-point-parent connection1)) " ~ " (describe-point (connection-point-child connection1)) ", " (number->string (connection-angle connection1)) "°"))
 
+(struct parameter (lower-bound upper-bound default)
+  #:auto-value 0
+  #:transparent
+  #:mutable)
