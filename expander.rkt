@@ -4,16 +4,14 @@
 
 (require "point.rkt"
          "bone.rkt"
-         racket/syntax)
+         racket/syntax
+         racket/list)
 
 (define-macro (a-module-begin (a-program LINE ...))
   (with-pattern
       ([(ID ...) (find-unique-ids #'(LINE ...))])
   #'(#%module-begin
      (define ID #f) ...
-     ;(define Parameters (make-hash))
-     ;(hash-set! Parameters "test" (parameter 0 0 0))
-     ;(write Parameters)
      LINE ...)))
 (provide (rename-out [a-module-begin #%module-begin]))
 
@@ -35,32 +33,46 @@
       (set! ID VAL)
       (set-field! name ID (~a 'ID))
       ))
-(define-macro (a-connection-definition BONE-ID1 BONE-ID2 VAL)
-  #'(send BONE-ID1 add-connection BONE-ID2 VAL))
+
+(define-macro (a-connection-definition BONE-ID1 BONE-ID2 POINT-EXPR1 POINT-EXPR2 ANGLE)
+  #'(send BONE-ID1 add-connection BONE-ID2
+          (connection
+           (expand-point-expression POINT-EXPR1 BONE-ID1)
+           (expand-point-expression POINT-EXPR2 BONE-ID2)
+           ANGLE)))
+
+(define (expand-point-expression point-expr bone)
+  (match point-expr
+    [(== "last")
+     (last (get-field points bone))]
+    [(? number?)
+     (list-ref (get-field points bone) point-expr)]
+    [_
+     point-expr]
+    ))
 
 (define-macro (a-parameters-definition ID PARAMETER ...)
   #'(begin
       (set! ID (make-hash))
-      ;(write PARAMETER) ...
-      ;(define Parameters (make-hash))
       (hash-set! ID (car PARAMETER) (cdr PARAMETER)) ...
-      ;(write (parameter-default (hash-ref ID (car PARAMETER)))) ...
       ))
 
 (define-macro (a-parameter-definition ID LOWER-BOUND UPPER-BOUND VAL)
   #'(begin
       (set! ID VAL)
       '(ID (parameter LOWER-BOUND UPPER-BOUND VAL))
-      ;(hash-set! Parameters ID (parameter LOWER-BOUND UPPER-BOUND VAL))
-      
       ))
 
 (define (a-bone point-list)
   (new bone%
        [points point-list]))
 
-(define-macro (a-connection POINT1 POINT2 ANGLE)
-  #'(connection POINT1 POINT2 ANGLE))
+;(define-macro (a-connection POINT1 POINT2 ANGLE)
+;  #'(connection POINT1 POINT2 ANGLE))
+
+;(define-macro-cases a-point-index
+;  [(last) #'INTEGER]
+;  [(
 
 (define-macro-cases a-sum
   [(_ VAL) #'VAL]

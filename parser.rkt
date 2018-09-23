@@ -15,7 +15,13 @@ a-bone : a-points-list
 a-points-list : a-point-expr [/"," a-point-expr]*
 
 a-connection-definition : a-bone-id /"~" a-bone-id /"=" a-connection
-a-connection : a-point-expr /"~" a-point-expr /"," a-expr
+@a-connection : a-connection-point-expr /"~" a-connection-point-expr /"," a-expr
+;connection point functions can have context sensitive point indicies, which is why they are seperate from just point functions
+;the fact that these expressions can't be resolved without the context from the left side of a connection definition is something
+;that complicates the expander.
+;An alternative syntax of BONE-NAME.FUNCTION-NAME(POINT-INDEX) was considered, which would simplify the expander
+;but would still mean there is redundant infomormation in a connection definition
+@a-connection-point-expr : a-point-expr | a-point-index ;| a-connection-point-function
 
 a-variable-definition : /"var" a-variable-id /"=" a-expr
 a-point-definition : /"point" a-point-id /"=" a-point-expr
@@ -42,5 +48,6 @@ a-point-neg : ["-"] a-point-value
 @a-point-value : a-point | a-point-id | /"(" a-point-expr /")"
 a-point : /"[" a-expr /"," a-expr [/"," a-expr] /"]" ;points can be specified in 2D or 3D
 
+@a-point-index : INTEGER | "last"
 
 @a-comment: COMMENT

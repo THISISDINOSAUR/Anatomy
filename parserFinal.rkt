@@ -5,6 +5,7 @@
 ;TODO: extend print to all types, connections strings etc.
 ;todo colourer
 ;todo better errors?
+;repl?
 a-program : [a-line] (NEWLINE [a-line])*
 a-line : [a-definition | a-transformation] [a-comment]
 
