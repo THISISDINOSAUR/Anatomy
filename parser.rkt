@@ -21,7 +21,9 @@ a-connection-definition : a-bone-id /"~" a-bone-id /"=" a-connection
 ;that complicates the expander.
 ;An alternative syntax of BONE-NAME.FUNCTION-NAME(POINT-INDEX) was considered, which would simplify the expander
 ;but would still mean there is redundant infomormation in a connection definition
-@a-connection-point-expr : a-point-expr | a-point-index ;| a-connection-point-function
+@a-connection-point-expr : a-point-expr-with-bone
+a-point-expr-with-bone : a-point-index | a-point-expr
+;@a-connection-point-function : a-function-id /"(" (a-connection-point) [/"," (a-connection-point)]* /")"
 
 a-variable-definition : /"var" a-variable-id /"=" a-expr
 a-point-definition : /"point" a-point-id /"=" a-point-expr
@@ -30,6 +32,8 @@ a-point-definition : /"point" a-point-id /"=" a-point-expr
 @a-bone-id : a-id
 @a-point-id : a-id
 @a-id : ID
+
+@a-function-id : ID
 
 @a-expr : a-sum
 a-sum : [a-sum ("+"|"-")] a-product

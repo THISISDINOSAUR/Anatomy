@@ -4,8 +4,7 @@
 
 (require "point.rkt"
          "bone.rkt"
-         racket/syntax
-         racket/list)
+         racket/syntax)
 
 (define-macro (a-module-begin (a-program LINE ...))
   (with-pattern
@@ -34,14 +33,39 @@
       (set-field! name ID (~a 'ID))
       ))
 
-(define-macro (a-connection-definition BONE-ID1 BONE-ID2 POINT-EXPR1 POINT-EXPR2 ANGLE)
-  #'(send BONE-ID1 add-connection BONE-ID2
+(define-macro (a-connection-definition BONE-ID1 BONE-ID2 POINT-EXPR-OR-FUNC1 POINT-EXPR-OR-FUNC2 ANGLE)
+  #'
+  (send BONE-ID1 add-connection BONE-ID2
           (connection
-           (expand-point-expression POINT-EXPR1 BONE-ID1)
-           (expand-point-expression POINT-EXPR2 BONE-ID2)
+           (POINT-EXPR-OR-FUNC1 BONE-ID1)
+            (POINT-EXPR-OR-FUNC2 BONE-ID2)
+           ;(expand-connection-point-expression POINT-EXPR1 BONE-ID1)
+           ;(expand-connection-point-expression POINT-EXPR2 BONE-ID2)
            ANGLE)))
 
-(define (expand-point-expression point-expr bone)
+(define-macro (a-connection-point-expr POINT-EXPR-OR-FUNC)
+  #'(lambda bone (apply POINT-EXPR-OR-FUNC bone)))
+
+(define-macro (a-point-expr-with-bone POINT-EXPR)
+  #'(begin
+      (write '(lambda bone (apply expand-connection-point-expression POINT-EXPR bone)))
+      (lambda bone (apply expand-connection-point-expression POINT-EXPR bone))))
+
+;(define-macro-cases expand-connection-point-expr-or-func
+;  [(BONE-ID VAL) #'(expand-connection-point-expression VAL BONE-ID)]
+;  [(BONE-ID FUNCTION-ID POINT-EXPRS ...) #'(FUNCTION-ID (expand-connection-point-expression POINT-EXPRS ... BONE-ID))])
+                                ;(map (lambda (point-expr)
+                                    ;   (expand-connection-point-expression point-expr BONE-ID))
+                                    ; ...))])
+(define-macro (expand-connection-point-expr-or-func EXPR BONE-ID)
+  #'(begin
+      (write EXPR) 
+             (expand-connection-point-expression EXPR BONE-ID)))
+  ;[(BONE-ID VAL) #'(expand-connection-point-expression VAL BONE-ID)]
+  ;[(BONE-ID FUNCTION-ID POINT-EXPRS ...) #'(FUNCTION-ID (expand-connection-point-expression POINT-EXPRS ... BONE-ID))])
+
+
+(define (expand-connection-point-expression point-expr bone)
   (match point-expr
     [(== "last")
      (last (get-field points bone))]
@@ -66,13 +90,6 @@
 (define (a-bone point-list)
   (new bone%
        [points point-list]))
-
-;(define-macro (a-connection POINT1 POINT2 ANGLE)
-;  #'(connection POINT1 POINT2 ANGLE))
-
-;(define-macro-cases a-point-index
-;  [(last) #'INTEGER]
-;  [(
 
 (define-macro-cases a-sum
   [(_ VAL) #'VAL]
