@@ -7,9 +7,14 @@
   #:transparent
   #:mutable)
 
+(define point-zero (point 0 0 0))
+
 (define (add-points point1 point2)
   (point (+ (point-x point1) (point-x point2)) (+ (point-y point1) (point-y point2)) (+ (point-z point1) (point-z point2))))
 
+(define (add-point points)
+  (foldl add-points point-zero points))
+  
 (define (subtract-points point1 point2)
   (point (- (point-x point1) (point-x point2)) (- (point-y point1) (point-y point2)) (- (point-z point1) (point-z point2))))
 
