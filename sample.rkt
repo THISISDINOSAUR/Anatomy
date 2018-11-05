@@ -1,6 +1,6 @@
 #lang anatomy
 
-//todo functions, indexing, ranges, etc
+//todo indexing, ranges, etc
 
 Parameters = {
 	neckLength: 0.2 > < 1.8 = 1,

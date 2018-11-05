@@ -34,18 +34,11 @@
       ))
 
 (define-macro (a-connection-definition BONE-ID1 BONE-ID2 POINT-EXPR-OR-FUNC1 POINT-EXPR-OR-FUNC2 ANGLE)
-  #'(begin
-      ;(write 'POINT-EXPR-OR-FUNC1)
-  (send BONE-ID1 add-connection BONE-ID2
+  #'(send BONE-ID1 add-connection BONE-ID2
           (connection
            (POINT-EXPR-OR-FUNC1 BONE-ID1)
-            (POINT-EXPR-OR-FUNC2 BONE-ID2)
-           ;(expand-connection-point-expression POINT-EXPR1 BONE-ID1)
-           ;(expand-connection-point-expression POINT-EXPR2 BONE-ID2)
-           ANGLE))))
-
-;(define-macro (a-connection-point-expr POINT-EXPR-OR-FUNC)
-;  #'(lambda bone (apply POINT-EXPR-OR-FUNC bone)))
+           (POINT-EXPR-OR-FUNC2 BONE-ID2)
+           ANGLE)))
 
 (define-macro (a-point-expr-with-bone POINT-EXPR)
   #'(lambda bone (apply expand-connection-point-expression POINT-EXPR bone)))
@@ -63,22 +56,7 @@
   #'average)
 
 (define (average points)
-  (add-point points))
-
-
-;(define-macro-cases expand-connection-point-expr-or-func
-;  [(BONE-ID VAL) #'(expand-connection-point-expression VAL BONE-ID)]
-;  [(BONE-ID FUNCTION-ID POINT-EXPRS ...) #'(FUNCTION-ID (expand-connection-point-expression POINT-EXPRS ... BONE-ID))])
-                                ;(map (lambda (point-expr)
-                                    ;   (expand-connection-point-expression point-expr BONE-ID))
-                                    ; ...))])
-;(define-macro (expand-connection-point-expr-or-func EXPR BONE-ID)
-;  #'(begin
-;      (write EXPR) 
-;             (expand-connection-point-expression EXPR BONE-ID)))
-  ;[(BONE-ID VAL) #'(expand-connection-point-expression VAL BONE-ID)]
-  ;[(BONE-ID FUNCTION-ID POINT-EXPRS ...) #'(FUNCTION-ID (expand-connection-point-expression POINT-EXPRS ... BONE-ID))])
-
+  (average-points points))
 
 (define (expand-connection-point-expression point-expr bone)
   (match point-expr
@@ -134,8 +112,8 @@
 
 (define-macro-cases a-point-sum
   [(_ VAL) #'VAL]
-  [(_ LEFT "+" RIGHT) #'(add-points LEFT RIGHT)]
-  [(_ LEFT "-" RIGHT) #'(subtract-points LEFT RIGHT)])
+  [(_ LEFT "+" RIGHT) #'(add-point LEFT RIGHT)]
+  [(_ LEFT "-" RIGHT) #'(subtract-point LEFT RIGHT)])
 
 (define-macro-cases a-point-product-left
   [(_ VAL) #'VAL]
