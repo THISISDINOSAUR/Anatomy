@@ -13,7 +13,6 @@
   (point (+ (point-x point1) (point-x point2)) (+ (point-y point1) (point-y point2)) (+ (point-z point1) (point-z point2))))
 
 (define (add-points points)
-  (write points)
   (foldl add-point point-zero points))
   
 (define (subtract-point point1 point2)
