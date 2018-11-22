@@ -21,9 +21,15 @@ a-connection-definition : a-bone-id /"~" a-bone-id /"=" a-connection
 ;that complicates the expander.
 ;An alternative syntax of BONE-NAME.FUNCTION-NAME(POINT-INDEX) was considered, which would simplify the expander
 ;but would still mean there is redundant infomormation in a connection definition
+
+;for the sake of flexibilty (E.g. doing maths like 'average + [20, 30]'), I think I should probaby change to the more general format above.
+;also need to add a more general way of indexing points
+
+;DO BOTH! If use short form, no maths for you, since it's ambigious
+;e.g. does '[20, 30] * 2' mean times the third point, or times the number 2?
 @a-connection-point-expr : a-point-expr-with-bone | a-connection-point-function
 a-point-expr-with-bone : a-point-index | a-point-expr
-a-connection-point-function : a-function-id /"(" (a-point-index | a-point-expr) [/"," (a-point-index | a-point-expr)]* /")"
+a-connection-point-function : a-function-id /"(" (((a-point-index | a-point-expr) [/"," (a-point-index | a-point-expr)]*) | "all") /")"
 
 a-variable-definition : /"var" a-variable-id /"=" a-expr
 a-point-definition : /"point" a-point-id /"=" a-point-expr

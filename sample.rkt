@@ -41,5 +41,5 @@ scapula = [156, 30], [204, 2], [209, 63], [132, 113]
 illium~scapula = last ~ 1, 40
 
 print illium
-illium~pubis = average([10,2],[0,0] + [20, 4], last) ~ 1, -70
+illium~pubis = average([10,2],[0,0] + [20, 4], last) ~ average(all), -70
 print illium

@@ -41,17 +41,19 @@
            ANGLE)))
 
 (define-macro (a-point-expr-with-bone POINT-EXPR)
-  #'(lambda bone (apply expand-connection-point-expression POINT-EXPR bone)))
+  #'(lambda (bone) (expand-connection-point-expression POINT-EXPR bone)))
 
 
-(define-macro (a-connection-point-function FUNC-ID POINT-EXPRS ...)
-  #'(begin
-      (lambda bone (FUNC-ID (expand-connection-point-expressions (list POINT-EXPRS ...) bone)))))
+(define-macro-cases a-connection-point-function 
+  [(_ FUNC-ID "all")
+   #'(lambda (bone) (average-points (get-field points bone)))]
+  [(_ FUNC-ID POINT-EXPRS ...)
+   #'(lambda (bone) (FUNC-ID (expand-connection-point-expressions (list POINT-EXPRS ...) bone)))])
 
 
 (define-macro (expand-connection-point-expressions POINT-EXPRS BONE)
   #'(map (lambda (expr)
-           (apply expand-connection-point-expression expr BONE))
+           (expand-connection-point-expression expr BONE))
          POINT-EXPRS))
 
 (define-macro (a-function-id)
