@@ -38,7 +38,7 @@ pubis = [22, 4], [53,26], [156, 30], [204, 2], [209, 63], [132, 113], [102, 67],
 print illium
 
 scapula = [156, 30], [204, 2], [209, 63], [132, 113]
-illium~scapula = last ~ 1, 40
+illium~scapula = last ~ 1 + 2, 40
 
 print illium
 illium~pubis = average([10,2],[0,0] + [20, 4], last) ~ average(all), -70
