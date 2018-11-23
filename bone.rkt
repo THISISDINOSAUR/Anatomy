@@ -26,7 +26,7 @@
        name ":\n"
        indent "points:\n"
        indent indent (string-join
-                      (map describe-point points) ", ") "\n"
+                      (map describe-point (vector->list points)) ", ") "\n"
        indent "connections:\n"
        indent indent (string-join
                        (map (lambda (bone-connection)

@@ -25,6 +25,10 @@
 
 (define-macro (a-print BONE-ID) #'(display (send BONE-ID description)))
 
+;a-bone-range-operation : a-bone-range a-operation-equals a-point-expr
+(define-macro (a-bone-range-operation BONE-ID START-INDEX END-INDEX OPERATION POINT-EXPR)
+  #'())
+
 (define-macro (a-variable-definition ID VAL) #'(set! ID VAL))
 (define-macro (a-point-definition ID VAL) #'(set! ID VAL))
 (define-macro (a-bone-definition ID VAL)
@@ -46,7 +50,7 @@
 
 (define-macro-cases a-connection-point-function 
   [(_ FUNC-ID "all")
-   #'(lambda (bone) (average-points (get-field points bone)))]
+   #'(lambda (bone) (average-points (vector->list (get-field points bone))))]
   [(_ FUNC-ID POINT-EXPRS ...)
    #'(lambda (bone) (FUNC-ID (expand-connection-point-expressions (list POINT-EXPRS ...) bone)))])
 
@@ -63,9 +67,9 @@
 (define (expand-connection-point-expression point-expr bone)
   (match point-expr
     [(== "last")
-     (last (get-field points bone))]
+     (last (vector->list (get-field points bone)))]
     [(? number?)
-     (list-ref (get-field points bone) point-expr)]
+     (vector-ref (get-field points bone) point-expr)]
     [_
      point-expr]
     ))
@@ -110,7 +114,7 @@
   [(a-point X Y) #'(point X Y 0)]
   [(a-point X Y Z) #'(point X Y Z)])
 
-(define-macro (a-points-list VAR ...) #'(list VAR ...))
+(define-macro (a-points-list VAR ...) #'(vector VAR ...))
 
 (define-macro-cases a-point-sum
   [(_ VAL) #'VAL]
