@@ -43,3 +43,6 @@ illium~scapula = last ~ 1 + 2, 40
 print illium
 illium~pubis = average([10,2],[0,0] + [20, 4], last) ~ average(all), -70
 print illium
+
+scapula[1:3].x -= (-90 * scapulaLength)
+print scapula

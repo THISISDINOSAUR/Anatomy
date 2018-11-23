@@ -5,7 +5,9 @@
 
 (define-lex-abbrev identifier (:seq alphabetic (:* (:or alphabetic numeric))))
 
-(define-lex-abbrev reserved-terms (:or "+" "-" "*" "/" "^" "mod" "(" ")" "=" ":" ".." "var" "point" "[" "]" "," "print" "~" "{" "}" ">" "<" "last" "all" "average"))
+(define-lex-abbrev reserved-terms (:or "+" "-" "*" "/" "^" "mod" "(" ")" "=" ":" ".."
+                                       "var" "point" "[" "]" "," "print" "~" "{" "}"
+                                       ">" "<" "last" "all" "average" "." "x" "y" "z"))
 
 (define anatomy-lexer
   (lexer-srcloc
@@ -19,7 +21,6 @@
    [(:or (:seq (:? digits) "." digits)
          (:seq digits "."))
     (token 'DECIMAL (string->number lexeme))]
-   ;[(from/to "[" "]") (token 'POINT lexeme)]
    ))
 
 (provide anatomy-lexer)

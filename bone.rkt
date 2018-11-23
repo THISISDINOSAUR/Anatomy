@@ -20,6 +20,18 @@
     (define/public (remove-connection! bone)
       (hash-remove! connections bone))
 
+    (define/public (operation-on-range! op point start end)
+      (for ([i (in-range start (+ end 1))])
+        (vector-set! points i (op (vector-ref points i) point))
+        ))
+
+    (define/public (operation-on-range-dimension! op dimension val start end)
+      (for ([i (in-range start (+ end 1))])
+        (define point1 (vector-ref points i))
+        (vector-set! points i
+                     (operation-on-point-dimension op dimension (vector-ref points i) val))
+        ))
+    
     (define/public (description)
       (string-append
        name ":\n"

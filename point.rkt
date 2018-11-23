@@ -30,5 +30,25 @@
 (define (average-points points)
   (divide-point (add-points-list points) (length points)))
 
+(define (operation-on-point-dimension op dimension point1 val)
+  (match dimension
+    [(== point-x)
+     (point
+      (op (point-x point1) val)
+      (point-y point1)
+      (point-z point1))]
+    [(== point-y)
+     (point
+      (point-x point1)
+      (op (point-y point1) val)
+      (point-z point1))]
+    [(== point-z)
+     (point
+      (point-x point1)
+      (point-y point1)
+      (op (point-z point1) val))]
+    [_
+     void]))
+
 (define (describe-point point1)
   (string-append "[" (~a (point-x point1)) ", " (~a (point-y point1)) ", " (~a (point-z point1)) "]"))

@@ -25,10 +25,27 @@
 
 (define-macro (a-print BONE-ID) #'(display (send BONE-ID description)))
 
-;a-bone-range-operation : a-bone-range a-operation-equals a-point-expr
 (define-macro (a-bone-range-operation BONE-ID START-INDEX END-INDEX OPERATION POINT-EXPR)
-  #'())
+  #'(send BONE-ID operation-on-range! OPERATION POINT-EXPR START-INDEX END-INDEX))
 
+(define-macro-cases a-operation-equals-point
+  [(_ "+") #'add-points]
+  [(_ "-") #'subtract-points])
+
+(define-macro (a-bone-range-single-dimension-operation BONE-ID START-INDEX END-INDEX DIMENSION OPERATION EXPR)
+#'(send BONE-ID operation-on-range-dimension! OPERATION DIMENSION EXPR START-INDEX END-INDEX))
+                                                       
+(define-macro-cases a-point-dimension
+  [(_ "x") #'point-x]
+  [(_ "y") #'point-y]
+  [(_ "z") #'point-z])
+
+(define-macro-cases a-operation-equals
+  [(_ "+") #'+]
+  [(_ "-") #'-]
+  [(_ "*") #'*]
+  [(_ "/") #'/])
+                                                       
 (define-macro (a-variable-definition ID VAL) #'(set! ID VAL))
 (define-macro (a-point-definition ID VAL) #'(set! ID VAL))
 (define-macro (a-bone-definition ID VAL)
