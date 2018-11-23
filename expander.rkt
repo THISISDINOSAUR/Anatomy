@@ -118,8 +118,8 @@
 
 (define-macro-cases a-point-sum
   [(_ VAL) #'VAL]
-  [(_ LEFT "+" RIGHT) #'(add-point LEFT RIGHT)]
-  [(_ LEFT "-" RIGHT) #'(subtract-point LEFT RIGHT)])
+  [(_ LEFT "+" RIGHT) #'(add-points LEFT RIGHT)]
+  [(_ LEFT "-" RIGHT) #'(subtract-points LEFT RIGHT)])
 
 (define-macro-cases a-point-product-left
   [(_ VAL) #'VAL]
