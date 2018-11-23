@@ -4,6 +4,8 @@
 
 (require "point.rkt")
 
+(define indent "  ")
+
 (define bone%
   (class object%
 
@@ -12,13 +14,10 @@
      [connections (make-hash)]
      [name ""])
 
-    (define indent
-      "  ")
-
-    (define/public (add-connection bone connection)
+    (define/public (add-connection! bone connection)
       (hash-set! connections bone connection))
     
-    (define/public (remove-connection bone)
+    (define/public (remove-connection! bone)
       (hash-remove! connections bone))
 
     (define/public (description)

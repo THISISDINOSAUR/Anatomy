@@ -38,7 +38,7 @@
       ))
 
 (define-macro (a-connection-definition BONE-ID1 BONE-ID2 POINT-EXPR-OR-FUNC1 POINT-EXPR-OR-FUNC2 ANGLE)
-  #'(send BONE-ID1 add-connection BONE-ID2
+  #'(send BONE-ID1 add-connection! BONE-ID2
           (connection
            (POINT-EXPR-OR-FUNC1 BONE-ID1)
            (POINT-EXPR-OR-FUNC2 BONE-ID2)
