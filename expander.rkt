@@ -89,6 +89,8 @@
 (define-macro (a-function-id)
   #'average-points)
 
+(define (a-distance point1 point2)
+  (distance-between-points point1 point2))
 
 (define (expand-connection-point-expression point-expr bone)
   (match point-expr

@@ -30,6 +30,13 @@
 (define (average-points points)
   (divide-point (add-points-list points) (length points)))
 
+(define (distance-between-points point1 point2)
+  (define p (subtract-points point1 point2))
+  (sqrt (+
+         (* (point-x p) (point-x p))
+         (* (point-y p) (point-y p))
+         (* (point-z p) (point-z p)))))
+
 (define (operation-on-point-dimension op dimension point1 val)
   (match dimension
     [(== point-x)

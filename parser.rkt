@@ -53,9 +53,10 @@ a-sum : [a-sum ("+"|"-")] a-product
 a-product : [a-product ("*"|"/"|"mod")] a-neg
 a-neg : ["-"] a-expt
 a-expt : [a-expt "^"] a-value
-@a-value : a-number | a-variable-id | /"(" a-expr /")"
+@a-value : a-number | a-variable-id | a-distance | /"(" a-expr /")"
 @a-number : INTEGER | DECIMAL
 
+a-distance : /"distanceBetween" /"(" a-point-expr /"," a-point-expr /")"
 
 @a-point-expr: a-point-sum
 a-point-sum: [a-point-sum ("+"|"-")] a-point-product-left
