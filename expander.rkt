@@ -89,6 +89,12 @@
 (define-macro (a-function-id)
   #'average-points)
 
+(define-macro (a-max VALS ...)
+  #'(max VALS ...))
+
+(define-macro (a-min VALS ...)
+  #'(min VALS ...))
+
 (define (a-distance point1 point2)
   (distance-between-points point1 point2))
 

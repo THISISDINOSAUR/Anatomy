@@ -53,9 +53,12 @@ a-sum : [a-sum ("+"|"-")] a-product
 a-product : [a-product ("*"|"/"|"mod")] a-neg
 a-neg : ["-"] a-expt
 a-expt : [a-expt "^"] a-value
-@a-value : a-number | a-variable-id | a-distance | /"(" a-expr /")"
+@a-value : a-number | a-variable-id | a-number-function | /"(" a-expr /")"
 @a-number : INTEGER | DECIMAL
 
+@a-number-function : a-max | a-min | a-distance
+a-max : /"max" /"(" a-expr [/"," a-expr]* /")"
+a-min : /"min" /"(" a-expr [/"," a-expr]* /")"
 a-distance : /"distanceBetween" /"(" a-point-expr /"," a-point-expr /")"
 
 @a-point-expr: a-point-sum

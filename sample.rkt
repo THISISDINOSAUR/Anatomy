@@ -48,5 +48,5 @@ point steve = pubis[2]
 
 //TODO: allow below on only one index
 //scapula[1:3].x -= (-90 * scapulaLength)
-scapula[1:3].x += distanceBetween([10,20], [20, 30])
+scapula[1:3].x += min(1,2,-3,4,5)
 print scapula
