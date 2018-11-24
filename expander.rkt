@@ -86,6 +86,9 @@
            (expand-connection-point-expression expr BONE))
          POINT-EXPRS))
 
+(define (a-trapesium topSpan bottomSpan leftSpan rightSpan)
+  (list->vector (trapesium topSpan bottomSpan leftSpan rightSpan)))
+
 (define-macro (a-function-id)
   #'average-points)
 

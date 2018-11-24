@@ -49,3 +49,6 @@ point steve = pubis[2]
 //scapula[1:3].x -= (-90 * scapulaLength)
 scapula[1:3].x += min(1,2,-3,4,5)
 print scapula
+
+dog = trapesium(1, 2, 3, 4)
+print dog

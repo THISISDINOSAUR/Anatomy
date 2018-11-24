@@ -18,8 +18,11 @@ a-parameters-definition : a-id /"=" /"{" [/NEWLINE]* a-parameter-definition (/",
 a-parameter-definition : a-variable-id /":" a-expr /">" /"<" a-expr /"=" a-expr
 
 a-bone-definition : a-bone-id /"=" a-bone
-a-bone : a-points-list
+a-bone : a-points-list | a-points-list-function
 a-points-list : a-point-expr [/"," a-point-expr]*
+@a-points-list-function : a-trapesium
+a-trapesium : /"trapesium" /"(" a-expr /"," a-expr /"," a-expr /"," a-expr /")"
+
 
 a-connection-definition : a-bone-id /"~" a-bone-id /"=" a-connection
 @a-connection : a-connection-point-expr /"~" a-connection-point-expr /"," a-expr
