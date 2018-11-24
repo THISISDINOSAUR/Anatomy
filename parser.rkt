@@ -19,7 +19,7 @@ a-parameter-definition : a-variable-id /":" a-expr /">" /"<" a-expr /"=" a-expr
 
 a-bone-definition : a-bone-id /"=" a-bone
 a-bone : a-points-list | a-points-list-function
-a-points-list : a-point-expr [/"," a-point-expr]*
+a-points-list : a-point-expr [/"," a-point-expr]+
 @a-points-list-function : a-trapesium
 a-trapesium : /"trapesium" /"(" a-expr /"," a-expr /"," a-expr /"," a-expr /")"
 
@@ -41,8 +41,8 @@ a-connection-definition : a-bone-id /"~" a-bone-id /"=" a-connection
 a-point-expr-with-bone : a-point-index | a-point-expr
 a-connection-point-function : a-function-id /"(" (((a-point-index | a-point-expr) [/"," (a-point-index | a-point-expr)]*) | "all") /")"
 
-a-variable-definition : /"var" a-variable-id /"=" a-expr
-a-point-definition : /"point" a-point-id /"=" a-point-expr
+a-variable-definition : a-variable-id /"=" a-expr
+a-point-definition : a-point-id /"=" a-point-expr
 
 @a-variable-id : a-id
 @a-bone-id : a-id
