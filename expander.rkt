@@ -45,6 +45,9 @@
   [(_ "-") #'-]
   [(_ "*") #'*]
   [(_ "/") #'/])
+
+(define (a-point-from-bone-index BONE-ID INDEX)
+  (send BONE-ID point-at-index INDEX))
                                                        
 (define-macro (a-variable-definition ID VAL) #'(set! ID VAL))
 (define-macro (a-point-definition ID VAL) #'(set! ID VAL))

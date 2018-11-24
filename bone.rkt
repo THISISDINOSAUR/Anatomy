@@ -20,6 +20,9 @@
     (define/public (remove-connection! bone)
       (hash-remove! connections bone))
 
+    (define/public (point-at-index index)
+      (vector-ref points index))
+
     (define/public (operation-on-range! op point start end)
       (for ([i (in-range start (+ end 1))])
         (vector-set! points i (op (vector-ref points i) point))

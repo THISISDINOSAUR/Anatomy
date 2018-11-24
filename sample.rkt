@@ -44,5 +44,9 @@ print illium
 illium~pubis = average([10,2],[0,0] + [20, 4], last) ~ average(all), -70
 print illium
 
-scapula[1:3].x -= (-90 * scapulaLength)
+point steve = pubis[2]
+
+//TODO: allow below on only one index
+//scapula[1:3].x -= (-90 * scapulaLength)
+scapula[1:3] += steve
 print scapula

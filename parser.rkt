@@ -62,9 +62,10 @@ a-point-sum: [a-point-sum ("+"|"-")] a-point-product-left
 a-point-product-left : [a-expr ("*")] a-point-product-right
 a-point-product-right : a-point-neg [("*"|"/") a-expr]
 a-point-neg : ["-"] a-point-value
-@a-point-value : a-point | a-point-id | /"(" a-point-expr /")"
+@a-point-value : a-point | a-point-id | a-point-from-bone-index | /"(" a-point-expr /")"
 a-point : /"[" a-expr /"," a-expr [/"," a-expr] /"]" ;points can be specified in 2D or 3D
 
+a-point-from-bone-index : a-bone-id /"[" a-point-index /"]"
 @a-point-index : a-expr | "last"
 
 a-operation-equals : ("+"|"-"|"*"|"/") /"="
