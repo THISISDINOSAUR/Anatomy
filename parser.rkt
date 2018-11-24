@@ -9,7 +9,7 @@ a-print : /"print" a-bone-id
 a-bone-range-operation : a-bone-range a-operation-equals-point a-point-expr
 a-bone-range-single-dimension-operation : a-bone-range /"." a-point-dimension a-operation-equals a-expr
 
-@a-bone-range : a-bone-id /"[" a-point-index /":" a-point-index /"]"
+@a-bone-range : a-bone-id /"[" a-point-index [/":" a-point-index] /"]"
 
 
 @a-definition : a-variable-definition | a-point-definition | a-bone-definition | a-connection-definition | a-parameters-definition

@@ -48,5 +48,5 @@ point steve = pubis[2]
 
 //TODO: allow below on only one index
 //scapula[1:3].x -= (-90 * scapulaLength)
-scapula[1:3] += steve
+scapula[1:3].x += 20
 print scapula

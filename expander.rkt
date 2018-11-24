@@ -25,16 +25,22 @@
 
 (define-macro (a-print BONE-ID) #'(display (send BONE-ID description)))
 
-(define-macro (a-bone-range-operation BONE-ID START-INDEX END-INDEX OPERATION POINT-EXPR)
-  #'(send BONE-ID operation-on-range! OPERATION POINT-EXPR START-INDEX END-INDEX))
+(define-macro-cases a-bone-range-operation
+  [(_ BONE-ID START-INDEX END-INDEX OPERATION POINT-EXPR)
+   #'(send BONE-ID operation-on-range! OPERATION POINT-EXPR START-INDEX END-INDEX)]
+  [(_ BONE-ID INDEX OPERATION POINT-EXPR)
+   #' (send BONE-ID operation-on-index! OPERATION POINT-EXPR INDEX)])
 
 (define-macro-cases a-operation-equals-point
   [(_ "+") #'add-points]
   [(_ "-") #'subtract-points])
 
-(define-macro (a-bone-range-single-dimension-operation BONE-ID START-INDEX END-INDEX DIMENSION OPERATION EXPR)
-#'(send BONE-ID operation-on-range-dimension! OPERATION DIMENSION EXPR START-INDEX END-INDEX))
-                                                       
+(define-macro-cases a-bone-range-single-dimension-operation
+  [(_ BONE-ID START-INDEX END-INDEX DIMENSION OPERATION EXPR)
+   #'(send BONE-ID operation-on-dimension-of-range! OPERATION DIMENSION EXPR START-INDEX END-INDEX)]
+  [(_ BONE-ID INDEX DIMENSION OPERATION EXPR)
+   #' (send BONE-ID operation-on-dimension-of-index! OPERATION DIMENSION EXPR INDEX)])
+
 (define-macro-cases a-point-dimension
   [(_ "x") #'point-x]
   [(_ "y") #'point-y]

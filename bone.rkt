@@ -23,16 +23,21 @@
     (define/public (point-at-index index)
       (vector-ref points index))
 
+    (define/public (operation-on-index! op point index)
+      (vector-set! points index (op (vector-ref points index) point)))
+
     (define/public (operation-on-range! op point start end)
       (for ([i (in-range start (+ end 1))])
-        (vector-set! points i (op (vector-ref points i) point))
+        (operation-on-index! op point i)
         ))
 
-    (define/public (operation-on-range-dimension! op dimension val start end)
+    (define/public (operation-on-dimension-of-index! op dimension val index)
+      (vector-set! points index
+                   (operation-on-point-dimension op dimension (vector-ref points index) val)))
+    
+    (define/public (operation-on-dimension-of-range! op dimension val start end)
       (for ([i (in-range start (+ end 1))])
-        (define point1 (vector-ref points i))
-        (vector-set! points i
-                     (operation-on-point-dimension op dimension (vector-ref points i) val))
+        (operation-on-dimension-of-index! op dimension val i)
         ))
     
     (define/public (description)
