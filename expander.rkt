@@ -95,6 +95,9 @@
 (define-macro (a-min VALS ...)
   #'(min VALS ...))
 
+(define (a-abs val)
+  (abs val))
+
 (define (a-distance point1 point2)
   (distance-between-points point1 point2))
 
