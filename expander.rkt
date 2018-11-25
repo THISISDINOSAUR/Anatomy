@@ -65,8 +65,12 @@
   [(_ SECTION-ID X Y) #'(send SECTION-ID scale! X Y 1)]
   [(_ SECTION-ID X Y Z) #'(send SECTION-ID scale! X Y Z)])
 
-(define (a-point-from-bone-index BONE-ID INDEX)
-  (send BONE-ID point-at-index INDEX))
+(define (a-point-from-bone-index bone-id index)
+  (match index
+    [(== "last")
+     (last (vector->list (get-field points bone-id)))]
+    [_
+     (send bone-id point-at-index index)]))
 
 (define-macro (a-variable-definition ID VAL) #'(set! ID VAL))
 (define-macro (a-point-definition ID VAL) #'(set! ID VAL))
