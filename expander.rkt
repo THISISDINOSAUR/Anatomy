@@ -23,7 +23,16 @@
        stx)
      #:key syntax->datum)))
 
-(define-macro (a-print BONE-ID) #'(display (send BONE-ID description)))
+(define (a-print id)
+  (cond
+    [(is-a? id bone%)
+     (display (send id description))]
+    [(point? id)
+     (display (describe-point id))
+     (display "\n")]
+    [else
+     (write id)
+     (display "\n")]))
 
 (define-macro-cases a-bone-range-operation
   [(_ BONE-ID START-INDEX END-INDEX OPERATION POINT-EXPR)

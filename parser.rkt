@@ -3,7 +3,7 @@
 a-program : [a-line] (/NEWLINE [a-line])*
 @a-line : [a-definition | a-bone-operation | a-print] [a-comment]
 
-a-print : /"print" a-bone-id
+a-print : /"print" (a-bone-id | a-variable-id | a-point-id)
 
 @a-bone-operation : a-bone-range-operation | a-bone-range-single-dimension-operation
 a-bone-range-operation : a-bone-range a-operation-equals-point a-point-expr

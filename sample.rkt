@@ -52,3 +52,6 @@ print scapula
 
 dog = trapesium(1, 2, 3, 4)
 print dog
+
+print test4
+print test
