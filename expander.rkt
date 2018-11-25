@@ -61,6 +61,10 @@
   [(_ "*") #'*]
   [(_ "/") #'/])
 
+(define-macro-cases a-bone-scale
+  [(_ BONE-ID X Y) #'(send BONE-ID scale! X Y 1)]
+  [(_ BONE-ID X Y Z) #'(send BONE-ID scale! X Y Z)])
+
 (define-macro-cases a-section-operation
   [(_ SECTION-ID X Y) #'(send SECTION-ID scale! X Y 1)]
   [(_ SECTION-ID X Y Z) #'(send SECTION-ID scale! X Y Z)])

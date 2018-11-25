@@ -7,7 +7,8 @@ a-print : /"print" (a-bone-id | a-variable-id | a-point-id | a-section-id)
 
 @a-operation : a-bone-operation | a-section-operation
 
-@a-bone-operation : a-bone-range-operation | a-bone-range-single-dimension-operation
+@a-bone-operation : a-bone-scale | a-bone-range-operation | a-bone-range-single-dimension-operation
+a-bone-scale : a-section-id /"." /"scale" /"(" a-expr /"," a-expr [/"," a-expr] /")"
 a-bone-range-operation : a-bone-range a-operation-equals-point a-point-expr
 a-bone-range-single-dimension-operation : a-bone-range /"." a-point-dimension a-operation-equals a-expr
 
