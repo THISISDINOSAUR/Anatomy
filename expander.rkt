@@ -25,7 +25,7 @@
 
 (define (a-print id)
   (cond
-    [(is-a? id bone%)
+    [(or (is-a? id bone%) (is-a? id section%))
      (display (send id description))]
     [(point? id)
      (display (describe-point id))
@@ -63,7 +63,7 @@
 
 (define (a-point-from-bone-index BONE-ID INDEX)
   (send BONE-ID point-at-index INDEX))
-                                                       
+
 (define-macro (a-variable-definition ID VAL) #'(set! ID VAL))
 (define-macro (a-point-definition ID VAL) #'(set! ID VAL))
 (define-macro (a-bone-definition ID VAL)
@@ -71,6 +71,19 @@
       (set! ID VAL)
       (set-field! name ID (~a 'ID))
       ))
+
+(define-macro (a-section-definition ID VAL)
+  #' (begin
+      (set! ID VAL)
+      (set-field! name ID (~a 'ID))))
+
+(define (a-section bones-list)
+  (new section%
+       [bones bones-list]))
+
+(define-macro (a-bones-list BONE-IDS ...)
+  #'(list BONE-IDS ...))
+
 
 (define-macro (a-connection-definition BONE-ID1 BONE-ID2 POINT-EXPR-OR-FUNC1 POINT-EXPR-OR-FUNC2 ANGLE)
   #'(send BONE-ID1 add-connection! BONE-ID2

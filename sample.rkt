@@ -1,7 +1,5 @@
 #lang anatomy
 
-//todo indexing, ranges, etc
-
 Parameters = {
 	neckLength: 0.2 > < 1.8 = 1,
 	neckAngle: -30 > < 100 = 45,
@@ -53,5 +51,5 @@ print scapula
 dog = trapesium(1, 2, 3, 4)
 print dog
 
-print test4
-print test
+section = illium, pubis
+print section

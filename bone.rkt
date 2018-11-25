@@ -63,6 +63,25 @@
     (super-new)
     ))
 
+(define section%
+  (class object%
+
+    (init-field
+     [bones #f]
+     [name ""])
+
+    (define/public (description)
+      (string-append
+       name ": " (string-join
+                      (map (lambda (bone)
+                             (get-field name bone))
+                           bones)
+                      ", ")
+       "\n"))
+
+    (super-new)
+    ))
+
 (struct connection (point-parent point-child angle)
   #:auto-value 0
   #:transparent
