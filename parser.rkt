@@ -1,9 +1,11 @@
 #lang brag
 
 a-program : [a-line] (/NEWLINE [a-line])*
-@a-line : [a-definition | a-bone-operation | a-print] [a-comment]
+@a-line : [a-definition | a-operation | a-print] [a-comment]
 
 a-print : /"print" (a-bone-id | a-variable-id | a-point-id | a-section-id)
+
+@a-operation : a-bone-operation | a-section-operation
 
 @a-bone-operation : a-bone-range-operation | a-bone-range-single-dimension-operation
 a-bone-range-operation : a-bone-range a-operation-equals-point a-point-expr
@@ -17,7 +19,7 @@ a-bone-range-single-dimension-operation : a-bone-range /"." a-point-dimension a-
 a-section-definition : a-section-id /"=" a-section
 a-section : a-bones-list
 a-bones-list : a-bone-id [/"," a-bone-id]+
-;a-section-operatiom
+a-section-operation : a-section-id /"." /"scale" /"(" a-expr /"," a-expr [/"," a-expr] /")"
 
 a-parameters-definition : a-id /"=" /"{" [/NEWLINE]* a-parameter-definition (/"," [/NEWLINE]* a-parameter-definition)* [/NEWLINE]* /"}"
 a-parameter-definition : a-variable-id /":" a-expr /">" /"<" a-expr /"=" a-expr

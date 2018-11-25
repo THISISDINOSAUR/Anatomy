@@ -18,8 +18,11 @@
 (define (subtract-points point1 point2)
   (point (- (point-x point1) (point-x point2)) (- (point-y point1) (point-y point2)) (- (point-z point1) (point-z point2))))
 
+(define (scale-point-dimension-wise point1 x-scale y-scale z-scale)
+  (point (* (point-x point1) x-scale) (* (point-y point1) y-scale) (* (point-z point1) z-scale)))
+
 (define (scale-point point1 scale)
-  (point (* (point-x point1) scale) (* (point-y point1) scale) (* (point-z point1) scale)))
+  (scale-point-dimension-wise point1 scale scale scale))
 
 (define (divide-point point1 divider)
   (scale-point point1 (/ 1.0 divider)))

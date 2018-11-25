@@ -61,6 +61,10 @@
   [(_ "*") #'*]
   [(_ "/") #'/])
 
+(define-macro-cases a-section-operation
+  [(_ SECTION-ID X Y) #'(send SECTION-ID scale! X Y 1)]
+  [(_ SECTION-ID X Y Z) #'(send SECTION-ID scale! X Y Z)])
+
 (define (a-point-from-bone-index BONE-ID INDEX)
   (send BONE-ID point-at-index INDEX))
 

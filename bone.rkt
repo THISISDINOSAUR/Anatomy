@@ -39,6 +39,11 @@
       (for ([i (in-range start (+ end 1))])
         (operation-on-dimension-of-index! op dimension val i)
         ))
+
+    (define/public (scale! x y z)
+      (vector-map! (lambda (point)
+           (scale-point-dimension-wise point x y z))
+         points))
     
     (define/public (description)
       (string-append
@@ -69,6 +74,12 @@
     (init-field
      [bones #f]
      [name ""])
+
+    (define/public (scale! x y z)
+      (set! bones
+            (map (lambda (bone)
+                   (send bone scale! x y z))
+                 bones)))
 
     (define/public (description)
       (string-append

@@ -48,8 +48,10 @@ steve = pubis[2]
 scapula[1:3].x += min(1,2,-3,4,5)
 print scapula
 
-dog = trapesium(1, 2, 3, 4)
-print dog
+scapula = trapesium(1, 2, 3, 4)
+print scapula
 
 section = illium, pubis
 print section
+section.scale(2,1)
+print pubis
