@@ -59,3 +59,6 @@ print pubis
 
 duplicateOfIllium = illium.duplicate
 print duplicateOfIllium
+
+var = mag([-10,10])
+print var

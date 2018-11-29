@@ -141,6 +141,9 @@
 (define (a-distance point1 point2)
   (distance-between-points point1 point2))
 
+(define (a-mag point)
+  (distance-between-points point point-zero))
+
 (define (expand-connection-point-expression point-expr bone)
   (match point-expr
     [(== "last")

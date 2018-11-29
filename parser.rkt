@@ -69,11 +69,12 @@ a-expt : [a-expt "^"] a-value
 @a-value : a-number | a-variable-id | a-number-function | /"(" a-expr /")"
 @a-number : INTEGER | DECIMAL
 
-@a-number-function : a-max | a-min | a-abs | a-distance
+@a-number-function : a-max | a-min | a-abs | a-distance | a-mag
 a-max : /"max" /"(" a-expr [/"," a-expr]* /")"
 a-min : /"min" /"(" a-expr [/"," a-expr]* /")"
 a-abs : /"abs" /"(" a-expr /")"
 a-distance : /"distanceBetween" /"(" a-point-expr /"," a-point-expr /")"
+a-mag : /"mag" /"(" a-point-expr /")"
 
 @a-point-expr: a-point-sum
 a-point-sum: [a-point-sum ("+"|"-")] a-point-product-left
