@@ -8,7 +8,7 @@
 (define-lex-abbrev reserved-terms (:or "+" "-" "*" "/" "^" "mod" "(" ")" "=" ":" ".."
                                        "[" "]" "," "print" "~" "{" "}" ">" "<" "last"
                                        "all" "average" "." "x" "y" "z" "distanceBetween"
-                                       "min" "max" "abs" "trapesium" "scale"))
+                                       "min" "max" "abs" "trapesium" "scale" "duplicate"))
 
 (define anatomy-lexer
   (lexer-srcloc

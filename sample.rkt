@@ -53,6 +53,9 @@ print scapula
 
 section = illium, pubis
 print section
-section.scale(2,1)
+//section.scale(2,1)
 pubis.scale(1000,2)
 print pubis
+
+duplicateOfIllium = illium.duplicate
+print duplicateOfIllium

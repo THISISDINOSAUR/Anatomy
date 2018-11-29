@@ -120,6 +120,9 @@
            (expand-connection-point-expression expr BONE))
          POINT-EXPRS))
 
+(define (a-bone-duplicate bone-id)
+  (get-field points bone-id))
+
 (define (a-trapesium topSpan bottomSpan leftSpan rightSpan)
   (list->vector (trapesium topSpan bottomSpan leftSpan rightSpan)))
 

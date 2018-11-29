@@ -28,8 +28,9 @@ a-parameter-definition : a-variable-id /":" a-expr /">" /"<" a-expr /"=" a-expr
 a-bone-definition : a-bone-id /"=" a-bone
 a-bone : a-points-list | a-points-list-function
 a-points-list : a-point-expr [/"," a-point-expr]+
-@a-points-list-function : a-trapesium
+@a-points-list-function : a-trapesium | a-bone-duplicate
 a-trapesium : /"trapesium" /"(" a-expr /"," a-expr /"," a-expr /"," a-expr /")"
+a-bone-duplicate : a-bone-id /"." /"duplicate"
 
 
 a-connection-definition : a-bone-id /"~" a-bone-id /"=" a-connection
