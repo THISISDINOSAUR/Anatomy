@@ -28,6 +28,7 @@ a-parameter-definition : a-variable-id /":" a-expr /">" /"<" a-expr /"=" a-expr
 a-bone-definition : a-bone-id /"=" a-bone
 a-bone : a-points-list | a-points-list-function
 a-points-list : a-point-expr [/"," a-point-expr]+
+
 @a-points-list-function : a-trapesium | a-bone-duplicate
 a-trapesium : /"trapesium" /"(" a-expr /"," a-expr /"," a-expr /"," a-expr /")"
 a-bone-duplicate : a-bone-id /"." /"duplicate"
@@ -69,11 +70,12 @@ a-expt : [a-expt "^"] a-value
 @a-value : a-number | a-variable-id | a-number-function | /"(" a-expr /")"
 @a-number : INTEGER | DECIMAL
 
-@a-number-function : a-max | a-min | a-abs | a-distance | a-mag
+@a-number-function : a-max | a-min | a-abs | a-distance | a-sqrt | a-mag
 a-max : /"max" /"(" a-expr [/"," a-expr]* /")"
 a-min : /"min" /"(" a-expr [/"," a-expr]* /")"
 a-abs : /"abs" /"(" a-expr /")"
 a-distance : /"distanceBetween" /"(" a-point-expr /"," a-point-expr /")"
+a-sqrt : /"sqrt" /"(" a-expr /")"
 a-mag : /"mag" /"(" a-point-expr /")"
 
 @a-point-expr: a-point-sum

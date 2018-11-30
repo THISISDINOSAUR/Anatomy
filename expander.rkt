@@ -141,6 +141,9 @@
 (define (a-distance point1 point2)
   (distance-between-points point1 point2))
 
+(define (a-sqrt val)
+  (sqrt val))
+
 (define (a-mag point)
   (distance-between-points point point-zero))
 

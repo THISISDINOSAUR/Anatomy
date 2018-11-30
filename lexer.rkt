@@ -9,7 +9,7 @@
                                        "[" "]" "," "print" "~" "{" "}" ">" "<" "last"
                                        "all" "average" "." "x" "y" "z" "distanceBetween"
                                        "min" "max" "abs" "trapesium" "scale" "duplicate"
-                                       "mag"))
+                                       "mag" "sqrt"))
 
 (define anatomy-lexer
   (lexer-srcloc

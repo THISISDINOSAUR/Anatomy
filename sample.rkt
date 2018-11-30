@@ -62,3 +62,6 @@ print duplicateOfIllium
 
 var = mag([-10,10])
 print var
+
+var2 = sqrt(10)
+print var2
