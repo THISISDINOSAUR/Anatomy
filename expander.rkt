@@ -108,11 +108,11 @@
   #'(lambda (bone) (expand-connection-point-expression POINT-EXPR bone)))
 
 
-(define-macro-cases a-connection-point-function 
-  [(_ FUNC-ID "all")
-   #'(lambda (bone) (FUNC-ID (vector->list (get-field points bone))))]
-  [(_ FUNC-ID POINT-EXPRS ...)
-   #'(lambda (bone) (FUNC-ID (expand-connection-point-expressions (list POINT-EXPRS ...) bone)))])
+(define-macro-cases a-connection-point-average
+  [(_ "all")
+   #'(lambda (bone) (a-average-bone-points bone "all"))]
+  [(_ POINT-EXPRS ...)
+   #'(lambda (bone) (a-average-bone-points bone POINT-EXPRS ...))])
 
 
 (define-macro (expand-connection-point-expressions POINT-EXPRS BONE)
@@ -126,14 +126,21 @@
   [(_ BONE-ID POINT-EXPRS ...)
    #'(average-points (expand-connection-point-expressions (list POINT-EXPRS ...) BONE-ID))])
 
+(define (expand-connection-point-expression point-expr bone)
+  (match point-expr
+    [(== "last")
+     (last (vector->list (get-field points bone)))]
+    [(? number?)
+     (vector-ref (get-field points bone) point-expr)]
+    [_
+     point-expr]
+    ))
+
 (define (a-bone-duplicate bone-id)
   (get-field points bone-id))
 
 (define (a-trapesium topSpan bottomSpan leftSpan rightSpan)
   (list->vector (trapesium topSpan bottomSpan leftSpan rightSpan)))
-
-(define-macro (a-function-id)
-  #'average-points)
 
 (define-macro (a-max VALS ...)
   #'(max VALS ...))
@@ -155,16 +162,6 @@
 
 (define-macro (a-average-points POINT-EXPRS ...)
   #'(average-points (list POINT-EXPRS ...)))
-
-(define (expand-connection-point-expression point-expr bone)
-  (match point-expr
-    [(== "last")
-     (last (vector->list (get-field points bone)))]
-    [(? number?)
-     (vector-ref (get-field points bone) point-expr)]
-    [_
-     point-expr]
-    ))
 
 (define-macro (a-parameters-definition ID PARAMETER ...)
   #'(begin
