@@ -110,7 +110,7 @@
 
 (define-macro-cases a-connection-point-function 
   [(_ FUNC-ID "all")
-   #'(lambda (bone) (average-points (vector->list (get-field points bone))))]
+   #'(lambda (bone) (FUNC-ID (vector->list (get-field points bone))))]
   [(_ FUNC-ID POINT-EXPRS ...)
    #'(lambda (bone) (FUNC-ID (expand-connection-point-expressions (list POINT-EXPRS ...) bone)))])
 
@@ -119,6 +119,12 @@
   #'(map (lambda (expr)
            (expand-connection-point-expression expr BONE))
          POINT-EXPRS))
+
+(define-macro-cases a-average-bone-points
+  [(_ BONE-ID "all")
+   #'(average-points (vector->list (get-field points BONE-ID)))]
+  [(_ BONE-ID POINT-EXPRS ...)
+   #'(average-points (expand-connection-point-expressions (list POINT-EXPRS ...) BONE-ID))])
 
 (define (a-bone-duplicate bone-id)
   (get-field points bone-id))
@@ -146,6 +152,9 @@
 
 (define (a-mag point)
   (distance-between-points point point-zero))
+
+(define-macro (a-average-points POINT-EXPRS ...)
+  #'(average-points (list POINT-EXPRS ...)))
 
 (define (expand-connection-point-expression point-expr bone)
   (match point-expr

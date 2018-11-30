@@ -65,3 +65,10 @@ print var
 
 var2 = sqrt(10)
 print var2
+
+var3 = average([0,0], [1,1])
+print var3
+
+testBone = [0,0], [1,1], [2,2]
+var4 = testBone.average(1,2)
+print var4
