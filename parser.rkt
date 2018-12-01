@@ -44,17 +44,7 @@ a-bone-duplicate : a-bone-id /"." /"duplicate"
 
 a-connection-definition : a-bone-id /"~" a-bone-id /"=" a-connection
 @a-connection : a-connection-point-expr /"~" a-connection-point-expr /"," a-expr
-;connection point functions can have context sensitive point indicies, which is why they are seperate from just point functions
-;the fact that these expressions can't be resolved without the context from the left side of a connection definition is something
-;that complicates the expander.
-;An alternative syntax of BONE-NAME.FUNCTION-NAME(POINT-INDEX) was considered, which would simplify the expander
-;but would still mean there is redundant infomormation in a connection definition
 
-;for the sake of flexibilty (E.g. doing maths like 'average + [20, 30]'), I think I should probaby change to the more general format above.
-;also need to add a more general way of indexing points
-
-;DO BOTH! If use short form, no maths for you, since it's ambigious
-;e.g. does '[20, 30] * 2' mean times the third point, or times the number 2?
 @a-connection-point-expr : a-point-expr-with-bone | a-connection-point-average
 a-point-expr-with-bone : a-point-index | a-point-expr
 a-connection-point-average : /"average" /"(" (((a-point-index | a-point-expr) [/"," (a-point-index | a-point-expr)]*) | "all") /")"
