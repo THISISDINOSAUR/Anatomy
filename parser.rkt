@@ -16,12 +16,10 @@ a-bone-range-single-dimension-operation : a-bone-range /"." a-point-dimension a-
 
 ;TODO:
 ;duplicates with children? Duplicate section?
-;print expressions as well as ids?
+;probably not for now, without address the question of how to assign these things ids
 
-;find a way to allow this?
-;dorsalSpine~scapula = average(0, last) + [190, 20] ~ average(1,4), -scapulaAngle
-;step one, allow bone.average as a function to exist anywhere
-;then maybe see if can implement average as a convinence for that
+;print expressions as well as ids?
+;why does scaling a bone produce unwanted output?
 
 @a-definition : a-variable-definition | a-point-definition | a-bone-definition | a-connection-definition | a-parameters-definition | a-section-definition
 
