@@ -14,6 +14,10 @@
      (provide ID ...)
      (define ID #f) ...
      (provide a-print)
+     
+     (provide recalculate)
+     (define (recalculate)
+       LINE ...)
      LINE ...)))
 (provide (rename-out [a-module-begin #%module-begin]))
 (provide a-module-begin)
