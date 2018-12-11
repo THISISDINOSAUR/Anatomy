@@ -3,7 +3,7 @@
 a-program : [a-line] (/NEWLINE [a-line])*
 @a-line : [a-definition | a-operation | a-print] [a-comment]
 
-a-print : /"print" (a-bone-id | a-variable-id | a-point-id | a-section-id)
+a-print : /"print" (a-bone-id | a-expr | a-point-expr | a-section-id)
 
 @a-operation : a-bone-operation | a-section-operation
 
@@ -17,8 +17,6 @@ a-bone-range-single-dimension-operation : a-bone-range /"." a-point-dimension a-
 ;TODO:
 ;duplicates with children? Duplicate section?
 ;probably not for now, without address the question of how to assign these things ids
-
-;print expressions as well as ids?
 
 @a-definition : a-variable-definition | a-point-definition | a-bone-definition | a-connection-definition | a-parameters-definition | a-section-definition
 
