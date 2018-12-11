@@ -10,9 +10,13 @@
   (with-pattern
       ([(ID ...) (find-unique-ids #'(LINE ...))])
   #'(#%module-begin
+     
+     (provide ID ...)
      (define ID #f) ...
+     (provide a-print)
      LINE ...)))
 (provide (rename-out [a-module-begin #%module-begin]))
+(provide a-module-begin)
 
 (begin-for-syntax
   (require racket/list)
