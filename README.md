@@ -9,6 +9,11 @@ Getting a first version of the full stack done, i.e:
 - Server v1 
 - Front end v1
 
+This will require the following to be implemented first: 
+- Cleaning up parameter setters
+- Reading/parsing parameters
+
+
 
 ### Language level features
 
@@ -55,6 +60,9 @@ It is currently unclear what the expectation is for how a script might actually 
 
 - Ability to reference point dimensions
 At the moment you can't reference a specific dimension of a point. I've never needed it, but it feels like an omission, and something that should be very simple to add.
+
+- Rotate function
+Rotating bones could be useful, particularly for the root bone
 
 - Allow importing of racket functions
 Would really add to the extensibility of the language, but I currently have no idea what I'd use this for or what it would look like.
@@ -120,6 +128,14 @@ If the presets have phylogentic information, then a phylogentic tree could be pr
 
 - Name generation
 Similarly to the phylogentic tree, names could be generated based on the the creatures position in the phylogentic tree.
+
+- Identifying defining characteristics
+What sets one species apart from the others? Or one family apart from another? Could create a tool that tells you.
+Not a goal, but could be fun.
+
+- Creature labeling
+By labeling presets (e.g. 'cute', 'vicious'), could procedurally generate creatures with certain characteristics.
+Not a goal, but could be fun.
 
 - Server
 Top priority. A server that reads an anatomy, exposes the parameter information, takes in parameter values, and then uses those to regenerate the anatomy, and then outputs the new anatomy.
