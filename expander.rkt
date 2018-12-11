@@ -13,6 +13,9 @@
      
      (provide ID ...)
      (define ID #f) ...
+
+     (provide set-parameters!)
+     
      (provide a-print)
      
      (provide recalculate)
@@ -30,6 +33,13 @@
                 #:when (syntax-property stx 'a-id))
        stx)
      #:key syntax->datum)))
+
+(define-macro (set-parameters! ID VALS)
+  (with-pattern ([PARAMETERS-ID (datum->syntax #'ID #'ID)])
+  #'(for ([(param-id val) VALS])
+      (hash-set! PARAMETERS-ID param-id val)
+      ((car (hash-ref PARAMETERS-ID (append-symbols 'set- param-id))) val)
+    )))
 
 (define (a-print id)
   (cond
@@ -174,14 +184,19 @@
 (define-macro (a-parameters-definition ID PARAMETER ...)
   #'(begin
       (set! ID (make-hash))
-      (hash-set! ID (car PARAMETER) (cdr PARAMETER)) ...
+      (hash-set! ID (car (car PARAMETER)) (cdr (car PARAMETER))) ...
+      (hash-set! ID (car (cdr PARAMETER)) (cdr (cdr PARAMETER))) ...
       ))
 
 (define-macro (a-parameter-definition ID LOWER-BOUND UPPER-BOUND VAL)
   #'(begin
-      (set! ID VAL)
-      '(ID (parameter LOWER-BOUND UPPER-BOUND VAL))
+      (cond [(not ID) (set! ID VAL)])
+      (list (list 'ID (parameter LOWER-BOUND UPPER-BOUND VAL))
+            (append-symbols 'set- 'ID) (lambda (val) (set! ID val)))
       ))
+
+(define (append-symbols symbol1 symbol2)
+  (string->symbol (string-append (symbol->string symbol1) (symbol->string symbol2))))
 
 (define (a-bone point-list)
   (new bone%
