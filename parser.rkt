@@ -19,7 +19,6 @@ a-bone-range-single-dimension-operation : a-bone-range /"." a-point-dimension a-
 ;probably not for now, without address the question of how to assign these things ids
 
 ;print expressions as well as ids?
-;why does scaling a bone produce unwanted output?
 
 @a-definition : a-variable-definition | a-point-definition | a-bone-definition | a-connection-definition | a-parameters-definition | a-section-definition
 

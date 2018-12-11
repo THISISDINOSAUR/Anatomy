@@ -43,7 +43,8 @@
     (define/public (scale! x y z)
       (vector-map! (lambda (point)
            (scale-point-dimension-wise point x y z))
-         points))
+         points)
+      (void)) ;void to supress output
     
     (define/public (description)
       (string-append
