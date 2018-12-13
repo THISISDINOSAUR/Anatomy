@@ -65,8 +65,8 @@ It's currently possible to use compound operators (e.g. `+=`) when performing op
 - Bone operations on an entire bone
 At the moment, it's only possible to perform operations on a bone range (e.g. `illium[0, last] += 60`, rather than a whole bone (e.g. `illium += 60`. Just for the sake of completion, it might be worth adding.
 
-- Assignment to a single bone point
-It's possible to mutate a single point with compound operators, but it should also be possible to assign a value to a single point as well
+~~- Assignment to a single bone point
+It's possible to mutate a single point with compound operators, but it should also be possible to assign a value to a single point as well~~
 
 - Standalone average function
 For both points and values
