@@ -54,9 +54,9 @@
 
 (define-macro-cases a-bone-range-operation
   [(_ BONE-ID START-INDEX END-INDEX OPERATION POINT-EXPR)
-   #'(send BONE-ID operation-on-range! OPERATION POINT-EXPR START-INDEX END-INDEX)]
+   #'(send BONE-ID operation-on-range! OPERATION POINT-EXPR START-INDEX (resolve-index-of-bone BONE-ID END-INDEX))]
   [(_ BONE-ID INDEX OPERATION POINT-EXPR)
-   #' (send BONE-ID operation-on-index! OPERATION POINT-EXPR INDEX)])
+   #' (send BONE-ID operation-on-index! OPERATION POINT-EXPR (resolve-index-of-bone BONE-ID INDEX))])
 
 (define-macro-cases a-operation-equals-point
   [(_ "+") #'add-points]
@@ -65,9 +65,9 @@
 
 (define-macro-cases a-bone-range-single-dimension-operation
   [(_ BONE-ID START-INDEX END-INDEX DIMENSION OPERATION EXPR)
-   #'(send BONE-ID operation-on-dimension-of-range! OPERATION DIMENSION EXPR START-INDEX END-INDEX)]
+   #'(send BONE-ID operation-on-dimension-of-range! OPERATION DIMENSION EXPR START-INDEX (resolve-index-of-bone BONE-ID END-INDEX))]
   [(_ BONE-ID INDEX DIMENSION OPERATION EXPR)
-   #' (send BONE-ID operation-on-dimension-of-index! OPERATION DIMENSION EXPR INDEX)])
+   #' (send BONE-ID operation-on-dimension-of-index! OPERATION DIMENSION EXPR (resolve-index-of-bone BONE-ID INDEX))])
 
 (define-macro-cases a-point-dimension
   [(_ "x") #'point-x]
@@ -88,6 +88,13 @@
 (define-macro-cases a-section-operation
   [(_ SECTION-ID X Y) #'(send SECTION-ID scale! X Y 1)]
   [(_ SECTION-ID X Y Z) #'(send SECTION-ID scale! X Y Z)])
+
+(define (resolve-index-of-bone bone-id index)
+  (match index
+    [(== "last")
+     (- (length (vector->list (get-field points bone-id))) 1)]
+    [_
+     index]))
 
 (define (a-point-from-bone-index bone-id index)
   (match index
