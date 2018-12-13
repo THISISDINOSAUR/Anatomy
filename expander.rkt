@@ -92,9 +92,12 @@
 (define (resolve-index-of-bone bone-id index)
   (match index
     [(== "last")
-     (- (length (vector->list (get-field points bone-id))) 1)]
+     (last-index-of-bone bone-id)]
     [_
      index]))
+
+(define (last-index-of-bone bone-id)
+  (- (length (vector->list (get-field points bone-id))) 1))
 
 (define (a-point-from-bone-index bone-id index)
   (match index
