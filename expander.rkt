@@ -60,7 +60,8 @@
 
 (define-macro-cases a-operation-equals-point
   [(_ "+") #'add-points]
-  [(_ "-") #'subtract-points])
+  [(_ "-") #'subtract-points]
+  [(_) #'(lambda (x y) y)])
 
 (define-macro-cases a-bone-range-single-dimension-operation
   [(_ BONE-ID START-INDEX END-INDEX DIMENSION OPERATION EXPR)
@@ -77,7 +78,8 @@
   [(_ "+") #'+]
   [(_ "-") #'-]
   [(_ "*") #'*]
-  [(_ "/") #'/])
+  [(_ "/") #'/]
+  [(_) #'(lambda (x y) y)])
 
 (define-macro-cases a-bone-scale
   [(_ BONE-ID X Y) #'(send BONE-ID scale! X Y 1)]

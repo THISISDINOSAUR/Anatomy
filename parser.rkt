@@ -84,8 +84,8 @@ a-point-from-bone-index : a-bone-id /"[" a-point-index /"]"
 a-average-points : /"average" /"(" a-point-expr [/"," a-point-expr]* /")"
 a-average-bone-points : a-bone-id /"." /"average" /"(" (((a-point-index | a-point-expr) [/"," (a-point-index | a-point-expr)]*) | "all") /")"
 
-a-operation-equals : ("+"|"-"|"*"|"/") /"="
-a-operation-equals-point : ("+"|"-") /"="
+a-operation-equals : ["+"|"-"|"*"|"/"] /"="
+a-operation-equals-point : ["+"|"-"] /"="
 a-point-dimension : "x" | "y" | "z"
 
 @a-comment: COMMENT
