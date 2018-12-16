@@ -161,6 +161,10 @@ Should check the parameters actually exist, and check the allowed ranges, and ha
 - Handle when no parameters specified  
 Should  return dinosaur with default parameters. Also, need to reset parameters when regardless, to handle when only certain parameters are specified.
 
+### Web UI
+
+Top priority after the server. A website that uses the server to display the generated creature, and provide an interface to edit the parameters.
+
 ### Ecosystem level features
 
 - Parameter range analysis  
@@ -194,9 +198,6 @@ Not a goal, but could be fun.
 - Creature labeling  
 By labeling presets (e.g. 'cute', 'vicious'), could procedurally generate creatures with certain characteristics.  
 Not a goal, but could be fun.
-
-- Web UI  
-Top priority after the server. A website that uses the server to display the generated creature, and provide an interface to edit the parameters.
 
 - Racket interface  
 It's potentially also worth considering a racket interface to make it easier to iterate on anatomy files. This will depend on how easy it is to set the server up in such a way that changes to the anatomy file will be immediately reflected in the web UI.
