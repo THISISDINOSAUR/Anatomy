@@ -52,7 +52,9 @@
 
     (define (connections->json)
       (map (lambda (bone-connection)
-             (hasheq 'angle (connection-angle (cdr bone-connection))
+             (hasheq 'parent_point (point->list (connection-point-parent (cdr bone-connection)))
+                     'child_point (point->list (connection-point-child (cdr bone-connection)))
+                     'angle (connection-angle (cdr bone-connection))
                      'bone (send (car bone-connection) json)))
            (hash->list connections)))
 
