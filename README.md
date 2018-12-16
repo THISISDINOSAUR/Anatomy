@@ -66,13 +66,19 @@ It's currently possible to use compound operators (e.g. `+=`) when performing op
 It's possible to mutate a single point with compound operators, but it should also be possible to assign a value to a single point as well~~
 
 - Standalone average function
-For both points and values
+For both points and values. This could be difficult as long as the short form average function exists in connection points
 
 - Appending points to bones
 Or inserting at a specific index
 
 - Distributing bones over a line
 E.g. distributing vertebrae over the spine. This could lead to wanting other helper methods to e.g. scale them towards one end. Raises the question of what they should be connected to.
+
+- Modifier groups
+Ability to group points, so can perform transformations on non contiguous points (e.g. points 2-4, 7-12)
+
+- Selection shapes
+Ability to group points, or perform transformations by using bounding shapes (e.g. group all points that fall within this bounding box). Very useful, but probably quite difficult to implement generically, although should be straight forward for just rectangles. Requires modifier groups first to be particularly useful
 
 - Other parameter types (e.g. integer, bool)  
 At the very least, booleans seem like an essential. However, this will complicate the entire stack, as the front end and the server will also need to know about this. Given that neither the front end or the server exist yet, will implement when required, probably when a first version of the entire stack is actually done, complete with some sort of front end.
