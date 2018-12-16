@@ -202,7 +202,8 @@ The armoured dinosaurs are currently particularly lacking, so there should be pa
 Currently don't represent things like horns, spikes, spines etc. I consider this fairly superficial and not a priority, but worth bearing in mind.
 
 - Skeleton detail  
-Skeletal detail is currently quite low. This is deliberate, since scientifically accurate representations isn't currently the main goal. It is however interesting, and is definitely something I want to keep in the back of my mind. I may generally aim to gradually increase the detail, and potentially nurture this as either a separate project, or keep trying to work it into the main generation pipeline.
+Skeletal detail is currently quite low. This is deliberate, since scientifically accurate representations isn't currently the main goal. It is however interesting, and is definitely something I want to keep in the back of my mind. I may generally aim to gradually increase the detail, and potentially nurture this as either a separate project, or keep trying to work it into the main generation pipeline.  
+Do wonder if I should prioritise this more since people find it way more impressive and it will be much more satisfying.
 
 - Skull detail  
 Skull detail currently nonexistent. Not a priority to change until successfully rending something, since I think we get away with it. However, once that's achieved, it should be a reasonably high priority.
