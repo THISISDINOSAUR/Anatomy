@@ -63,6 +63,9 @@
 (define (describe-point point1)
   (string-append "[" (~a (point-x point1)) ", " (~a (point-y point1)) ", " (~a (point-z point1)) "]"))
 
+(define (point->list point1)
+  (list (point-x point1) (point-y point1) (point-z point1)))
+
 (define (trapesium top-span bottom-span left-span right-span)
   (define shift (point (/ (max bottom-span top-span) 2.0)
                        (/ (max left-span right-span) 2.0)

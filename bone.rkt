@@ -2,7 +2,8 @@
 
 (provide (all-defined-out))
 
-(require "point.rkt")
+(require "point.rkt"
+         json)
 
 (define indent "  ")
 
@@ -45,6 +46,21 @@
            (scale-point-dimension-wise point x y z))
          points)
       (void)) ;void to supress output
+
+    (define (points->json)
+      (vector->list (vector-map (lambda (point) (point->list point)) points)))
+
+    (define (connections->json)
+      (map (lambda (bone-connection)
+             (hasheq 'angle (connection-angle (cdr bone-connection))
+                     'bone (send (car bone-connection) json)))
+           (hash->list connections)))
+
+    (define/public (json)
+      (write connections)
+      (hasheq 'name name
+              'points (points->json)
+              'connections (connections->json)))
     
     (define/public (description)
       (string-append
