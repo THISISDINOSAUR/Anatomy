@@ -139,6 +139,22 @@ Attempt to accomplish same as parameter ranges, but instead have the ability to 
 - Clean up expander (and maybe parser)
 The expander's gotten quite large and unorganised, and could do with some reorganisation.
 
+### Server features
+  
+Top priority. A server that reads an anatomy, exposes the parameter information, takes in parameter values, and then uses those to regenerate the anatomy, and then outputs the new anatomy.
+
+- URL parameters currently case insensitive
+This is because in racket `request-bindings` is case insensitive. Need to find an alternative for this.
+
+- Server should serve available parameters
+This should include the allowed ranges and default value
+
+- Parameter checks
+Should check the parameters actually exist, and check the allowed ranges, and handle appropriately
+
+- Handle when no parameters specified
+Should  return dinosaur with default parameters. Also, need to reset parameters when regardless, to handle when only certain parameters are specified.
+
 ### Ecosystem level features
 
 - Parameter range analysis  
@@ -172,9 +188,6 @@ Not a goal, but could be fun.
 - Creature labeling  
 By labeling presets (e.g. 'cute', 'vicious'), could procedurally generate creatures with certain characteristics.  
 Not a goal, but could be fun.
-
-- Server  
-Top priority. A server that reads an anatomy, exposes the parameter information, takes in parameter values, and then uses those to regenerate the anatomy, and then outputs the new anatomy.
 
 - Web UI  
 Top priority after the server. A website that uses the server to display the generated creature, and provide an interface to edit the parameters.
