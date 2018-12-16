@@ -16,6 +16,10 @@ This will require the following to be implemented first:
 - Cleaning up parameter setters
 - Reading/parsing parameters
 
+The minimum still required for a functioning server is:
+- URL parameters currently case insensitive  
+- Server should serve available parameters  
+
 
 ### Language level features
 
@@ -138,6 +142,8 @@ Attempt to accomplish same as parameter ranges, but instead have the ability to 
 
 - Clean up expander (and maybe parser)
 The expander's gotten quite large and unorganised, and could do with some reorganisation.
+
+- Mute output when importing to regular racket scripts
 
 ### Server features
   
