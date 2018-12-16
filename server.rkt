@@ -4,9 +4,10 @@
 	 web-server/http
          web-server/servlet-env
          web-server/dispatch
+         web-server/http/bindings
 	 json)
 
-(require "dinosaur.rkt") 
+(require "integrationTestLayout.rkt") 
 
 (define (response
 	 #:code    [code/kw 200]
@@ -46,8 +47,21 @@
    headers/kw
    body))
 
+(define (request-bindings->parameter-hash bindings)
+  (define newParams (make-hash))
+  (for ([param bindings])
+    (hash-set! newParams (car param) (string->number (cdr param))))
+  newParams)
+  
+;TODO request-bindings is case insensitve, it shouldn't be
+;TODO check params actually exist and handle appropriately
+;TODO check allowed range of params
+;TODO if no parameters specified, what do? probably recalculate with default values
 (define (get-dinosaur req)
-  (response #:body (jsexpr->bytes (send illium json))
+  (define newParams (request-bindings->parameter-hash (request-bindings req)))
+  (set-parameters! Parameters newParams)
+  (recalculate)
+  (response #:body (jsexpr->bytes (send scapula json))
             #:mime "application/json"))
 
 (define (not-found req)
@@ -64,7 +78,7 @@
 
 (define-values (go _)
   (dispatch-rules
-   [("dinosaur")               #:method "get" get-dinosaur]
+   [("dinosaur") #:method "get" get-dinosaur]
    [else not-found]))
 
 (module+ main
