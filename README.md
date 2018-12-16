@@ -62,7 +62,7 @@ To implement this would be fairly difficult for the benefit it would provide, an
 - Compound operators on variables
 It's currently possible to use compound operators (e.g. `+=`) when performing operations on bone ranges, but not on variables
 
-~~- Assignment to a single bone point
+- ~~Assignment to a single bone point
 It's possible to mutate a single point with compound operators, but it should also be possible to assign a value to a single point as well~~
 
 - Standalone average function
@@ -143,16 +143,16 @@ The expander's gotten quite large and unorganised, and could do with some reorga
   
 Top priority. A server that reads an anatomy, exposes the parameter information, takes in parameter values, and then uses those to regenerate the anatomy, and then outputs the new anatomy.
 
-- URL parameters currently case insensitive
+- URL parameters currently case insensitive  
 This is because in racket `request-bindings` is case insensitive. Need to find an alternative for this.
 
-- Server should serve available parameters
+- Server should serve available parameters  
 This should include the allowed ranges and default value
 
-- Parameter checks
+- Parameter checks  
 Should check the parameters actually exist, and check the allowed ranges, and handle appropriately
 
-- Handle when no parameters specified
+- Handle when no parameters specified  
 Should  return dinosaur with default parameters. Also, need to reset parameters when regardless, to handle when only certain parameters are specified.
 
 ### Ecosystem level features
