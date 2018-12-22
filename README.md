@@ -149,8 +149,8 @@ The expander's gotten quite large and unorganised, and could do with some reorga
   
 Top priority. A server that reads an anatomy, exposes the parameter information, takes in parameter values, and then uses those to regenerate the anatomy, and then outputs the new anatomy.
 
-- URL parameters currently case insensitive  
-This is because in racket `request-bindings` is case insensitive. Need to find an alternative for this.
+- ~~URL parameters currently case insensitive  
+This is because in racket `request-bindings` is case insensitive. Need to find an alternative for this.~~
 
 - Server should serve available parameters  
 This should include the allowed ranges and default value

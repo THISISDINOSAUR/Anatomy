@@ -58,6 +58,7 @@
 ;TODO check params actually exist and handle appropriately
 ;TODO check allowed range of params
 ;TODO if no parameters specified, what do? probably recalculate with default values
+;need to handle unspecified params
 (define (get-dinosaur req)
   (define newParams (raw-request-bindings->parameter-hash (request-bindings/raw req)))
   (set-parameters! Parameters newParams)
