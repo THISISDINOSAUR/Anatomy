@@ -124,3 +124,24 @@
   #:auto-value 0
   #:transparent
   #:mutable)
+
+(define (describe-parameter parameter1)
+  (string-append (~a (parameter-lower-bound parameter1)) "  > < " (~a (parameter-upper-bound parameter1)) " = " (~a (parameter-default parameter1))))
+
+(define parameters%
+  (class object%
+
+    (init-field
+     [parameters #f]
+     [setters #f])
+
+    (define/public (description)
+      (string-join
+       (map (lambda (param)
+              (string-append (symbol->string (car param))
+                             ": "
+                             (describe-parameter (cadr param))))
+            (hash->list parameters))
+       "\n"))
+
+    (super-new)))

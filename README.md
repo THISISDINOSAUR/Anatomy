@@ -13,22 +13,22 @@ Getting a first version of the full stack done, i.e:
 - Front end v1
 
 This will require the following to be implemented first: 
-- Cleaning up parameter setters
+- ~~Cleaning up parameter setters~~
 - Reading/parsing parameters
 
 The minimum still required for a functioning server is:
-- URL parameters currently case insensitive  
+- ~~URL parameters currently case insensitive~~  
 - Server should serve available parameters  
 
 
 ### Language level features
 
-- Better output for parameters  
+- ~~Better output for parameters  
 Currently printing parameters prints the raw hashmap. A more user friendly output could be provided.
-It may well make sense to implement this by converting that hashmap into a custom parameters object, which would also be useful for the cleaning up of parameter setters.
+It may well make sense to implement this by converting that hashmap into a custom parameters object, which would also be useful for the cleaning up of parameter setters.~~
 
-- Cleaning up parameter setters  
-Currently parameters setters are stored in the parameters hashmap, so are exposed to users. They should either be moved to a private data structure, or handled as part of a separate parameters object (see above).
+- ~~Cleaning up parameter setters  
+Currently parameters setters are stored in the parameters hashmap, so are exposed to users. They should either be moved to a private data structure, or handled as part of a separate parameters object (see above).~~
 
 - Reading/parsing parameters  
 It is currently unclear what the expectation is for how a script might actually use an Anatomy file, i.e. how it should read the allowed parameter ranges so it can then choose values for them. Probably best to have a consistent interface, regardless of what name is given to the parameters definition in the anatomy file.
@@ -140,10 +140,8 @@ Slight complication: the far range of one parameter might not be compatible with
 - Preset parameter sub specifications
 Attempt to accomplish same as parameter ranges, but instead have the ability to define subsets of parameters on a preset (e.g. two different pairs of tail lengths and neck lengths).
 
-- ~~Clean up expander
+- ~~Clean up expander  
 The expander's gotten quite large and unorganised, and could do with some reorganisation.~~
-
-- Maybe cleanup Parser
 
 - Mute output when importing to regular racket scripts
 

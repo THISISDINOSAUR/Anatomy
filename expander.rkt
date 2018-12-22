@@ -44,13 +44,13 @@
 (define-macro (set-parameters! ID VALS)
   (with-pattern ([PARAMETERS-ID (datum->syntax #'ID #'ID)])
   #'(for ([(param-id val) VALS])
-      (hash-set! PARAMETERS-ID param-id val)
-      ((car (hash-ref PARAMETERS-ID (append-symbols 'set- param-id))) val)
+      ;(hash-set! PARAMETERS-ID param-id val)
+      ((car (hash-ref (get-field setters PARAMETERS-ID) (append-symbols 'set- param-id))) val)
     )))
 
 (define (a-print id)
   (cond
-    [(or (is-a? id bone%) (is-a? id section%))
+    [(or (is-a? id bone%) (is-a? id section%) (is-a? id parameters%))
      (display (send id description))]
     [(point? id)
      (display (describe-point id))

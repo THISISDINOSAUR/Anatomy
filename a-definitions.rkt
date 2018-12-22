@@ -8,6 +8,7 @@
 
 (define-macro (a-variable-definition ID VAL) #'(set! ID VAL))
 (define-macro (a-point-definition ID VAL) #'(set! ID VAL))
+(define-macro (a-parameters-definition ID VAL) #'(set! ID VAL))
 (define-macro (a-bone-definition ID VAL)
   #'(begin
       (set! ID VAL)
@@ -19,20 +20,6 @@
       (set! ID VAL)
       (set-field! name ID (~a 'ID))))
 
-(define-macro (a-parameters-definition ID PARAMETER ...)
-  #'(begin
-      (set! ID (make-hash))
-      (hash-set! ID (car (car PARAMETER)) (cdr (car PARAMETER))) ...
-      (hash-set! ID (car (cdr PARAMETER)) (cdr (cdr PARAMETER))) ...
-      ))
-
-(define-macro (a-parameter-definition ID LOWER-BOUND UPPER-BOUND VAL)
-  #'(begin
-      (cond [(not ID) (set! ID VAL)])
-      (list (list 'ID (parameter LOWER-BOUND UPPER-BOUND VAL))
-            (append-symbols 'set- 'ID) (lambda (val) (set! ID val)))
-      ))
-
 (define-macro (a-connection-definition BONE-ID1 BONE-ID2 POINT-EXPR-OR-FUNC1 POINT-EXPR-OR-FUNC2 ANGLE)
   #'(send BONE-ID1 add-connection! BONE-ID2
           (connection
@@ -43,6 +30,24 @@
 (define (a-bone point-list)
   (new bone%
        [points point-list]))
+
+(define-macro (a-parameters PARAMETER ...)
+  #'(begin
+      (new parameters%
+           [parameters (make-hash
+                        (list (cons (car (car PARAMETER))
+                                    (cdr (car PARAMETER))) ...))]
+           [setters (make-hash
+                     (list (cons (car (cdr PARAMETER))
+                                 (cdr (cdr PARAMETER))) ...))]
+           )))
+
+(define-macro (a-parameter ID LOWER-BOUND UPPER-BOUND VAL)
+  #'(begin
+      (cond [(not ID) (set! ID VAL)])
+      (list (list 'ID (parameter LOWER-BOUND UPPER-BOUND VAL))
+            (append-symbols 'set- 'ID) (lambda (val) (set! ID val)))
+      ))
 
 (define (a-section bones-list)
   (new section%
