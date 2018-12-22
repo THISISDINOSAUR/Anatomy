@@ -1,9 +1,16 @@
 #lang br/quicklang
 
-(provide (matching-identifiers-out #rx"^a-" (all-defined-out)))
+(provide (matching-identifiers-out #rx"^a-" (all-defined-out))
+         (all-from-out "a-functions.rkt"
+                       "a-maths.rkt"
+                       "a-definitions.rkt"))
 
 (require "point.rkt"
          "bone.rkt"
+         "utils.rkt"
+         "a-functions.rkt"
+         "a-maths.rkt"
+         "a-definitions.rkt"
          racket/syntax)
 
 (define-macro (a-module-begin (a-program LINE ...))
@@ -106,154 +113,5 @@
     [_
      (send bone-id point-at-index index)]))
 
-(define-macro (a-variable-definition ID VAL) #'(set! ID VAL))
-(define-macro (a-point-definition ID VAL) #'(set! ID VAL))
-(define-macro (a-bone-definition ID VAL)
-  #'(begin
-      (set! ID VAL)
-      (set-field! name ID (~a 'ID))
-      ))
-
-(define-macro (a-section-definition ID VAL)
-  #' (begin
-      (set! ID VAL)
-      (set-field! name ID (~a 'ID))))
-
-(define (a-section bones-list)
-  (new section%
-       [bones bones-list]))
-
-(define-macro (a-bones-list BONE-IDS ...)
-  #'(list BONE-IDS ...))
 
 
-(define-macro (a-connection-definition BONE-ID1 BONE-ID2 POINT-EXPR-OR-FUNC1 POINT-EXPR-OR-FUNC2 ANGLE)
-  #'(send BONE-ID1 add-connection! BONE-ID2
-          (connection
-           (POINT-EXPR-OR-FUNC1 BONE-ID1)
-           (POINT-EXPR-OR-FUNC2 BONE-ID2)
-           ANGLE)))
-
-(define-macro (a-point-expr-with-bone POINT-EXPR)
-  #'(lambda (bone) (expand-connection-point-expression POINT-EXPR bone)))
-
-
-(define-macro-cases a-connection-point-average
-  [(_ "all")
-   #'(lambda (bone) (a-average-bone-points bone "all"))]
-  [(_ POINT-EXPRS ...)
-   #'(lambda (bone) (a-average-bone-points bone POINT-EXPRS ...))])
-
-
-(define-macro (expand-connection-point-expressions POINT-EXPRS BONE)
-  #'(map (lambda (expr)
-           (expand-connection-point-expression expr BONE))
-         POINT-EXPRS))
-
-(define-macro-cases a-average-bone-points
-  [(_ BONE-ID "all")
-   #'(average-points (vector->list (get-field points BONE-ID)))]
-  [(_ BONE-ID POINT-EXPRS ...)
-   #'(average-points (expand-connection-point-expressions (list POINT-EXPRS ...) BONE-ID))])
-
-(define (expand-connection-point-expression point-expr bone)
-  (match point-expr
-    [(== "last")
-     (last (vector->list (get-field points bone)))]
-    [(? number?)
-     (vector-ref (get-field points bone) point-expr)]
-    [_
-     point-expr]
-    ))
-
-(define (a-bone-duplicate bone-id)
-  (get-field points bone-id))
-
-(define (a-trapesium topSpan bottomSpan leftSpan rightSpan)
-  (list->vector (trapesium topSpan bottomSpan leftSpan rightSpan)))
-
-(define-macro (a-max VALS ...)
-  #'(max VALS ...))
-
-(define-macro (a-min VALS ...)
-  #'(min VALS ...))
-
-(define (a-abs val)
-  (abs val))
-
-(define (a-distance point1 point2)
-  (distance-between-points point1 point2))
-
-(define (a-sqrt val)
-  (sqrt val))
-
-(define (a-mag point)
-  (distance-between-points point point-zero))
-
-(define-macro (a-average-points POINT-EXPRS ...)
-  #'(average-points (list POINT-EXPRS ...)))
-
-(define-macro (a-parameters-definition ID PARAMETER ...)
-  #'(begin
-      (set! ID (make-hash))
-      (hash-set! ID (car (car PARAMETER)) (cdr (car PARAMETER))) ...
-      (hash-set! ID (car (cdr PARAMETER)) (cdr (cdr PARAMETER))) ...
-      ))
-
-(define-macro (a-parameter-definition ID LOWER-BOUND UPPER-BOUND VAL)
-  #'(begin
-      (cond [(not ID) (set! ID VAL)])
-      (list (list 'ID (parameter LOWER-BOUND UPPER-BOUND VAL))
-            (append-symbols 'set- 'ID) (lambda (val) (set! ID val)))
-      ))
-
-(define (append-symbols symbol1 symbol2)
-  (string->symbol (string-append (symbol->string symbol1) (symbol->string symbol2))))
-
-(define (a-bone point-list)
-  (new bone%
-       [points point-list]))
-
-(define-macro-cases a-sum
-  [(_ VAL) #'VAL]
-  [(_ LEFT "+" RIGHT) #'(+ LEFT RIGHT)]
-  [(_ LEFT "-" RIGHT) #'(- LEFT RIGHT)])
-
-(define-macro-cases a-product
-  [(_ VAL) #'VAL]
-  [(_ LEFT "*" RIGHT) #'(* LEFT RIGHT)]
-  [(_ LEFT "/" RIGHT) #'(/ LEFT RIGHT)]
-  [(_ LEFT "mod" RIGHT) #'(modulo LEFT RIGHT)])
-
-(define-macro-cases a-neg
-  [(_ VAL) #'VAL]
-  [(_ "-" VAL) #'(- VAL)])
-
-(define-macro-cases a-expt
-  [(_ VAL) #'VAL]
-  [(_ LEFT "^" RIGHT) #'(expt LEFT RIGHT)])
-
-
-(define-macro-cases a-point
-  [(a-point X Y) #'(point X Y 0)]
-  [(a-point X Y Z) #'(point X Y Z)])
-
-(define-macro (a-points-list VAR ...) #'(vector VAR ...))
-
-(define-macro-cases a-point-sum
-  [(_ VAL) #'VAL]
-  [(_ LEFT "+" RIGHT) #'(add-points LEFT RIGHT)]
-  [(_ LEFT "-" RIGHT) #'(subtract-points LEFT RIGHT)])
-
-(define-macro-cases a-point-product-left
-  [(_ VAL) #'VAL]
-  [(_ SCALE "*" POINT) #'(scale-point POINT SCALE)])
-
-(define-macro-cases a-point-product-right
-  [(_ VAL) #'VAL]
-  [(_ POINT "*" SCALE) #'(scale-point POINT SCALE)]
-  [(_ POINT "/" SCALE) #'(scale-point POINT (/ 1 SCALE))])
-
-(define-macro-cases a-point-neg
-  [(_ VAL) #'VAL]
-  [(_ "-" VAL) #'(negate-point VAL)])

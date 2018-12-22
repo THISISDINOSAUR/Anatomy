@@ -140,8 +140,10 @@ Slight complication: the far range of one parameter might not be compatible with
 - Preset parameter sub specifications
 Attempt to accomplish same as parameter ranges, but instead have the ability to define subsets of parameters on a preset (e.g. two different pairs of tail lengths and neck lengths).
 
-- Clean up expander (and maybe parser)
-The expander's gotten quite large and unorganised, and could do with some reorganisation.
+- ~~Clean up expander
+The expander's gotten quite large and unorganised, and could do with some reorganisation.~~
+
+- Maybe cleanup Parser
 
 - Mute output when importing to regular racket scripts
 
