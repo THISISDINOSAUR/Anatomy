@@ -47,18 +47,19 @@
    headers/kw
    body))
 
-(define (request-bindings->parameter-hash bindings)
+(define (raw-request-bindings->parameter-hash bindings)
   (define newParams (make-hash))
   (for ([param bindings])
-    (hash-set! newParams (car param) (string->number (cdr param))))
+    (hash-set! newParams
+               (string->symbol (bytes->string/utf-8 (binding-id param)))
+               (string->number (bytes->string/utf-8 (binding:form-value param)))))
   newParams)
   
-;TODO request-bindings is case insensitve, it shouldn't be
 ;TODO check params actually exist and handle appropriately
 ;TODO check allowed range of params
 ;TODO if no parameters specified, what do? probably recalculate with default values
 (define (get-dinosaur req)
-  (define newParams (request-bindings->parameter-hash (request-bindings req)))
+  (define newParams (raw-request-bindings->parameter-hash (request-bindings/raw req)))
   (set-parameters! Parameters newParams)
   (recalculate)
   (response #:body (jsexpr->bytes (send scapula json))
