@@ -12,15 +12,7 @@ Getting a first version of the full stack done, i.e:
 - ~~Server v1~~
 - Front end v1
 
-~~This will require the following to be implemented first: 
-- ~~Cleaning up parameter setters~~
-- ~~Reading/parsing parameters~~
-
-~~The minimum still required for a functioning server is:
-- ~~URL parameters currently case insensitive~~  
-- ~~Server should serve available parameters~~~~~~  
-
-The minimum functional server is now done! ~~(Although it still needs to handle invalid parameters)~~
+The minimum functional server is now done!
 
 
 ### Language level features
