@@ -140,7 +140,7 @@
        (map (lambda (param)
               (string-append (symbol->string (car param))
                              ": "
-                             (describe-parameter (cadr param))))
+                             (describe-parameter (cdr param))))
             (hash->list parameters))
        "\n"))
 

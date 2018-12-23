@@ -36,7 +36,7 @@
       (new parameters%
            [parameters (make-hash
                         (list (cons (car (car PARAMETER))
-                                    (cdr (car PARAMETER))) ...))]
+                                    (cadr (car PARAMETER))) ...))]
            [setters (make-hash
                      (list (cons (car (cdr PARAMETER))
                                  (cdr (cdr PARAMETER))) ...))]
