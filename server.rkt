@@ -57,7 +57,6 @@
   
 ;TODO check params actually exist and handle appropriately
 ;TODO check allowed range of params
-;TODO if no parameters specified, what do? probably recalculate with default values
 ;need to handle unspecified params
 (define (get-dinosaur req)
   (define newParams (raw-request-bindings->parameter-hash (request-bindings/raw req)))
@@ -65,6 +64,10 @@
   (set-parameters! Parameters newParams)
   (recalculate)
   (response #:body (jsexpr->bytes (send scapula json))
+            #:mime "application/json"))
+
+(define (get-parameters req)
+  (response #:body (jsexpr->bytes (send Parameters json))
             #:mime "application/json"))
 
 (define (not-found req)
@@ -82,6 +85,7 @@
 (define-values (go _)
   (dispatch-rules
    [("dinosaur") #:method "get" get-dinosaur]
+   [("parameters") #:method "get" get-parameters] ;TODO: how to do dinosaur/parameters?
    [else not-found]))
 
 (module+ main

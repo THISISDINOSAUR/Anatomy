@@ -59,7 +59,6 @@
            (hash->list connections)))
 
     (define/public (json)
-      (write connections)
       (hasheq 'name name
               'points (points->json)
               'connections (connections->json)))
@@ -128,12 +127,23 @@
 (define (describe-parameter parameter1)
   (string-append (~a (parameter-lower-bound parameter1)) "  > < " (~a (parameter-upper-bound parameter1)) " = " (~a (parameter-default parameter1))))
 
+(define (parameter->json parameter1)
+  (hasheq 'lower-bound (parameter-lower-bound parameter1)
+          'upper-bound (parameter-upper-bound parameter1)
+          'default (parameter-default parameter1)))
+
 (define parameters%
   (class object%
 
     (init-field
      [parameters #f]
      [setters #f])
+
+    (define/public (json)
+      (map (lambda (param)
+             (write param)
+             (hasheq (car param) (parameter->json (cdr param))))
+           (hash->list parameters)))
 
     (define/public (description)
       (string-join
