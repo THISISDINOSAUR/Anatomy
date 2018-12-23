@@ -124,6 +124,9 @@
   #:transparent
   #:mutable)
 
+(define (is-valid-parameter-value? param value)
+  (<= (parameter-lower-bound param) value (parameter-upper-bound param)))
+
 (define (describe-parameter parameter1)
   (string-append (~a (parameter-lower-bound parameter1)) "  > < " (~a (parameter-upper-bound parameter1)) " = " (~a (parameter-default parameter1))))
 

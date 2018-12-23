@@ -5,7 +5,9 @@
          web-server/servlet-env
          web-server/dispatch
          web-server/http/bindings
-	 json)
+	 json
+         "point.rkt"
+         "bone.rkt")
 
 (require "integrationTestLayout.rkt") 
 
@@ -54,16 +56,33 @@
                (string->symbol (bytes->string/utf-8 (binding-id param)))
                (string->number (bytes->string/utf-8 (binding:form-value param)))))
   newParams)
+
+(define (request-parameters-exist? req-params params)
+  (andmap (lambda (param)
+            (member param (hash-keys (get-field parameters params))))
+          (hash-keys req-params)))
+
+(define (request-parameters-values-valid? req-params params)
+  (andmap (lambda (param)
+            (is-valid-parameter-value? (hash-ref (get-field parameters params) (car param)) (cdr param)))
+          (hash->list req-params)))
   
-;TODO check params actually exist and handle appropriately
-;TODO check allowed range of params
 (define (get-dinosaur req)
   (define newParams (raw-request-bindings->parameter-hash (request-bindings/raw req)))
-  (reset-parameters! Parameters)
-  (set-parameters! Parameters newParams)
-  (recalculate)
-  (response #:body (jsexpr->bytes (send scapula json))
-            #:mime "application/json"))
+ 
+  (cond
+    [(not (request-parameters-exist? newParams Parameters))
+     (invalid-parameter-response)]
+    [(not (request-parameters-values-valid? newParams Parameters))
+     (invalid-parameter-value-response)]
+    [else
+     (reset-parameters! Parameters)
+     (set-parameters! Parameters newParams)
+  
+     (recalculate)
+  
+     (response #:body (jsexpr->bytes (send scapula json))
+               #:mime "application/json")]))
 
 (define (get-parameters req)
   (response #:body (jsexpr->bytes (send Parameters json))
@@ -76,6 +95,14 @@
 (define (bad-request)
   (response #:code 400
             #:message "Bad Request"))
+
+(define (invalid-parameter-response)
+  (response #:code 400
+            #:message "Invalid parameter"))
+
+(define (invalid-parameter-value-response)
+  (response #:code 400
+            #:message "Invalid parameter value"))
 
 (define (internal-server-error)
   (response #:code 500
