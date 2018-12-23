@@ -111,7 +111,7 @@
 (define-values (go _)
   (dispatch-rules
    [("dinosaur") #:method "get" get-dinosaur]
-   [("parameters") #:method "get" get-parameters] ;TODO: how to do dinosaur/parameters?
+   [("parameters") #:method "get" get-parameters]
    [else not-found]))
 
 (module+ main
