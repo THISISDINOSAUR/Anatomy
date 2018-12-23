@@ -141,7 +141,6 @@
 
     (define/public (json)
       (map (lambda (param)
-             (write param)
              (hasheq (car param) (parameter->json (cdr param))))
            (hash->list parameters)))
 

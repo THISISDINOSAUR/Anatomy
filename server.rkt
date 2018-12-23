@@ -57,7 +57,6 @@
   
 ;TODO check params actually exist and handle appropriately
 ;TODO check allowed range of params
-;need to handle unspecified params
 (define (get-dinosaur req)
   (define newParams (raw-request-bindings->parameter-hash (request-bindings/raw req)))
   (reset-parameters! Parameters)

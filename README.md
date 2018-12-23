@@ -9,16 +9,18 @@ Anatomy definition -> Racket server -> Web UI
 
 **Current priorities:**
 Getting a first version of the full stack done, i.e:
-- Server v1 
+- ~~Server v1~~
 - Front end v1
 
-This will require the following to be implemented first: 
+~~This will require the following to be implemented first: 
 - ~~Cleaning up parameter setters~~
-- Reading/parsing parameters
+- ~~Reading/parsing parameters~~
 
 The minimum still required for a functioning server is:
 - ~~URL parameters currently case insensitive~~  
-- Server should serve available parameters  
+- ~~Server should serve available parameters~~~~  
+
+The minimum functional server is now done! (Although it still needs to handle invalid parameters)
 
 
 ### Language level features
@@ -30,8 +32,8 @@ It may well make sense to implement this by converting that hashmap into a custo
 - ~~Cleaning up parameter setters  
 Currently parameters setters are stored in the parameters hashmap, so are exposed to users. They should either be moved to a private data structure, or handled as part of a separate parameters object (see above).~~
 
-- Reading/parsing parameters  
-It is currently unclear what the expectation is for how a script might actually use an Anatomy file, i.e. how it should read the allowed parameter ranges so it can then choose values for them. Probably best to have a consistent interface, regardless of what name is given to the parameters definition in the anatomy file.
+- ~~Reading/parsing parameters  
+It is currently unclear what the expectation is for how a script might actually use an Anatomy file, i.e. how it should read the allowed parameter ranges so it can then choose values for them. Probably best to have a consistent interface, regardless of what name is given to the parameters definition in the anatomy file.~~
 
 - Ability to reference point dimensions  
 At the moment you can't reference a specific dimension of a point. I've never needed it, but it feels like an omission, and something that should be very simple to add.
@@ -152,8 +154,8 @@ Top priority. A server that reads an anatomy, exposes the parameter information,
 - ~~URL parameters currently case insensitive  
 This is because in racket `request-bindings` is case insensitive. Need to find an alternative for this.~~
 
-- Server should serve available parameters  
-This should include the allowed ranges and default value
+- ~~Server should serve available parameters  
+This should include the allowed ranges and default value~~
 
 - Parameter checks  
 Should check the parameters actually exist, and check the allowed ranges, and handle appropriately
