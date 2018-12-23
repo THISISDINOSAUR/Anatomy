@@ -61,6 +61,7 @@
 ;need to handle unspecified params
 (define (get-dinosaur req)
   (define newParams (raw-request-bindings->parameter-hash (request-bindings/raw req)))
+  (reset-parameters! Parameters)
   (set-parameters! Parameters newParams)
   (recalculate)
   (response #:body (jsexpr->bytes (send scapula json))

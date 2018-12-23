@@ -72,3 +72,5 @@ print var3
 testBone = [0,0], [1,1], [2,2]
 var4 = testBone.average(1,2)
 print var4
+
+print Parameters

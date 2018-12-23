@@ -158,8 +158,8 @@ This should include the allowed ranges and default value
 - Parameter checks  
 Should check the parameters actually exist, and check the allowed ranges, and handle appropriately
 
-- Handle when no parameters specified  
-Should  return dinosaur with default parameters. Also, need to reset parameters when regardless, to handle when only certain parameters are specified.
+- ~~Handle when no parameters specified  
+Should  return dinosaur with default parameters. Also, need to reset parameters when regardless, to handle when only certain parameters are specified.~~
 
 ### Web UI
 

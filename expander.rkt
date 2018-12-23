@@ -22,6 +22,7 @@
      (define ID #f) ...
 
      (provide set-parameters!)
+     (provide reset-parameters!)
      
      (provide a-print)
      
@@ -44,9 +45,15 @@
 (define-macro (set-parameters! ID VALS)
   (with-pattern ([PARAMETERS-ID (datum->syntax #'ID #'ID)])
   #'(for ([(param-id val) VALS])
-      ;(hash-set! PARAMETERS-ID param-id val)
       ((car (hash-ref (get-field setters PARAMETERS-ID) (append-symbols 'set- param-id))) val)
     )))
+
+(define-macro (reset-parameters! ID)
+  (with-pattern ([PARAMETERS-ID (datum->syntax #'ID #'ID)])
+    #'(for ([(param-id val) (get-field parameters PARAMETERS-ID)])
+        ((car (hash-ref (get-field setters PARAMETERS-ID) (append-symbols 'set- param-id)))
+         (parameter-default val))
+        )))
 
 (define (a-print id)
   (cond
