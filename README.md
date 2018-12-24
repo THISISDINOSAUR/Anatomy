@@ -20,6 +20,12 @@ The minimum functional server is now done!
 - Fix scaling  
 Section scaling (and probably bone scaling) currently has an issue, where it appears the parent connection point isn't scaled with the rest of the bone.
 
+- Fix arm  
+Scaling the arm currently has an issue, needs investigation
+
+- Check all other parameters 
+It looks like there may be other issues, although it's hard to tell at the moment with the other scaling issues 
+
 - ~~Better output for parameters  
 Currently printing parameters prints the raw hashmap. A more user friendly output could be provided.
 It may well make sense to implement this by converting that hashmap into a custom parameters object, which would also be useful for the cleaning up of parameter setters.~~
@@ -169,14 +175,23 @@ Top priority. A website that uses the server to display the generated creature, 
 - ~~Fetching of parameters and constructing parameter sliders  
 Includes then fetching the dinosaur with these parameters
 
-- Request smoothing  
-Currently requests a dinosaur on every input, leading to far to many server requests, and potential race conditions. Should at least implement a system where no requests are made whilst a request is pending
+- ~~Request smoothing  
+Currently requests a dinosaur on every input, leading to far to many server requests, and potential race conditions. Should at least implement a system where no requests are made whilst a request is pending~~
+
+- Fix Z fighting  
+All bones are currently rendered at the same z position, leading to z fighting.
 
 - Preset buttons  
 Fetching presets, constructing buttons for them, and then fetching the dinosaur with the correct parameters. Requires presets to be implemented on the server and at the language level.
 
+- Print parameters button  
+Reimplement print parameters button
+
 - Refactoring  
 Code currently uses a lot of code from the old JS version, and could do with refactoring
+
+- Refactor rendering to be more generic  
+Currently uses a hard coded 'initial position'
 
 ### Ecosystem level features
 
