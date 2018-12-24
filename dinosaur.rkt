@@ -121,7 +121,22 @@ frontFoot = [-2, 49], [-6, 99], [-42, 95], [-79, 110], [-89, 64], [-74, 4]
 ulnaRadius~frontFoot = average(4, 5) ~ average(0, 1), 200
 //front leg end
 
-//TODO: duplicates
+//second leg
+femur2 = femur.duplicate
+illium~femur2 = average(0,0,1,last) ~ average(0,10), 80
+tibiaFibula2 = tibiaFibula.duplicate
+femur2~tibiaFibula2 = 5 ~ 14, -25
+backFoot2 = backFoot.duplicate
+tibiaFibula2~backFoot2 = 6 ~ average(0,1), -90
+
+//second arm
+humerus2 = humerus.duplicate
+scapula~humerus2 = scapula[11] + [10, 15] ~ last, 75 - bodyAngle + scapulaAngle
+ulnaRadius2 = ulnaRadius.duplicate
+humerus2~ulnaRadius2 = 8 ~ 12, 50
+frontFoot2 = frontFoot.duplicate
+ulnaRadius2~frontFoot2 = average(4, 5) ~ average(0, 1), 155
+
 
 //sections start
 head = cranium, mandible
