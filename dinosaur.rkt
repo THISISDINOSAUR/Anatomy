@@ -157,5 +157,11 @@ shoulder.scale(shoulderSize, shoulderSize)
 armWithoutHand = humerus, ulnaRadius
 armWithoutHand.scale(armLength, 1)
 
+armWithoutHand2 = humerus2, ulnaRadius2
+armWithoutHand2.scale(armLength, 1)
+
 arm = humerus, ulnaRadius, frontFoot
 arm.scale(1, armWidth)
+
+arm2 = humerus2, ulnaRadius2, frontFoot2
+arm2.scale(1, armWidth)
