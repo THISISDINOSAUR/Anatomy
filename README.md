@@ -2,18 +2,10 @@
 
 A DSL  capable of specifying arbitrary skeletons with interrelationships, constraints, and bounded parameters. Designed to be used to create procedural creature generators.
 
-This is the first step in a planned pipeline for THE DINOSAUR GENERATOR:  
+This is the first step in a pipeline for THE DINOSAUR GENERATOR:  
 Anatomy definition -> Racket server -> Web UI
 
 ## Potential future features
-
-**Current priorities:**
-Getting a first version of the full stack done, i.e:
-- ~~Server v1~~
-- Front end v1
-
-The minimum functional server is now done!
-
 
 ### Language level features
 
@@ -66,31 +58,31 @@ is not currently allowed, whereas:
 is allowed.   
 To implement this would be fairly difficult for the benefit it would provide, and it would be mostly for the sake of completion. It would however have the benefit of conceptually simplifying both the parser and expander for connection points, making the short form `average()` syntax implementation truly syntactic sugar, as opposed to existing as a separate concept. Would be implemented by traversing the two `a-connection-point` in a connection definition, finding any instance of contextless `a-point-index`es or `a-point-function`s, and replacing them with the bone version, using the bones from the left side of the connection definition.
 
-- Compound operators on variables
+- Compound operators on variables  
 It's currently possible to use compound operators (e.g. `+=`) when performing operations on bone ranges, but not on variables
 
-- ~~Assignment to a single bone point
+- ~~Assignment to a single bone point  
 It's possible to mutate a single point with compound operators, but it should also be possible to assign a value to a single point as well~~
 
-- Standalone average function
+- Standalone average function  
 For both points and values. This could be difficult as long as the short form average function exists in connection points
 
-- Appending points to bones
+- Appending points to bones  
 Or inserting at a specific index
 
-- Distributing bones over a line
+- Distributing bones over a line  
 E.g. distributing vertebrae over the spine. This could lead to wanting other helper methods to e.g. scale them towards one end. Raises the question of what they should be connected to.
 
-- Modifier groups
+- Modifier groups  
 Ability to group points, so can perform transformations on non contiguous points (e.g. points 2-4, 7-12)
 
-- Selection shapes
+- Selection shapes  
 Ability to group points, or perform transformations by using bounding shapes (e.g. group all points that fall within this bounding box). Very useful, but probably quite difficult to implement generically, although should be straight forward for just rectangles. Requires modifier groups first to be particularly useful
 
 - Other parameter types (e.g. integer, bool)  
 At the very least, booleans seem like an essential. However, this will complicate the entire stack, as the front end and the server will also need to know about this. Given that neither the front end or the server exist yet, will implement when required, probably when a first version of the entire stack is actually done, complete with some sort of front end.
 
-- Toggling between 2d and 3d
+- Toggling between 2d and 3d  
 At the moment, points can be specified in 2d, but everything is automatically converted to 3d. This could be needlessly confusing for applications that are strictly 2d, as well as polluting the output. Could perhaps at least have a setting on whether to expose the third dimension to the user (although this could invite further confusion when accessing things as racket variables). 
 Making the whole thing work actually using two dimensions would require too much unnecessary work, so won't be considered.
 
@@ -140,13 +132,14 @@ At least when it comes to certain parameters (e.g. spine distribution, soft tiss
 May be worth implementing, and then ignoring it for most purposes (e.g. just taking the middle value).  
 Slight complication: the far range of one parameter might not be compatible with the far range of another (e.g. longer neck and shorter tail). If I do implement this, I should definitely use with caution.
 
-- Preset parameter sub specifications
+- Preset parameter sub specifications  
 Attempt to accomplish same as parameter ranges, but instead have the ability to define subsets of parameters on a preset (e.g. two different pairs of tail lengths and neck lengths).
 
 - ~~Clean up expander  
 The expander's gotten quite large and unorganised, and could do with some reorganisation.~~
 
-- Mute output when importing to regular racket scripts
+- Mute output when importing to regular racket scripts  
+Should be relatively easy to do
 
 ### Server features
 
@@ -173,10 +166,13 @@ Top priority. A website that uses the server to display the generated creature, 
 - ~~Dinosaur fetching and drawing~~
 
 - ~~Fetching of parameters and constructing parameter sliders  
-Includes then fetching the dinosaur with these parameters
+Includes then fetching the dinosaur with these parameters~~
 
 - ~~Request smoothing  
 Currently requests a dinosaur on every input, leading to far to many server requests, and potential race conditions. Should at least implement a system where no requests are made whilst a request is pending~~
+
+- Request timeout  
+Due to request smoothing, if a request takes a long time, it will block all other requests. There should be some kind of timeout on this. Whilst faffing with timers, may also want to implement some sort of rate limiting
 
 - Fix Z fighting  
 All bones are currently rendered at the same z position, leading to z fighting.
