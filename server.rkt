@@ -9,7 +9,7 @@
          "point.rkt"
          "bone.rkt")
 
-(require "integrationTestLayout.rkt") 
+(require "dinosaur.rkt") 
 
 (define (response
 	 #:code    [code/kw 200]
@@ -81,7 +81,7 @@
   
      (recalculate)
   
-     (response #:body (jsexpr->bytes (send scapula json))
+     (response #:body (jsexpr->bytes (send illium json))
                #:mime "application/json")]))
 
 (define (get-parameters req)
