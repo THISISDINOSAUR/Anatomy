@@ -17,6 +17,9 @@ The minimum functional server is now done!
 
 ### Language level features
 
+- Fix scaling  
+Section scaling (and probably bone scaling) currently has an issue, where it appears the parent connection point isn't scaled with the rest of the bone.
+
 - ~~Better output for parameters  
 Currently printing parameters prints the raw hashmap. A more user friendly output could be provided.
 It may well make sense to implement this by converting that hashmap into a custom parameters object, which would also be useful for the cleaning up of parameter setters.~~
@@ -163,11 +166,17 @@ Top priority. A website that uses the server to display the generated creature, 
 
 - ~~Dinosaur fetching and drawing~~
 
-- Fetching of parameters and constructing parameter sliders  
+- ~~Fetching of parameters and constructing parameter sliders  
 Includes then fetching the dinosaur with these parameters
 
+- Request smoothing  
+Currently requests a dinosaur on every input, leading to far to many server requests, and potential race conditions. Should at least implement a system where no requests are made whilst a request is pending
+
 - Preset buttons  
-Fetching presets, constructing buttons for them, and then fetching the dinosaur with the correct parameters. Requires presets to be implemented on the server
+Fetching presets, constructing buttons for them, and then fetching the dinosaur with the correct parameters. Requires presets to be implemented on the server and at the language level.
+
+- Refactoring  
+Code currently uses a lot of code from the old JS version, and could do with refactoring
 
 ### Ecosystem level features
 
