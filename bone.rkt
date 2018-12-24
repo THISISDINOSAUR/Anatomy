@@ -94,10 +94,9 @@
      [name ""])
 
     (define/public (scale! x y z)
-      (set! bones
             (map (lambda (bone)
                    (send bone scale! x y z))
-                 bones)))
+                 bones))
 
     (define/public (description)
       (string-append
