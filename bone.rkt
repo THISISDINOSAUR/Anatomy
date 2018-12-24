@@ -52,10 +52,7 @@
 
     (define (connections->json)
       (map (lambda (bone-connection)
-             (hasheq 'parent_point (point->list (connection-point-parent (cdr bone-connection)))
-                     'child_point (point->list (connection-point-child (cdr bone-connection)))
-                     'angle (connection-angle (cdr bone-connection))
-                     'bone (send (car bone-connection) json)))
+             (send (cdr bone-connection) json (car bone-connection)))
            (hash->list connections)))
 
     (define/public (json)
@@ -77,7 +74,7 @@
                                " ~ "
                                (get-field name (car bone-connection))
                                " = "
-                               (describe-connection (cdr bone-connection))))
+                               (send (cdr bone-connection) description)))
                             (hash->list connections))
                        (string-append "\n" indent indent))
        "\n"))
@@ -94,9 +91,10 @@
      [name ""])
 
     (define/public (scale! x y z)
-            (map (lambda (bone)
-                   (send bone scale! x y z))
-                 bones))
+      (map (lambda (bone)
+             (send bone scale! x y z))
+           bones)
+      (void))
 
     (define/public (description)
       (string-append
@@ -110,14 +108,28 @@
     (super-new)
     ))
 
-(struct connection (point-parent point-child angle)
-  #:auto-value 0
-  #:transparent
-  #:mutable)
+(define connection%
+  (class object%
 
-(define (describe-connection connection1)
-  (string-append (describe-point (connection-point-parent connection1)) " ~ " (describe-point (connection-point-child connection1)) ", " (number->string (connection-angle connection1)) "°"))
+    (init-field
+     [parent-point #f]
+     [child-point #f]
+     [angle #f])
 
+    (define/public (json child-bone)
+      (hasheq 'parent_point (point->list parent-point)
+                     'child_point (point->list child-point)
+                     'angle angle
+                     'bone (send child-bone json)))
+
+    (define/public (description)
+        (string-append
+         (describe-point parent-point) " ~ " (describe-point child-point) ", " (number->string angle) "°"))
+
+
+    (super-new)
+    ))
+      
 (struct parameter (lower-bound upper-bound default)
   #:auto-value 0
   #:transparent

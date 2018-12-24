@@ -28,6 +28,9 @@ Currently parameters setters are stored in the parameters hashmap, so are expose
 - ~~Reading/parsing parameters  
 It is currently unclear what the expectation is for how a script might actually use an Anatomy file, i.e. how it should read the allowed parameter ranges so it can then choose values for them. Probably best to have a consistent interface, regardless of what name is given to the parameters definition in the anatomy file.~~
 
+- Add addressable connections  
+At the moment, a connection only exists as a property on the parent bone, rather than as a standard racket variable itself (e.g. attempts to access `illium~scapula` will yield nothing).
+
 - Ability to reference point dimensions  
 At the moment you can't reference a specific dimension of a point. I've never needed it, but it feels like an omission, and something that should be very simple to add.
 
