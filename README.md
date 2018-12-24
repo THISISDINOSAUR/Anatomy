@@ -161,6 +161,14 @@ Should  return dinosaur with default parameters. Also, need to reset parameters 
 
 Top priority. A website that uses the server to display the generated creature, and provide an interface to edit the parameters.
 
+- ~~Dinosaur fetching and drawing~~
+
+- Fetching of parameters and constructing parameter sliders  
+Includes then fetching the dinosaur with these parameters
+
+- Preset buttons  
+Fetching presets, constructing buttons for them, and then fetching the dinosaur with the correct parameters. Requires presets to be implemented on the server
+
 ### Ecosystem level features
 
 - Parameter range analysis  
