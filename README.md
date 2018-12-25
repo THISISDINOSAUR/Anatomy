@@ -129,7 +129,7 @@ Needs language support first
 
 ### Web UI
 
-Top priority. A website that uses the server to display the generated creature, and provide an interface to edit the parameters.
+A website that uses the server to display the generated creature, and provide an interface to edit the parameters.
 
 - Request throttling  
 Limit request so a reasonable rate to avoid overloading the server
@@ -229,7 +229,7 @@ Similar to above. The nice appeal of footprints is it would be even easier, but 
 
 
   
-  
+
 ## Done
 
 ### Language

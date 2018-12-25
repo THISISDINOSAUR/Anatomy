@@ -9,6 +9,7 @@
 (define-macro (a-variable-definition ID VAL) #'(set! ID VAL))
 (define-macro (a-point-definition ID VAL) #'(set! ID VAL))
 (define-macro (a-parameters-definition ID VAL) #'(set! ID VAL))
+(define-macro (a-preset-definition ID VAL) #'(set! ID VAL))
 (define-macro (a-bone-definition ID VAL)
   #'(begin
       (set! ID VAL)
@@ -39,15 +40,14 @@
        [points (list->vector points-list)]))
 
 (define-macro (a-parameters PARAMETER ...)
-  #'(begin
-      (new parameters%
+  #'(new parameters%
            [parameters (make-hash
                         (list (cons (car (car PARAMETER))
                                     (cadr (car PARAMETER))) ...))]
            [setters (make-hash
                      (list (cons (car (cdr PARAMETER))
                                  (cdr (cdr PARAMETER))) ...))]
-           )))
+           ))
 
 (define-macro (a-parameter ID LOWER-BOUND UPPER-BOUND VAL)
   #'(begin
@@ -55,6 +55,13 @@
       (list (list 'ID (parameter LOWER-BOUND UPPER-BOUND VAL))
             (append-symbols 'set- 'ID) (lambda (val) (set! ID val)))
       ))
+
+(define-macro (a-preset PRESET-VALUES ...)
+  #'(begin
+      (hasheq PRESET-VALUES ...)))
+
+(define-macro (a-preset-id ID)
+  #''ID)
 
 (define (a-section bones-list)
   (new section%

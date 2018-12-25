@@ -14,7 +14,7 @@ a-bone-range-single-dimension-operation : a-bone-range /"." a-point-dimension a-
 
 @a-bone-range : a-bone-id /"[" a-point-index [/":" a-point-index] /"]"
 
-@a-definition : a-variable-definition | a-point-definition | a-bone-definition | a-connection-definition | a-parameters-definition | a-section-definition
+@a-definition : a-variable-definition | a-point-definition | a-bone-definition | a-connection-definition | a-parameters-definition | a-section-definition | a-preset-definition
 
 a-section-definition : a-section-id /"=" a-section
 a-section : a-bones-list
@@ -23,7 +23,12 @@ a-section-operation : a-section-id /"." /"scale" /"(" a-expr /"," a-expr [/"," a
 
 a-parameters-definition : a-id /"=" a-parameters
 a-parameters: /"{" [/NEWLINE]* a-parameter (/"," [/NEWLINE]* a-parameter)* [/NEWLINE]* /"}"
-a-parameter : a-variable-id /":" a-expr /">" /"<" a-expr /"=" a-expr
+a-parameter  : a-variable-id /":" a-expr /">" /"<" a-expr /"=" a-expr
+
+a-preset-definition : a-variable-id /"=" a-preset
+a-preset : /"{" [/NEWLINE]* a-preset-value (/"," [/NEWLINE]* a-preset-value)* [/NEWLINE]* /"}"
+@a-preset-value : a-preset-id /":" a-expr
+a-preset-id: a-variable-id
 
 a-bone-definition : a-bone-id /"=" a-bone
 a-bone : a-points-list | a-points-list-function
