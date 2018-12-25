@@ -175,8 +175,14 @@ Includes then fetching the dinosaur with these parameters~~
 - ~~Request smoothing  
 Currently requests a dinosaur on every input, leading to far to many server requests, and potential race conditions. Should at least implement a system where no requests are made whilst a request is pending~~
 
+- Request throttling  
+Limit request so a reasonable rate to avoid overloading the server
+
 - Request timeout  
-Due to request smoothing, if a request takes a long time, it will block all other requests. There should be some kind of timeout on this. Whilst faffing with timers, may also want to implement some sort of rate limiting
+Due to request smoothing, if a request takes a long time, it will block all other requests. There should be some kind of timeout on this. 
+
+- Investigate stalling requests  
+Sometimes requests take a long time, should investigate why
 
 - Fix Z fighting  
 All bones are currently rendered at the same z position, leading to z fighting.
@@ -184,8 +190,8 @@ All bones are currently rendered at the same z position, leading to z fighting.
 - Preset buttons  
 Fetching presets, constructing buttons for them, and then fetching the dinosaur with the correct parameters. Requires presets to be implemented on the server and at the language level.
 
-- Print parameters button  
-Reimplement print parameters button
+- ~~Print parameters button  
+Reimplement print parameters button~~
 
 - Refactoring  
 Code currently uses a lot of code from the old JS version, and could do with refactoring
