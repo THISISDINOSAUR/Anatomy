@@ -9,28 +9,8 @@ Anatomy definition -> Racket server -> Web UI
 
 ### Language level features
 
-- ~~Fix scaling  
-Section scaling (and probably bone scaling) currently has an issue, where it appears the parent connection point isn't scaled with the rest of the bone.~~
-
-- ~~Fix arm  
-Scaling the arm currently has an issue, needs investigation.  
-On closer inspection, these seems to have something to do with duplicates~~
-
-- ~~Better output for parameters  
-Currently printing parameters prints the raw hashmap. A more user friendly output could be provided.
-It may well make sense to implement this by converting that hashmap into a custom parameters object, which would also be useful for the cleaning up of parameter setters.~~
-
-- ~~Cleaning up parameter setters  
-Currently parameters setters are stored in the parameters hashmap, so are exposed to users. They should either be moved to a private data structure, or handled as part of a separate parameters object (see above).~~
-
-- ~~Reading/parsing parameters  
-It is currently unclear what the expectation is for how a script might actually use an Anatomy file, i.e. how it should read the allowed parameter ranges so it can then choose values for them. Probably best to have a consistent interface, regardless of what name is given to the parameters definition in the anatomy file.~~
-
 - Add addressable connections  
 At the moment, a connection only exists as a property on the parent bone, rather than as a standard racket variable itself (e.g. attempts to access `illium~scapula` will yield nothing).
-
-- ~~Connections should have a consistent order  
-Connections are currently stored in a hash map, so when returned don't have a consistent order. The could just be an array, and the connection object could contain the child bone (Which would make a number of other things easier as well (such as the json generating code))~~
 
 - Ability to reference point dimensions  
 At the moment you can't reference a specific dimension of a point. I've never needed it, but it feels like an omission, and something that should be very simple to add.
@@ -64,9 +44,6 @@ To implement this would be fairly difficult for the benefit it would provide, an
 
 - Compound operators on variables  
 It's currently possible to use compound operators (e.g. `+=`) when performing operations on bone ranges, but not on variables
-
-- ~~Assignment to a single bone point  
-It's possible to mutate a single point with compound operators, but it should also be possible to assign a value to a single point as well~~
 
 - Standalone average function  
 For both points and values. This could be difficult as long as the short form average function exists in connection points
@@ -139,41 +116,20 @@ Slight complication: the far range of one parameter might not be compatible with
 - Preset parameter sub specifications  
 Attempt to accomplish same as parameter ranges, but instead have the ability to define subsets of parameters on a preset (e.g. two different pairs of tail lengths and neck lengths).
 
-- ~~Clean up expander  
-The expander's gotten quite large and unorganised, and could do with some reorganisation.~~
-
 - Mute output when importing to regular racket scripts  
 Should be relatively easy to do
 
 ### Server features
-
-**Done!**
   
 A server that reads an anatomy, exposes the parameter information, takes in parameter values, and then uses those to regenerate the anatomy, and then outputs the new anatomy.
 
-- ~~URL parameters currently case insensitive  
-This is because in racket `request-bindings` is case insensitive. Need to find an alternative for this.~~
+- Serve presets  
+Needs language support first
 
-- ~~Server should serve available parameters  
-This should include the allowed ranges and default value~~
-
-- ~~Parameter checks  
-Should check the parameters actually exist, and check the allowed ranges, and handle appropriately~~
-
-- ~~Handle when no parameters specified  
-Should  return dinosaur with default parameters. Also, need to reset parameters when regardless, to handle when only certain parameters are specified.~~
 
 ### Web UI
 
 Top priority. A website that uses the server to display the generated creature, and provide an interface to edit the parameters.
-
-- ~~Dinosaur fetching and drawing~~
-
-- ~~Fetching of parameters and constructing parameter sliders  
-Includes then fetching the dinosaur with these parameters~~
-
-- ~~Request smoothing  
-Currently requests a dinosaur on every input, leading to far to many server requests, and potential race conditions. Should at least implement a system where no requests are made whilst a request is pending~~
 
 - Request throttling  
 Limit request so a reasonable rate to avoid overloading the server
@@ -184,14 +140,8 @@ Due to request smoothing, if a request takes a long time, it will block all othe
 - Investigate stalling requests  
 Sometimes requests take a long time, should investigate why
 
-- ~~Fix Z fighting  
-All bones are currently rendered at the same z position, leading to z fighting.~~
-
 - Preset buttons  
 Fetching presets, constructing buttons for them, and then fetching the dinosaur with the correct parameters. Requires presets to be implemented on the server and at the language level.
-
-- ~~Print parameters button  
-Reimplement print parameters button~~
 
 - Refactoring  
 Code currently uses a lot of code from the old JS version, and could do with refactoring
@@ -276,3 +226,64 @@ Similar to above. Could be a nice self contained project that also has the poten
 
 - Bird feet or footprint generator
 Similar to above. The nice appeal of footprints is it would be even easier, but would still tell you a lot about the bird. Would make a neat twitter bot. what would be especially cool is if I made a feet generator, and then used that to make a footprint generator.
+
+## Done
+
+### Language
+
+- ~~Fix scaling  
+Section scaling (and probably bone scaling) currently has an issue, where it appears the parent connection point isn't scaled with the rest of the bone.~~
+
+- ~~Fix arm  
+Scaling the arm currently has an issue, needs investigation.  
+On closer inspection, these seems to have something to do with duplicates~~
+
+- ~~Better output for parameters  
+Currently printing parameters prints the raw hashmap. A more user friendly output could be provided.
+It may well make sense to implement this by converting that hashmap into a custom parameters object, which would also be useful for the cleaning up of parameter setters.~~
+
+- ~~Cleaning up parameter setters  
+Currently parameters setters are stored in the parameters hashmap, so are exposed to users. They should either be moved to a private data structure, or handled as part of a separate parameters object (see above).~~
+
+- ~~Reading/parsing parameters  
+It is currently unclear what the expectation is for how a script might actually use an Anatomy file, i.e. how it should read the allowed parameter ranges so it can then choose values for them. Probably best to have a consistent interface, regardless of what name is given to the parameters definition in the anatomy file.~~
+
+- ~~Connections should have a consistent order  
+Connections are currently stored in a hash map, so when returned don't have a consistent order. The could just be an array, and the connection object could contain the child bone (Which would make a number of other things easier as well (such as the json generating code))~~
+
+- ~~Assignment to a single bone point  
+It's possible to mutate a single point with compound operators, but it should also be possible to assign a value to a single point as well~~
+
+- ~~Clean up expander  
+The expander's gotten quite large and unorganised, and could do with some reorganisation.~~
+
+### Server
+
+- ~~URL parameters currently case insensitive  
+This is because in racket `request-bindings` is case insensitive. Need to find an alternative for this.~~
+
+- ~~Server should serve available parameters  
+This should include the allowed ranges and default value~~
+
+- ~~Parameter checks  
+Should check the parameters actually exist, and check the allowed ranges, and handle appropriately~~
+
+- ~~Handle when no parameters specified  
+Should  return dinosaur with default parameters. Also, need to reset parameters when regardless, to handle when only certain parameters are specified.~~
+
+### Web UI
+
+- ~~Dinosaur fetching and drawing~~
+
+- ~~Fetching of parameters and constructing parameter sliders  
+Includes then fetching the dinosaur with these parameters~~
+
+- ~~Request smoothing  
+Currently requests a dinosaur on every input, leading to far to many server requests, and potential race conditions. Should at least implement a system where no requests are made whilst a request is pending~~
+
+- ~~Fix Z fighting  
+All bones are currently rendered at the same z position, leading to z fighting.~~
+
+- ~~Print parameters button  
+Reimplement print parameters button~~
+
