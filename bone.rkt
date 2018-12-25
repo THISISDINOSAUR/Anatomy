@@ -12,11 +12,13 @@
 
     (init-field
      [points #f]
+     [parent-connection #f]
      [connections (make-hash)]
      [name ""])
 
     (define/public (add-connection! bone connection)
-      (hash-set! connections bone connection))
+      (hash-set! connections bone connection)
+      (set-field! parent-connection bone connection))
     
     (define/public (remove-connection! bone)
       (hash-remove! connections bone))
@@ -41,11 +43,20 @@
         (operation-on-dimension-of-index! op dimension val i)
         ))
 
+    ;TODO this should scale connections
     (define/public (scale! x y z)
       (vector-map! (lambda (point)
            (scale-point-dimension-wise point x y z))
          points)
-      (void)) ;void to supress output
+      (scale-connections! x y z)
+      (send parent-connection scale-child! x y z) ;TODO: check what happens when no parent
+      )
+
+    (define (scale-connections! x y z)
+      (for ([(bone connection) connections])
+        (send connection scale-parent! x y z))
+      )
+             
 
     (define (points->json)
       (vector->list (vector-map (lambda (point) (point->list point)) points)))
@@ -115,6 +126,12 @@
      [parent-point #f]
      [child-point #f]
      [angle #f])
+
+    (define/public (scale-parent! x y z)
+      (set! parent-point (scale-point-dimension-wise parent-point x y z)))
+
+    (define/public (scale-child! x y z)
+      (set! child-point (scale-point-dimension-wise child-point x y z)))
 
     (define/public (json child-bone)
       (hasheq 'parent_point (point->list parent-point)

@@ -9,8 +9,8 @@ Anatomy definition -> Racket server -> Web UI
 
 ### Language level features
 
-- Fix scaling  
-Section scaling (and probably bone scaling) currently has an issue, where it appears the parent connection point isn't scaled with the rest of the bone.
+- ~~Fix scaling  
+Section scaling (and probably bone scaling) currently has an issue, where it appears the parent connection point isn't scaled with the rest of the bone.~~
 
 - Fix arm  
 Scaling the arm currently has an issue, needs investigation
@@ -30,6 +30,9 @@ It is currently unclear what the expectation is for how a script might actually 
 
 - Add addressable connections  
 At the moment, a connection only exists as a property on the parent bone, rather than as a standard racket variable itself (e.g. attempts to access `illium~scapula` will yield nothing).
+
+- Connections should have a consistent order  
+Connections are currently stored in a hash map, so when returned don't have a consistent order. The could just be an array, and the connection object could contain the child bone (Which would make a number of other things easier as well (such as the json generating code))
 
 - Ability to reference point dimensions  
 At the moment you can't reference a specific dimension of a point. I've never needed it, but it feels like an omission, and something that should be very simple to add.
