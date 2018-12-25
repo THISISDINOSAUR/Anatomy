@@ -25,7 +25,8 @@
           (new connection%
            [parent-point (POINT-EXPR-OR-FUNC1 BONE-ID1)]
            [child-point (POINT-EXPR-OR-FUNC2 BONE-ID2)]
-           [angle ANGLE])))
+           [angle ANGLE]
+           [child-bone BONE-ID2])))
 
 (define-macro-cases a-point
   [(a-point X Y) #'(point X Y 0)]

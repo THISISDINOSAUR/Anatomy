@@ -13,15 +13,12 @@
     (init-field
      [points #f]
      [parent-connection #f]
-     [connections (make-hash)]
+     [connections (list)]
      [name ""])
 
     (define/public (add-connection! bone connection)
-      (hash-set! connections bone connection)
+      (set! connections (append connections (list connection)))
       (set-field! parent-connection bone connection))
-    
-    (define/public (remove-connection! bone)
-      (hash-remove! connections bone))
 
     (define/public (point-at-index index)
       (vector-ref points index))
@@ -43,7 +40,6 @@
         (operation-on-dimension-of-index! op dimension val i)
         ))
 
-    ;TODO this should scale connections
     (define/public (scale! x y z)
       (vector-map! (lambda (point)
            (scale-point-dimension-wise point x y z))
@@ -53,18 +49,17 @@
       )
 
     (define (scale-connections! x y z)
-      (for ([(bone connection) connections])
+      (for ([(connection) connections])
         (send connection scale-parent! x y z))
-      )
-             
+      )      
 
     (define (points->json)
       (vector->list (vector-map (lambda (point) (point->list point)) points)))
 
     (define (connections->json)
       (map (lambda (bone-connection)
-             (send (cdr bone-connection) json (car bone-connection)))
-           (hash->list connections)))
+             (send bone-connection json))
+           connections))
 
     (define/public (json)
       (hasheq 'name name
@@ -83,10 +78,10 @@
                               (string-append
                                name
                                " ~ "
-                               (get-field name (car bone-connection))
+                               (get-field name (get-field child-bone bone-connection))
                                " = "
-                               (send (cdr bone-connection) description)))
-                            (hash->list connections))
+                               (send bone-connection description)))
+                            connections)
                        (string-append "\n" indent indent))
        "\n"))
       
@@ -125,7 +120,8 @@
     (init-field
      [parent-point #f]
      [child-point #f]
-     [angle #f])
+     [angle #f]
+     [child-bone #f])
 
     (define/public (scale-parent! x y z)
       (set! parent-point (scale-point-dimension-wise parent-point x y z)))
@@ -133,7 +129,7 @@
     (define/public (scale-child! x y z)
       (set! child-point (scale-point-dimension-wise child-point x y z)))
 
-    (define/public (json child-bone)
+    (define/public (json)
       (hasheq 'parent_point (point->list parent-point)
                      'child_point (point->list child-point)
                      'angle angle
