@@ -27,9 +27,15 @@
            [child-point (POINT-EXPR-OR-FUNC2 BONE-ID2)]
            [angle ANGLE])))
 
-(define (a-bone point-list)
+(define-macro-cases a-point
+  [(a-point X Y) #'(point X Y 0)]
+  [(a-point X Y Z) #'(point X Y Z)])
+
+(define-macro (a-points-list VAR ...) #'(list VAR ...))
+
+(define (a-bone points-list)
   (new bone%
-       [points point-list]))
+       [points (list->vector points-list)]))
 
 (define-macro (a-parameters PARAMETER ...)
   #'(begin
@@ -57,7 +63,7 @@
   #'(list BONE-IDS ...))
 
 (define (a-bone-duplicate bone-id)
-  (get-field points bone-id))
+  (vector->list (get-field points bone-id)))
 
 
 ;Connection point evaluation

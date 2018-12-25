@@ -12,11 +12,9 @@ Anatomy definition -> Racket server -> Web UI
 - ~~Fix scaling  
 Section scaling (and probably bone scaling) currently has an issue, where it appears the parent connection point isn't scaled with the rest of the bone.~~
 
-- Fix arm  
-Scaling the arm currently has an issue, needs investigation
-
-- Check all other parameters 
-It looks like there may be other issues, although it's hard to tell at the moment with the other scaling issues 
+- ~~Fix arm  
+Scaling the arm currently has an issue, needs investigation.  
+On closer inspection, these seems to have something to do with duplicates~~
 
 - ~~Better output for parameters  
 Currently printing parameters prints the raw hashmap. A more user friendly output could be provided.

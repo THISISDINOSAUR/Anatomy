@@ -24,12 +24,6 @@
   [(_ LEFT "^" RIGHT) #'(expt LEFT RIGHT)])
 
 
-(define-macro-cases a-point
-  [(a-point X Y) #'(point X Y 0)]
-  [(a-point X Y Z) #'(point X Y Z)])
-
-(define-macro (a-points-list VAR ...) #'(vector VAR ...))
-
 (define-macro-cases a-point-sum
   [(_ VAL) #'VAL]
   [(_ LEFT "+" RIGHT) #'(add-points LEFT RIGHT)]

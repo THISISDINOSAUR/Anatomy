@@ -5,7 +5,7 @@
 (require "point.rkt")
 
 (define (a-trapesium topSpan bottomSpan leftSpan rightSpan)
-  (list->vector (trapesium topSpan bottomSpan leftSpan rightSpan)))
+  (trapesium topSpan bottomSpan leftSpan rightSpan))
 
 (define-macro (a-max VALS ...)
   #'(max VALS ...))
