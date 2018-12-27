@@ -146,12 +146,6 @@ Due to request smoothing, if a request takes a long time, it will block all othe
 - Investigate stalling requests  
 Sometimes requests take a long time, should investigate why
 
-- Preset buttons  
-Fetching presets, constructing buttons for them, and then fetching the dinosaur with the correct parameters. Requires presets to be implemented on the server and at the language level.
-
-- Refactoring  
-Code currently uses a lot of code from the old JS version, and could do with refactoring
-
 - Refactor rendering to be more generic  
 Currently uses a hard coded 'initial position'
 
@@ -302,4 +296,7 @@ All bones are currently rendered at the same z position, leading to z fighting.
 
 - Print parameters button  
 Reimplement print parameters button
+
+- Preset buttons  
+Fetching presets, constructing buttons for them, and then fetching the dinosaur with the correct parameters. Requires presets to be implemented on the server and at the language level.
 
