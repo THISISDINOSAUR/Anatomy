@@ -9,7 +9,8 @@
          "point.rkt"
          "bone.rkt")
 
-(require "dinosaur.rkt") 
+(require "dinosaur.rkt"
+         (prefix-in presets: "dinosaur-presets.rkt"))
 
 (define (response
 	 #:code    [code/kw 200]
@@ -88,6 +89,14 @@
   (response #:body (jsexpr->bytes (send Parameters json))
             #:mime "application/json"))
 
+(define (get-presets req)
+  (define presets-json (list presets:sauropod presets:therapod presets:orinthopod presets:stegasaur presets:ankylosaur presets:pachycephalosaur presets:ceratops presets:ornithomimosaur))
+  (define json (map (lambda (preset-name preset-json)
+                      (hasheq preset-name preset-json))
+                    presets:presets presets-json))
+  (response #:body (jsexpr->bytes json)
+            #:mime "application/json"))
+
 (define (not-found req)
   (response #:code 404
 	    #:message "Not Found"))
@@ -112,6 +121,7 @@
   (dispatch-rules
    [("dinosaur") #:method "get" get-dinosaur]
    [("parameters") #:method "get" get-parameters]
+   [("presets") #:method "get" get-presets]
    [else not-found]))
 
 (module+ main

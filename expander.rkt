@@ -15,7 +15,8 @@
 
 (define-macro (a-module-begin (a-program LINE ...))
   (with-pattern
-      ([(ID ...) (find-unique-ids #'(LINE ...))])
+      ([(ID ...) (find-unique-ids 'a-id #'(LINE ...))]
+       [(PRESET-ID ...) (find-unique-ids 'a-preset-id #'(LINE ...))])
   #'(#%module-begin
      
      (provide ID ...)
@@ -24,6 +25,8 @@
      (provide set-parameters!)
      (provide reset-parameters!)
      
+     (define presets (list 'PRESET-ID ...))
+     (provide presets)
      (provide a-print)
      
      (provide recalculate)
@@ -35,10 +38,10 @@
 
 (begin-for-syntax
   (require racket/list)
-  (define (find-unique-ids line-stxs)
+  (define (find-unique-ids id-type line-stxs)
     (remove-duplicates
      (for/list ([stx (in-list (stx-flatten line-stxs))]
-                #:when (syntax-property stx 'a-id))
+                #:when (syntax-property stx id-type))
        stx)
      #:key syntax->datum)))
 
