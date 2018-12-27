@@ -9,6 +9,10 @@ Anatomy definition -> Racket server -> Web UI
 
 ### Language level features
 
+- Parameters are out of order  
+Reason unknown, seem to be in a consistent order.  
+Did I use a hash map again? Probably
+
 - Add addressable connections  
 At the moment, a connection only exists as a property on the parent bone, rather than as a standard racket variable itself (e.g. attempts to access `illium~scapula` will yield nothing).
 
@@ -95,9 +99,6 @@ Likely to be more useful once in 3D. Haven't thought much about how this might b
 Definitely required, but currently little thoughts on how best to implement. Would probably require to distribute a certain number of something along a line, with different sizes and frequencies at different points (e.g. bigger spines in the middle of the body).  
 At least horns should be easy.
 
-- Reading in presets/definitions  
-Essential feature, ability to define and import individual creature definitions (i.e. sets of specific parameter values e.g. a stegosaur)
-
 - Phylogentic information  
 Presets/creature definitions could contain additional phylogentic information (e.g. suborder, family, etc.). This could then be used to construct a procedurally generated phylogentic tree. This could then be used to infer other information about the generated creatures (e.g. their relationship to other creatures).
 Not a priority, but should be relatively straight forward and cool
@@ -119,12 +120,18 @@ Attempt to accomplish same as parameter ranges, but instead have the ability to 
 - Mute output when importing to regular racket scripts  
 Should be relatively easy to do
 
+- Bone groups  
+It could be useful to have separate shapes that can be treated as a single bone (e.g. when multiple bones make up a single joint). What this should look like is unclear.
+
 ### Server features
   
 A server that reads an anatomy, exposes the parameter information, takes in parameter values, and then uses those to regenerate the anatomy, and then outputs the new anatomy.
 
-- Serve presets  
-Needs language support first
+- Collect presets automatically    
+At the moment, each preset has to be added to the list of presets served manually.
+
+- Serve preset based in name  
+At the moment presets are served by the front end giving the correct parameter values. It should be possible to request a preset by using only the name
 
 
 ### Web UI
@@ -260,6 +267,9 @@ It's possible to mutate a single point with compound operators, but it should al
 - Clean up expander  
 The expander's gotten quite large and unorganised, and could do with some reorganisation.
 
+- Reading in presets/definitions  
+Essential feature, ability to define and import individual creature definitions (i.e. sets of specific parameter values e.g. a stegosaur)
+
 ### Server
 
 - URL parameters currently case insensitive  
@@ -273,6 +283,8 @@ Should check the parameters actually exist, and check the allowed ranges, and ha
 
 - Handle when no parameters specified  
 Should  return dinosaur with default parameters. Also, need to reset parameters when regardless, to handle when only certain parameters are specified.
+
+- Serve presets  
 
 ### Web UI
 
