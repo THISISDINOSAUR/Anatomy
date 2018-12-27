@@ -164,20 +164,21 @@
 
     (init-field
      [parameters #f]
-     [setters #f])
+     [setters #f]
+     [ordering #f])
 
     (define/public (json)
-      (map (lambda (param)
-             (hasheq (car param) (parameter->json (cdr param))))
-           (hash->list parameters)))
+      (map (lambda (param-name)
+             (hasheq param-name (parameter->json (hash-ref parameters param-name))))
+           ordering))
 
     (define/public (description)
       (string-join
-       (map (lambda (param)
-              (string-append (symbol->string (car param))
+       (map (lambda (param-name)
+              (string-append (symbol->string param-name)
                              ": "
-                             (describe-parameter (cdr param))))
-            (hash->list parameters))
+                             (describe-parameter (hash-ref parameters param-name))))
+            ordering)
        "\n"))
 
     (super-new)))

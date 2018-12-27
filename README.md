@@ -9,9 +9,8 @@ Anatomy definition -> Racket server -> Web UI
 
 ### Language level features
 
-- Parameters are out of order  
-Reason unknown, seem to be in a consistent order.  
-Did I use a hash map again? Probably
+- Check what happens when scaling a bone with no parent  
+This case isn't explicitly handled, so I'm not sure what will happen
 
 - Add addressable connections  
 At the moment, a connection only exists as a property on the parent bone, rather than as a standard racket variable itself (e.g. attempts to access `illium~scapula` will yield nothing).
@@ -269,6 +268,8 @@ The expander's gotten quite large and unorganised, and could do with some reorga
 
 - Reading in presets/definitions  
 Essential feature, ability to define and import individual creature definitions (i.e. sets of specific parameter values e.g. a stegosaur)
+
+- Parameters are out of order  
 
 ### Server
 

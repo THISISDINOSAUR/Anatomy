@@ -47,6 +47,7 @@
            [setters (make-hash
                      (list (cons (car (cdr PARAMETER))
                                  (cdr (cdr PARAMETER))) ...))]
+           [ordering (list (car (car PARAMETER)) ...)]
            ))
 
 (define-macro (a-parameter ID LOWER-BOUND UPPER-BOUND VAL)
