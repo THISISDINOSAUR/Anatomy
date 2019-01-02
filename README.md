@@ -146,6 +146,8 @@ Due to request smoothing, if a request takes a long time, it will block all othe
 - Investigate stalling requests  
 Sometimes requests take a long time, should investigate why
 
+- Update parameter sliders when setting a preset
+
 - Refactor rendering to be more generic  
 Currently uses a hard coded 'initial position'
 
