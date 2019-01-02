@@ -25,10 +25,11 @@ a-parameters-definition : a-id /"=" a-parameters
 a-parameters: /"{" [/NEWLINE]* a-parameter (/"," [/NEWLINE]* a-parameter)* [/NEWLINE]* /"}"
 a-parameter  : a-variable-id /":" a-expr /">" /"<" a-expr /"=" a-expr
 
-a-preset-definition : a-variable-id /"=" a-preset
+a-preset-definition : a-preset-id /"=" a-preset
+@a-preset-id : a-variable-id
 a-preset : /"{" [/NEWLINE]* a-preset-value (/"," [/NEWLINE]* a-preset-value)* [/NEWLINE]* /"}"
-@a-preset-value : a-preset-id /":" a-expr
-a-preset-id: a-variable-id
+@a-preset-value : a-preset-value-id /":" a-expr
+a-preset-value-id: a-variable-id
 
 a-bone-definition : a-bone-id /"=" a-bone
 a-bone : a-points-list | a-points-list-function

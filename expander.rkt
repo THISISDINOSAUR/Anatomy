@@ -16,7 +16,8 @@
 (define-macro (a-module-begin (a-program LINE ...))
   (with-pattern
       ([(ID ...) (find-unique-ids 'a-id #'(LINE ...))]
-       [(PRESET-ID ...) (find-unique-ids 'a-preset-id #'(LINE ...))])
+       [(PRESET-ID ...) (find-unique-ids 'a-preset-id #'(LINE ...))]
+       [PRESETS-ID (datum->syntax #'presets #'presets)])
   #'(#%module-begin
      
      (provide ID ...)
@@ -24,9 +25,9 @@
 
      (provide set-parameters!)
      (provide reset-parameters!)
-     
-     (define presets (list 'PRESET-ID ...))
-     (provide presets)
+
+     (define PRESETS-ID (list 'PRESET-ID ...))
+     (provide PRESETS-ID)
      (provide a-print)
      
      (provide recalculate)

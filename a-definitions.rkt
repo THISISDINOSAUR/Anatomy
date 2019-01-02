@@ -61,7 +61,7 @@
   #'(begin
       (hasheq PRESET-VALUES ...)))
 
-(define-macro (a-preset-id ID)
+(define-macro (a-preset-value-id ID)
   #''ID)
 
 (define (a-section bones-list)
