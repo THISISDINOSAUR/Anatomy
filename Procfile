@@ -1,1 +1,1 @@
-web: racket -l anatomy-server/server
+web: racket -l anatomy/server
