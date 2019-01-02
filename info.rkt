@@ -1,5 +1,5 @@
 #lang info
-(define collection "Anatomy")
+(define collection "anatomy")
 (define version "1.0")
 (define test-omit-paths '("lexer-test.rkt" "parse-test.rkt"))
 (define deps '("base"
