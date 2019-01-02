@@ -124,9 +124,14 @@
    [("presets") #:method "get" get-presets]
    [else not-found]))
 
+(define port (if (getenv "PORT")
+                 (string->number (getenv "PORT"))
+                 8080))
+
 (module+ main
   (serve/servlet
    go
-   #:port 6892
+   #:port port
+   #:listen-ip #f
    #:command-line? #t
    #:servlet-regexp #rx""))
