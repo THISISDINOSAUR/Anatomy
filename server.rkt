@@ -18,7 +18,7 @@
 	 #:seconds [seconds/kw (current-seconds)]
 	 #:mime    [mime/kw #f]
 	 #:headers [headers/kw (list
-                                (make-header #"Access-Control-Allow-Origin:"
+                                (make-header #"Access-Control-Allow-Origin"
                                              #"*"))]
 	 #:body    [body/kw empty])
   (define mime
