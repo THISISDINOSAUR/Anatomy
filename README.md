@@ -2,15 +2,44 @@
 
 A DSL  capable of specifying arbitrary skeletons with interrelationships, constraints, and bounded parameters. Designed to be used to create procedural creature generators.
 
-This is the first step in a pipeline for THE DINOSAUR GENERATOR:  
+This is the first two steps in the pipeline for THE DINOSAUR GENERATOR:  
 Anatomy definition -> Racket server -> Web UI
 
-## Potential future features
+## Current TODO
 
-### Language level features
+### Anatomy Language
 
 - Check what happens when scaling a bone with no parent  
 This case isn't explicitly handled, so I'm not sure what will happen
+
+- Relative/absolute points/points pinned to specific bones  
+Defining shapes that have points that are relative to different bones is essential for implementing soft tissue stuff. Exactly how they should be implemented though is another matter entirely. In theory they perhaps ought to be calculated after the entire skeleton has been calculated, but then this poses interesting questions about what will happen when someone tries to use the individual points as part of something else. 
+Perhaps could have two types, deferred and none deferred, i.e. a non deferred point would give you the absolute position of a point on a bone at the time of defining the non deferred point, and any subsequent changes to that bone wouldn't be applied to that point. This would have the advantage that this point could then be used without issue in anyway. This would essentially require that any relative points be defined after the skeleton (which is a limitation that makes sense).  
+A deferred point could be defined relative to a bone, and then no matter what happens to that bone, would keep its relative position to that bone. This could certainly be useful, although substantially more complicated to implement. Easiest way to implement would probably to mutate relative points at the same time as mutating the rest of the bone.  
+Probably start with the nondeferred points, and then see where we go from there.
+
+- Soft body  
+Absolutely can't be done without relative points (see above). Should otherwise be simple to do a preliminary implementation, and is absolutely essential for actually rendering something.
+
+- Preset inheritance  
+Would be useful to define presets relative to other presets (e.g have a general Stegosauria, and then define Stegosauridae relative to that, etc.). Could have a concept of abstract presets, that are for inheriting from only, and don't represent real creatures.
+
+### Server
+
+### Web UI
+
+- Request timeout  
+Due to request smoothing, if a request takes a long time, it will block all other requests. There should be some kind of timeout on this.
+
+### dinosaur.anatomy
+
+- Protodinosaur  
+Refactor dinosaur layout so that default position is as close to a protodinosaur as possible.. Then progressively define presets further and further down the phylogentic tree.
+
+## Potential future features
+
+### Anatomy Language
+
 
 - Add addressable connections  
 At the moment, a connection only exists as a property on the parent bone, rather than as a standard racket variable itself (e.g. attempts to access `illium~scapula` will yield nothing).
@@ -82,14 +111,6 @@ Big questions about how to represent shapes in 3D. It seems unlikely that 3d bon
 Coming up with a good way to define shapes in 3D by hand could still be very useful at least for simpler things.  
 Perhaps think about more complex helper functions, with specific bones/structures in mind (e.g. helper function to make connected successive circles of points with different properties, that e.g. could be used to define a tail)
 
-- Relative/absolute points/points pinned to specific bones  
-Defining shapes that have points that are relative to different bones is essential for implementing soft tissue stuff. Exactly how they should be implemented though is another matter entirely. In theory they perhaps ought to be calculated after the entire skeleton has been calculated, but then this poses interesting questions about what will happen when someone tries to use the individual points as part of something else. 
-Perhaps could have two types, deferred and none deferred, i.e. a non deferred point would give you the absolute position of a point on a bone at the time of defining the non deferred point, and any subsequent changes to that bone wouldn't be applied to that point. This would have the advantage that this point could then be used without issue in anyway. This would essentially require that any relative points be defined after the skeleton (which is a limitation that makes sense).  
-A deferred point could be defined relative to a bone, and then no matter what happens to that bone, would keep its relative position to that bone. This could certainly be useful, although substantially more complicated to implement. Easiest way to implement would probably to mutate relative points at the same time as mutating the rest of the bone.  
-Probably start with the nondeferred points, and then see where we go from there.
-
-- Soft body  
-Absolutely can't be done without relative points (see above). Should otherwise be simple to do a preliminary implementation, and is absolutely essential for actually rendering something.
 
 - Muscles or other things to define mass  
 Likely to be more useful once in 3D. Haven't thought much about how this might be done or what might be useful. An interesting thing to think about for the future, but currently no intentions to add.
@@ -105,9 +126,6 @@ Not a priority, but should be relatively straight forward and cool
 - Other meta information in presets  
 By including other information about presets (e.g what they ate, where they lived, temporal range etc.), further information could be inferred about generated creatures. How to best structure this information is unclear at this time, and this is a far off goal. Definitely would be cool though. Probably best if individual types of info are added as desired (e.g. temporal range would be an easy one to start with).
 
-- Preset inheritance  
-Would be useful to define presets relative to other presets (e.g have a general Stegosauria, and then define Stegosauridae relative to that, etc.). Could have a concept of abstract presets, that are for inheriting from only, and don't represent real creatures.
-
 - Preset parameter ranges  
 At least when it comes to certain parameters (e.g. spine distribution, soft tissue stuff), it may make sense for an individual species to have a range for certain parameters, rather than a specific value (e.g. tail length can be between 1.2 and 1.4, rather than just 1.3). Exactly how this would interact with any ML for the parameter value generation is unclear.
 May be worth implementing, and then ignoring it for most purposes (e.g. just taking the middle value).  
@@ -122,13 +140,13 @@ Should be relatively easy to do
 - Bone groups  
 It could be useful to have separate shapes that can be treated as a single bone (e.g. when multiple bones make up a single joint). What this should look like is unclear.
 
-### Server features
+### Server
   
 A server that reads an anatomy, exposes the parameter information, takes in parameter values, and then uses those to regenerate the anatomy, and then outputs the new anatomy.
 
 
 - Serve preset based on name  
-At the moment presets are served by the front end giving the correct parameter values. It should be possible to request a preset by using only the name
+At the moment presets are served by the front end giving the correct parameter values. It should be possible to request a preset by using only the name. Low priority, given that the front end handles this fine
 
 
 ### Web UI
@@ -136,19 +154,12 @@ At the moment presets are served by the front end giving the correct parameter v
 A website that uses the server to display the generated creature, and provide an interface to edit the parameters.
 
 - Request throttling  
-Limit request so a reasonable rate to avoid overloading the server
-
-- Request timeout  
-Due to request smoothing, if a request takes a long time, it will block all other requests. There should be some kind of timeout on this. 
-
-- Investigate stalling requests  
-Sometimes requests take a long time, should investigate why. 
-This only happens locally, so may be DrRacket related
+Limit request so a reasonable rate to avoid overloading the server 
 
 - Refactor rendering to be more generic  
 Currently uses a hard coded 'initial position'
 
-### Ecosystem level features
+### Ecosystem
 
 - Parameter range analysis  
 Once sufficient presets are defined, writing a tool to analyze the used parameter values could be useful to cut down the anatomy definition. E.g. removing ranges of parameters that are unused, or if a parameter doesn't vary much to remove it entirely. Could potentially do even more complicated things, such as looking for covariant parameters, and using this information to simplify them into a single parameter.
@@ -181,9 +192,6 @@ Not a goal, but could be fun.
 - Creature labeling  
 By labeling presets (e.g. 'cute', 'vicious'), could procedurally generate creatures with certain characteristics.  
 Not a goal, but could be fun.
-
-- Racket interface  
-It's potentially also worth considering a racket interface to make it easier to iterate on anatomy files. This will depend on how easy it is to set the server up in such a way that changes to the anatomy file will be immediately reflected in the web UI.
 
 - Texturing  
 Currently little thoughts on the best way to do texturing. May use some sort of masking system, with similar tools to the other details (e.g. spikes), for things like varying stripes.  
@@ -231,7 +239,7 @@ Similar to above. The nice appeal of footprints is it would be even easier, but 
 
 ## Done
 
-### Language
+### Anatomy Language
 
 - Fix scaling  
 Section scaling (and probably bone scaling) currently has an issue, where it appears the parent connection point isn't scaled with the rest of the bone.
