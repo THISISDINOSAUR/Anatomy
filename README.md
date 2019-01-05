@@ -1,8 +1,8 @@
 # Anatomy
 
-A DSL  capable of specifying arbitrary skeletons with interrelationships, constraints, and bounded parameters. Designed to be used to create procedural creature generators.
+A DSL  capable of specifying parameterised arbitrary skeletons. Designed to be used to create procedural creature generators. For example, a single bird skeleton could be defined, with parameters that modify various aspects of it, so that, depending on the parameter values, different bird species can be represented.
 
-This is the first two steps in the pipeline for THE DINOSAUR GENERATOR:  
+This is the first two steps in the pipeline for THE DINOSAUR GENERATOR, containing both the language, and the server that serves the generated results (as well as associated information, such as information on the allowed parameter values, and the defined presets):  
 Anatomy definition -> Racket server -> Web UI
 
 ## Current TODO
