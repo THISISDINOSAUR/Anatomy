@@ -126,10 +126,8 @@ It could be useful to have separate shapes that can be treated as a single bone 
   
 A server that reads an anatomy, exposes the parameter information, takes in parameter values, and then uses those to regenerate the anatomy, and then outputs the new anatomy.
 
-- Collect presets automatically    
-At the moment, each preset has to be added to the list of presets served manually.
 
-- Serve preset based in name  
+- Serve preset based on name  
 At the moment presets are served by the front end giving the correct parameter values. It should be possible to request a preset by using only the name
 
 
@@ -144,9 +142,8 @@ Limit request so a reasonable rate to avoid overloading the server
 Due to request smoothing, if a request takes a long time, it will block all other requests. There should be some kind of timeout on this. 
 
 - Investigate stalling requests  
-Sometimes requests take a long time, should investigate why
-
-- Update parameter sliders when setting a preset
+Sometimes requests take a long time, should investigate why. 
+This only happens locally, so may be DrRacket related
 
 - Refactor rendering to be more generic  
 Currently uses a hard coded 'initial position'
@@ -283,6 +280,9 @@ Should  return dinosaur with default parameters. Also, need to reset parameters 
 
 - Serve presets  
 
+- Collect presets automatically    
+At the moment, each preset has to be added to the list of presets served manually.
+
 ### Web UI
 
 - Dinosaur fetching and drawing
@@ -301,4 +301,7 @@ Reimplement print parameters button
 
 - Preset buttons  
 Fetching presets, constructing buttons for them, and then fetching the dinosaur with the correct parameters. Requires presets to be implemented on the server and at the language level.
+
+- Update parameter sliders when setting a preset
+
 

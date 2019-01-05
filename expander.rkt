@@ -17,7 +17,8 @@
   (with-pattern
       ([(ID ...) (find-unique-ids 'a-id #'(LINE ...))]
        [(PRESET-ID ...) (find-unique-ids 'a-preset-id #'(LINE ...))]
-       [PRESETS-ID (datum->syntax #'presets #'presets)])
+       [PRESETS-ID (datum->syntax #'presets #'presets)]
+       [PRESET-GETTERS-ID (datum->syntax #'preset-getters #'preset-getters)])
   #'(#%module-begin
      
      (provide ID ...)
@@ -28,6 +29,9 @@
 
      (define PRESETS-ID (list 'PRESET-ID ...))
      (provide PRESETS-ID)
+     (define PRESET-GETTERS-ID (list (lambda () PRESET-ID) ...))
+     (provide PRESET-GETTERS-ID)
+
      (provide a-print)
      
      (provide recalculate)

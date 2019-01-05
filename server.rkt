@@ -92,10 +92,9 @@
             #:mime "application/json"))
 
 (define (get-presets req)
-  (define presets-json (list presets:sauropod presets:therapod presets:orinthopod presets:stegasaur presets:ankylosaur presets:pachycephalosaur presets:ceratops presets:ornithomimosaur))
-  (define json (map (lambda (preset-name preset-json)
-                      (hasheq preset-name preset-json))
-                    presets:presets presets-json))
+  (define json (map (lambda (preset-name preset-getter)
+                      (hasheq preset-name (preset-getter)))
+                    presets:presets presets:preset-getters))
   (response #:body (jsexpr->bytes json)
             #:mime "application/json"))
 
