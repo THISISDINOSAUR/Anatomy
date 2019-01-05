@@ -24,7 +24,6 @@ Absolutely can't be done without relative points (see above). Should otherwise b
 - Preset inheritance  
 Would be useful to define presets relative to other presets (e.g have a general Stegosauria, and then define Stegosauridae relative to that, etc.). Could have a concept of abstract presets, that are for inheriting from only, and don't represent real creatures.
 
-### Server
 
 ### Web UI
 
