@@ -203,7 +203,7 @@ Currently not a goal, with no plans to implement much in the way of texturing.
 - Animation  
 Few thoughts on potential options, but really too early for anything concrete. More of a goal than texturing. May try some simple IK as an experiment. Unsure at what stage to handle this (i.e. language level, or later down the pipeline?). Requires many questions to be answered, like should it export meshes with rigs and skin weights, or should it bake animations?
 
-### TODO on dinosaur.anatomy
+### dinosaur.anatomy
 
 - Dinosaur skeleton reference  
 Use the large number of skeletal references I posses to identify where new parameters are required to be able to define all dinosaurs.  
