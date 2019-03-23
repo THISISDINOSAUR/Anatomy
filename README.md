@@ -59,7 +59,7 @@ Should be reasonably straightforward to implement, but without much benefit or p
 - Better error messages  
 Requires proper investigation into where they are currently lacking. Will be better to implement after using the language a bit.
 
-- Add REPL support
+- Add REPL support. 
 Add ability to use anatomy in the REPL. Think might be easy so is worth doing.
 
 - Conditionals  
