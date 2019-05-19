@@ -61,6 +61,9 @@ Should be reasonably straightforward to implement, but without much benefit or p
 - Better error messages  
 Requires proper investigation into where they are currently lacking. Will be better to implement after using the language a bit.
 
+- Add REPL support  
+Add ability to use anatomy in the REPL. Think might be easy so is worth doing.
+
 - Conditionals  
 Almost certainly required sooner or later, particularly when it comes to adding different parameter types. Some minor implementation questions remain, but will likely be resolved in the course of implementing them.  
 Should be relatively straightforward to implement, but quite involved, and with a lot fundamental decisions about how the language works required.
