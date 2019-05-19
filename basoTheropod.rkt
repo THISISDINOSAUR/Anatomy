@@ -70,7 +70,7 @@ cervicalMiddle~cervicalFirst = average(0, last) ~ average(1, 2), 31.1
 
 //head start
 cranium = [-347.2, 27.28, 0], [-347.2, 109.12, 0], [-322.4, 131.44, 0], [-322.4, 166.16, 0], [-314.96, 205.84, 0], [-176.08, 195.92, 0], [-121.52, 158.72, 0], [-2.48, 173.6, 0], [-12.4, 109.12, 0], [-66.96, 96.72, 0], [-96.72, 19.84, 0], [-171.12, 2.48, 0], [-213.28, 4.96, 0]
-cervicalFirst~cranium = average(0, last) ~ average(0, 1), 7.77
+cervicalFirst~cranium = average(0, last) ~ average(0, 1), 27.77
 
 mandible = [-257.92, 19.84, 0], [-305.04, 32.24, 0], [-295.12, 49.6, 0], [-245.52, 39.68, 0], [-188.48, 42.16, 0], [-116.56, 62.0, 0], [-86.8, 84.32, 0], [-44.64, 84.32, 0], [-2.48, 59.516, 0], [-81.84, 37.2, 0], [-124.0, 2.48, 0], [-166.16, 22.32, 0]
 cranium~mandible = average(3, 4) ~ average(0, 1), 0
@@ -109,24 +109,24 @@ ulnaRadius~frontFoot = average(4, 5) ~ average(0, 1), -200
 //front leg end
 
 //second leg
-femur2 = femur.duplicate
-illium~femur2 = average(0,0,1,last) ~ average(0,10), -80
+//femur2 = femur.duplicate
+//illium~femur2 = average(0,0,1,last) ~ average(0,10), -80
 
-tibiaFibula2 = tibiaFibula.duplicate
-femur2~tibiaFibula2 = 5 ~ 14, 25
+//tibiaFibula2 = tibiaFibula.duplicate
+//femur2~tibiaFibula2 = 5 ~ 14, 25
 
-backFoot2 = backFoot.duplicate
-tibiaFibula2~backFoot2 = 6 ~ average(0,1), 90
+//backFoot2 = backFoot.duplicate
+//tibiaFibula2~backFoot2 = 6 ~ average(0,1), 90
 
 //second arm
-humerus2 = humerus.duplicate
-scapula~humerus2 = scapula[11] + [10, 15] ~ last, -121.84
+//humerus2 = humerus.duplicate
+//scapula~humerus2 = scapula[11] + [10, 15] ~ last, -121.84
 
-ulnaRadius2 = ulnaRadius.duplicate
-humerus2~ulnaRadius2 = 8 ~ 12, -50
+//ulnaRadius2 = ulnaRadius.duplicate
+//humerus2~ulnaRadius2 = 8 ~ 12, -50
 
-frontFoot2 = frontFoot.duplicate
-ulnaRadius2~frontFoot2 = average(4, 5) ~ average(0, 1), -155
+//frontFoot2 = frontFoot.duplicate
+//ulnaRadius2~frontFoot2 = average(4, 5) ~ average(0, 1), -155
 
 
 //sections start
@@ -142,8 +142,8 @@ shoulder = scapula, coracoid, sternalPlate
 
 armWithoutHand = humerus, ulnaRadius
 
-armWithoutHand2 = humerus2, ulnaRadius2
+//armWithoutHand2 = humerus2, ulnaRadius2
 
 arm = humerus, ulnaRadius, frontFoot
 
-arm2 = humerus2, ulnaRadius2, frontFoot2
+//arm2 = humerus2, ulnaRadius2, frontFoot2

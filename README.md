@@ -7,7 +7,10 @@ Anatomy definition -> Racket server -> Web UI
   
 
 Example dinosaur, with animated changing parameter values:
-![Example dinosaur](http://thecreativeperiod.com/elle/images/theDinosaurGeneratorSmall.gif)
+![Example dinosaur](http://thecreativeperiod.com/elle/images/theDinosaurGeneratorSmall.gif)  
+
+  
+I think it's worth writing a Racket front end to speed up the feedback loop when making changes to an anatomy definition (in the REPL spirit)
 
 ## Current TODO
 
@@ -16,7 +19,7 @@ Example dinosaur, with animated changing parameter values:
 - Check what happens when scaling a bone with no parent  
 This case isn't explicitly handled, so I'm not sure what will happen
 
-- Allow empty params definition (or no params definition)
+- Allow empty params definition (or no params definition)  
 
 - Relative/absolute points/points pinned to specific bones  
 Defining shapes that have points that are relative to different bones is essential for implementing soft tissue stuff. Exactly how they should be implemented though is another matter entirely. In theory they perhaps ought to be calculated after the entire skeleton has been calculated, but then this poses interesting questions about what will happen when someone tries to use the individual points as part of something else. 
