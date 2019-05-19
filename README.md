@@ -16,6 +16,8 @@ Example dinosaur, with animated changing parameter values:
 - Check what happens when scaling a bone with no parent  
 This case isn't explicitly handled, so I'm not sure what will happen
 
+- Allow empty params definition (or no params definition)
+
 - Relative/absolute points/points pinned to specific bones  
 Defining shapes that have points that are relative to different bones is essential for implementing soft tissue stuff. Exactly how they should be implemented though is another matter entirely. In theory they perhaps ought to be calculated after the entire skeleton has been calculated, but then this poses interesting questions about what will happen when someone tries to use the individual points as part of something else. 
 Perhaps could have two types, deferred and none deferred, i.e. a non deferred point would give you the absolute position of a point on a bone at the time of defining the non deferred point, and any subsequent changes to that bone wouldn't be applied to that point. This would have the advantage that this point could then be used without issue in anyway. This would essentially require that any relative points be defined after the skeleton (which is a limitation that makes sense).  
