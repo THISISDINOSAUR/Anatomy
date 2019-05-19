@@ -4,18 +4,7 @@
 //"The classic achaidc theropod"
 
 Parameters = {
-	neckLength: 0.2 > < 1.8 = 1,
-	neckAngle: -30 > < 100 = 45,
-	headSize: 0.7 > < 3 = 1,
-	tailLength: 0.2 > < 1.8 = 1,
-    tailAngle: -40 > < 30 = 0,
-	scapulaLength: 0.5 > < 1.5 = 1,
-	shoulderSize: 0.5 > < 1.5 = 1,
-	scapulaAngle: 10 > < 65 = 55,
-	armLength: 0.2 > < 1.2 = 1,
-	armWidth: 0.5 > < 1.2 = 1,
-	bodyLength: 0.5 > < 1.5 = 1,
-	bodyAngle: -35 > < 25 = 0
+	test: 0.2 > < 1.8 = 0.43
 }
 
 //hips start
@@ -44,51 +33,46 @@ tibiaFibula~backFoot = 6 ~ average(0,1), 90
 
 //body start
 dorsalSpine = [-9, 9], [-336, 3], [-643, 71], [-555, 215], [-307, 139], [0, 139]
-sacrum~dorsalSpine = average(0, last) ~ average(2,3), 22 - bodyAngle
+sacrum~dorsalSpine = average(0, last) ~ average(2,3), 22
 
 dorsalRibs = [-17, 28], [-137, 10], [-278, 6], [-536, 63], [-515, 193], [-411, 331], [-275, 375], [-42, 304], [0, 173]
 dorsalSpine~dorsalRibs = [-276, 13] ~ 2, 0
 
-scapula = [-215, 57], [-263, 34], [-290, 34], [-321, 81], [-299, 135], [-244, 134], [-226, 121], [-136, 119], [-83, 133], [-49, 173], [-26, 167], [-3, 128], [-20, 56], [-19, 36], [-50, 10], [-90, 5], [-130, 32], [-128, 53], [-135, 64]
-scapula[7:18].x += (90 * scapulaLength) - 90
-dorsalSpine~scapula = [-194.5, 94] ~ average(1,4), scapulaAngle
+scapula = [-146.22, 38.765, 0], [-178.84, 23.12, 0], [-197.22, 23.12, 0], [-218.283, 55.085, 0], [-203.322, 91.81, 0], [-165.922, 91.12, 0], [-153.68, 82.28, 0], [-61.88, 80.92, 0], [-25.843, 90.441, 0], [-2.72, 117.641, 0], [12.922, 113.56, 0], [28.562, 87.04, 0], [17.0, 38.085, 0], [17.68, 24.48, 0], [-3.4004, 6.801, 0], [-30.6, 3.4004, 0], [-57.804, 21.76, 0], [-56.445, 36.04, 0], [-61.2, 43.52, 0]
+dorsalSpine~scapula = [-194.5, 94] ~ average(1,4), 46.84
 
-coracoid = [-15, 2], [-99, 5], [-137, 53], [-87, 89], [-28, 75], [-2, 18]
-scapula~coracoid = [(90 * scapulaLength) - 100, 100] ~ average(0,1), -90
+coracoid = [-10.21, 1.36, 0], [-67.321, 3.44, 0], [-93.161, 36.04, 0], [-59.164, 60.52, 0], [-19.043, 51.1, 0], [-1.36, 12.24, 0]
+scapula~coracoid = [23.8, 68.0, 0] ~ average(0,1), -90
 
-sternalPlate = [-4, 8], [-108, 4], [-140, 12], [-189, 12], [-151, 30], [-71, 44], [-10, 39]
+sternalPlate = [-2.72, 5.44, 0], [-73.441, 2.72, 0], [-95.2, 8.16, 0], [-128.52, 8.16, 0], [-102.68, 20.42, 0], [-48.28, 29.92, 0], [-6.81, 26.523, 0]
 coracoid~sternalPlate = 2 ~ last, 15
 //body end
 
 //neck start
 cervicalLastEndHeight = distanceBetween(dorsalSpine[0], dorsalSpine[last])
-cervicalFirstStartHeight = 35 * headSize
+cervicalFirstStartHeight = 87
 neckHeightDifference = cervicalLastEndHeight - cervicalFirstStartHeight
 
-//Calculate length removed due to neck angle from first and last parts of neck to keep the total length normalised
-tailLastLengthChange = - max(0, (neckAngle - 45) * 3)
-tailFirstLengthChange = - max(0, (neckAngle - 45) * 2)
-
 cervicalLastStartHeight = cervicalLastEndHeight - neckHeightDifference * 0.42
-cervicalLastLength = 300 + tailLastLengthChange
+cervicalLastLength = 129 
 cervicalLast = trapesium(-cervicalLastLength, -cervicalLastLength, cervicalLastStartHeight, cervicalLastEndHeight)
-dorsalSpine~cervicalLast = average(0, last) ~ average(1, 2), -neckAngle * 0.2
+dorsalSpine~cervicalLast = average(0, last) ~ average(1, 2), -7.776
 
 cervicalMiddleStartHeight = cervicalLastStartHeight - neckHeightDifference * 0.42
-cervicalMiddleLength = 500 - tailLastLengthChange - tailFirstLengthChange
+cervicalMiddleLength = 215
 cervicalMiddle = trapesium(-cervicalMiddleLength, -cervicalMiddleLength, cervicalMiddleStartHeight, cervicalLastStartHeight)
-cervicalLast~cervicalMiddle = average(0, last) ~ average(1, 2), -neckAngle * 0.8
+cervicalLast~cervicalMiddle = average(0, last) ~ average(1, 2), -31.1
 
-cervicalFirstLength = 210 + tailFirstLengthChange
+cervicalFirstLength = 90.3 
 cervicalFirst = trapesium(-cervicalFirstLength, -cervicalFirstLength, cervicalFirstStartHeight, cervicalMiddleStartHeight)
-cervicalMiddle~cervicalFirst = average(0, last) ~ average(1, 2), neckAngle * 0.8 + bodyAngle * 0.5
+cervicalMiddle~cervicalFirst = average(0, last) ~ average(1, 2), 31.1
 //neck end
 
 //head start
-cranium = [-140, 11], [-140, 44], [-130, 53], [-130, 67], [-127, 83], [-71, 79], [-49, 64], [-1, 70], [-5, 44], [-27, 39], [-39, 8], [-69, 1], [-86, 2]
-cervicalFirst~cranium = average(0, last) ~ average(0, 1), neckAngle * 0.2 + bodyAngle * 0.5
+cranium = [-347.2, 27.28, 0], [-347.2, 109.12, 0], [-322.4, 131.44, 0], [-322.4, 166.16, 0], [-314.96, 205.84, 0], [-176.08, 195.92, 0], [-121.52, 158.72, 0], [-2.48, 173.6, 0], [-12.4, 109.12, 0], [-66.96, 96.72, 0], [-96.72, 19.84, 0], [-171.12, 2.48, 0], [-213.28, 4.96, 0]
+cervicalFirst~cranium = average(0, last) ~ average(0, 1), 7.77
 
-mandible = [-104, 8], [-123, 13], [-119, 20], [-99, 16], [-76, 17], [-47, 25], [-35, 34], [-18, 34], [-1, 24], [-33, 15], [-50, 1], [-67, 9]
+mandible = [-257.92, 19.84, 0], [-305.04, 32.24, 0], [-295.12, 49.6, 0], [-245.52, 39.68, 0], [-188.48, 42.16, 0], [-116.56, 62.0, 0], [-86.8, 84.32, 0], [-44.64, 84.32, 0], [-2.48, 59.516, 0], [-81.84, 37.2, 0], [-124.0, 2.48, 0], [-166.16, 22.32, 0]
 cranium~mandible = average(3, 4) ~ average(0, 1), 0
 //head end
 
@@ -99,25 +83,25 @@ tailFirstEndHeight = 100
 tailFirstLength = 350
 
 tailFirst = trapesium(-tailFirstLength, -tailFirstLength, tailFirstStartHeight, tailFirstEndHeight)
-sacrum~tailFirst = average(1, 2) ~ average(0, last), -tailAngle
+sacrum~tailFirst = average(1, 2) ~ average(0, last), 23
 
 tailMiddleEndHeight = 45
 tailMiddleLength = 420
 tailMiddle = trapesium(-tailMiddleLength, -tailMiddleLength, tailFirstEndHeight, tailMiddleEndHeight)
-tailFirst~tailMiddle = average(1, 2) ~ average(0, last), tailAngle * 0.8 + 15
+tailFirst~tailMiddle = average(1, 2) ~ average(0, last), -3.6
 
 tailLastEndHeight = 5
 tailLastLength = 680
 tailLast = trapesium(-tailLastLength, -tailLastLength, tailMiddleEndHeight, tailLastEndHeight)
-tailMiddle~tailLast = average(1, 2) ~ average(0, last), tailAngle * 0.8 + 10
+tailMiddle~tailLast = average(1, 2) ~ average(0, last), -8.6
 //tail end
 
 
 //front leg start
-humerus = [-31, 5], [-55, 2], [-72, 16], [-135, 26], [-194, 21], [-236, 14], [-249, 36], [-241, 54], [-238, 70], [-223, 89], [-200, 79], [-154, 68], [-106, 74], [-66, 86], [-42, 86], [-26, 85], [-12, 65], [-1, 49], [-3, 43]
-scapula~humerus = scapula[11] + [-10, 15] ~ last, -45 + bodyAngle - scapulaAngle
+humerus = [-22.008, 5, 0], [-39.05, 2, 0], [-51.12, 16, 0], [-95.85, 26, 0], [-137.738, 21, 0], [-167.56, 14, 0], [-176.79, 36, 0], [-171.10, 54, 0], [-168.98, 70, 0], [-158.328, 89, 0], [-142.0, 79, 0], [-109.33, 68, 0], [-75.25, 74, 0], [-46.86, 86, 0], [-29.82, 86, 0], [-18.46, 85, 0], [-8.52, 65, 0], [-0.71, 49, 0], [-2.13, 43, 0]
+scapula~humerus = scapula[11] + [-10, 15] ~ last, -91.84
 
-ulnaRadius = [-14, 3], [-72, 16], [-120, 21], [-166, 13], [-176, 21], [-169, 59], [-161, 67], [-140, 64], [-77, 68], [-42, 78], [-25, 83], [-15, 77], [-17, 62], [-4, 19]
+ulnaRadius = [-9.94, 3, 0], [-51.12, 16, 0], [-85.1, 21, 0], [-117.86, 13, 0], [-124.96, 21, 0], [-119.99, 59, 0], [-114.30, 67, 0], [-99.3, 64, 0], [-54.665, 68, 0], [-29.82, 78, 0], [-17.75, 83, 0], [-10.64, 77, 0], [-12.07, 62, 0], [-2.84, 19, 0]
 humerus~ulnaRadius = 8 ~ 12, -30
 
 frontFoot = [2, 49], [6, 99], [42, 95], [79, 110], [89, 64], [74, 4]
@@ -136,7 +120,7 @@ tibiaFibula2~backFoot2 = 6 ~ average(0,1), 90
 
 //second arm
 humerus2 = humerus.duplicate
-scapula~humerus2 = scapula[11] + [10, 15] ~ last, -75 + bodyAngle - scapulaAngle
+scapula~humerus2 = scapula[11] + [10, 15] ~ last, -121.84
 
 ulnaRadius2 = ulnaRadius.duplicate
 humerus2~ulnaRadius2 = 8 ~ 12, -50
@@ -147,28 +131,19 @@ ulnaRadius2~frontFoot2 = average(4, 5) ~ average(0, 1), -155
 
 //sections start
 head = cranium, mandible
-head.scale(headSize, headSize)	
 
 neck = cervicalLast, cervicalMiddle, cervicalFirst
-neck.scale(neckLength, 1)
 
 tail = tailFirst, tailMiddle, tailLast
-tail.scale(tailLength, 1)
 
 body = dorsalSpine, dorsalRibs
-body.scale(bodyLength, 1)
 
 shoulder = scapula, coracoid, sternalPlate
-shoulder.scale(shoulderSize, shoulderSize)
 
 armWithoutHand = humerus, ulnaRadius
-armWithoutHand.scale(armLength, 1)
 
 armWithoutHand2 = humerus2, ulnaRadius2
-armWithoutHand2.scale(armLength, 1)
 
 arm = humerus, ulnaRadius, frontFoot
-arm.scale(1, armWidth)
 
 arm2 = humerus2, ulnaRadius2, frontFoot2
-arm2.scale(1, armWidth)
