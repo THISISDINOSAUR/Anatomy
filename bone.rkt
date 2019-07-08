@@ -3,7 +3,8 @@
 (provide (all-defined-out))
 
 (require "point.rkt"
-         json)
+         json
+         racket/draw)
 
 (define indent "  ")
 
@@ -84,7 +85,50 @@
                             connections)
                        (string-append "\n" indent indent))
        "\n"))
+
+    (define (path)
+      (let ([p (new dc-path%)])
+        (define firstPoint (point-at-index 0))
+        (send p move-to (point-x firstPoint) (point-y firstPoint))
+        (for ([(point) points])
+          (send p line-to (point-x point) (point-y point)))
+        (send p line-to (point-x firstPoint) (point-y firstPoint))
+        p))
+
+    (define/public (render dc connection cumulative-offset cumulative-angle)
+      (send dc set-pen "black" 4 'solid)
+      (send dc set-brush "white" 'transparent)
       
+      (define parent-point (get-field parent-point connection))
+      (define child-point (get-field child-point connection))
+      (define angle (get-field angle connection))
+      (define path-to-draw (path))
+
+      (define total-angle (+ angle cumulative-angle))
+
+      ;drawing context expects anticlockwise rotation in radians
+      (define draw-angle (- (degrees->radians total-angle)))
+      
+      (send path-to-draw translate
+            (- (point-x child-point))
+            (- (point-y child-point)))
+      
+      (send path-to-draw rotate draw-angle)
+      
+      (send path-to-draw translate
+            (point-x cumulative-offset)
+            (point-y cumulative-offset))
+      
+      (send dc draw-path path-to-draw)
+      (for ([(child-connection) connections])
+        ;distance between current bones parent connection and the connection point for the new bone
+        ;rotated appropriatly
+        (define add-to-offset (subtract-points (get-field parent-point child-connection) child-point))
+        (define rotated-add-to-offset (rotate-point add-to-offset total-angle))
+        (define total-new-offset (add-points cumulative-offset rotated-add-to-offset))
+        
+        (send (get-field child-bone child-connection) render dc child-connection total-new-offset total-angle)
+      ))
 
     (super-new)
     ))
@@ -142,6 +186,12 @@
 
     (super-new)
     ))
+
+(define (connection-zero)
+  (new connection%
+       [parent-point point-zero]
+       [child-point point-zero]
+       [angle 0]))
       
 (struct parameter (lower-bound upper-bound default)
   #:auto-value 0

@@ -1,9 +1,13 @@
 #lang brag
 
 a-program : [a-line] (/NEWLINE [a-line])*
-@a-line : [a-definition | a-operation | a-print] [a-comment]
+@a-line : [a-definition | a-operation | a-utility] [a-comment]
+
+@a-utility : a-print | a-render
 
 a-print : /"print" (a-bone-id | a-expr | a-point-expr | a-section-id)
+
+a-render : /"render" a-bone-id
 
 @a-operation : a-bone-operation | a-section-operation
 

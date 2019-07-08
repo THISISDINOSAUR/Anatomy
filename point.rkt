@@ -30,6 +30,12 @@
 (define (negate-point point1)
   (point (- (point-x point1)) (- (point-y point1)) (- (point-z point1))))
 
+(define (rotate-point point1 angle)
+  (define radians (degrees->radians angle))
+  (point (- (* (point-x point1) (cos radians)) (* (point-y point1) (sin radians)))
+         (+ (* (point-x point1) (sin radians)) (* (point-y point1) (cos radians)))
+         (point-z point1)))
+
 (define (average-points points)
   (divide-point (add-points-list points) (length points)))
 

@@ -11,7 +11,8 @@
          "a-functions.rkt"
          "a-maths.rkt"
          "a-definitions.rkt"
-         racket/syntax)
+         racket/syntax
+         racket/gui/base)
 
 (define-macro (a-module-begin (a-program LINE ...))
   (with-pattern
@@ -33,6 +34,7 @@
      (provide PRESET-GETTERS-ID)
 
      (provide a-print)
+     (provide a-render)
      
      (provide recalculate)
      (define (recalculate)
@@ -73,6 +75,25 @@
     [else
      (write id)
      (display "\n")]))
+
+(define (a-render id)
+  (define frame (new frame%
+                     [label (get-field name id)]
+                     [width 1300]
+                     [height 750]))
+  (define canvas
+    (new canvas% [parent frame]
+       [paint-callback
+        (lambda (canvas dc)
+          (send id render dc (connection-zero) point-zero 0))]))
+  (define dc (send canvas get-dc))
+  ;TODO make rendering size appropriately
+  ;todo render connection points
+  ;todo render point information
+  ;todo how to set parameters or preset?
+  (send dc set-scale 0.5 0.5)
+  (send dc translate 800 300)
+  (send frame show #t))
 
 (define-macro-cases a-bone-range-operation
   [(_ BONE-ID START-INDEX END-INDEX OPERATION POINT-EXPR)

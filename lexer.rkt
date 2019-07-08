@@ -6,7 +6,7 @@
 (define-lex-abbrev identifier (:seq alphabetic (:* (:or alphabetic numeric))))
 
 (define-lex-abbrev reserved-terms (:or "+" "-" "*" "/" "^" "mod" "(" ")" "=" ":" ".."
-                                       "[" "]" "," "print" "~" "{" "}" ">" "<" "last"
+                                       "[" "]" "," "print" "render" "~" "{" "}" ">" "<" "last"
                                        "all" "average" "." "x" "y" "z" "distanceBetween"
                                        "min" "max" "abs" "trapesium" "scale" "duplicate"
                                        "mag" "sqrt"))
