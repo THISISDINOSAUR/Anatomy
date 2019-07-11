@@ -77,22 +77,31 @@
      (display "\n")]))
 
 (define (a-render id)
+  (define frame-width 1300)
+  (define frame-height 750)
+  (define padding 50)
+  (define drawing-width (- frame-width (* 2 padding)))
+  (define drawing-height (- frame-height (* 2 padding)))
   (define frame (new frame%
                      [label (get-field name id)]
-                     [width 1300]
-                     [height 750]))
+                     [width frame-width]
+                     [height frame-height]))
   (define canvas
     (new canvas% [parent frame]
        [paint-callback
         (lambda (canvas dc)
-          (send id render dc (connection-zero) point-zero 0))]))
+          (send id render-with-zero-offset dc))]))
   (define dc (send canvas get-dc))
-  ;TODO make rendering size appropriately
   ;todo render connection points
+  ;todo render bounding boxes?
   ;todo render point information
   ;todo how to set parameters or preset?
-  (send dc set-scale 0.5 0.5)
-  (send dc translate 800 300)
+  (define rect (add-padding-to-bounding-rect (send id tree-bounding-rect-with-zero-offset) 50))
+  (define rect-width (bounding-rect-width rect))
+  (define rect-height (bounding-rect-height rect))
+  (define scale (min (/ drawing-width rect-width) (/ drawing-height rect-height)))
+  (send dc set-scale scale scale)
+  (send dc translate (+ padding (- (bounding-rect-min-x rect))) (+ padding (- (bounding-rect-min-y rect))))
   (send frame show #t))
 
 (define-macro-cases a-bone-range-operation
