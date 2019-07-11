@@ -117,17 +117,17 @@
     (define/public (tree-bounding-rect-without-parent)
       (tree-bounding-rect (connection-zero) point-zero 0))
     
-    (define/public (tree-bounding-rect connection cumulative-offset cumulative-angle)      
-      (define offset-bounding-rect (absolute-bounding-rect connection cumulative-offset cumulative-angle))
+    (define/public (tree-bounding-rect parent-connection absolute-parent-connection-point absolute-parent-angle)      
+      (define offset-bounding-rect (absolute-bounding-rect parent-connection absolute-parent-connection-point absolute-parent-angle))
 
-      (define total-angle (+ cumulative-angle (get-field angle connection)))
-      (define origin-point (get-field child-point connection))
+      (define total-angle (+ absolute-parent-angle (get-field angle parent-connection)))
+      (define origin-point (get-field child-point parent-connection))
       (cond
         [(null? connections) offset-bounding-rect]
         [else
           (define child-rects
             (map (lambda (child-connection)
-                   (define child-offset (offset-for-connection child-connection origin-point cumulative-offset total-angle))
+                   (define child-offset (offset-for-connection child-connection origin-point absolute-parent-connection-point absolute-parent-angle))
 
                    (send (get-field child-bone child-connection) tree-bounding-rect child-connection child-offset total-angle))
                  connections))
