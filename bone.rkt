@@ -86,20 +86,18 @@
                        (string-append "\n" indent indent))
        "\n"))
 
-    (define (offset-for-connection connection origin-point total-offset total-angle)
-      (define add-to-offset (subtract-points (get-field parent-point connection) origin-point))
-      (define rotated-add-to-offset (rotate-point add-to-offset total-angle))
-      (add-points total-offset rotated-add-to-offset))
+    (define (offset-for-connection parent-connection origin-point absolute-parent-connection-point absolute-parent-angle)
+      (define add-to-offset (subtract-points (get-field parent-point parent-connection) origin-point))
+      (define rotated-add-to-offset (rotate-point add-to-offset absolute-parent-angle))
+      (add-points absolute-parent-connection-point rotated-add-to-offset))
 
-    (define (absolute-points connection cumulative-offset cumulative-angle)
-      (define child-point (get-field child-point connection))
-      (define angle (get-field angle connection))
-
-      (define total-angle (+ angle cumulative-angle))
+    (define (absolute-points parent-connection absolute-parent-connection-point absolute-parent-angle)
+      (define origin-point (get-field child-point parent-connection))
+      (define total-angle (+ absolute-parent-angle (get-field angle parent-connection)))
 
       (define points-with-child-as-origin
         (map (lambda (point)
-               (subtract-points point child-point))
+               (subtract-points point origin-point))
              (vector->list points)))
 
       (define rotated-points
@@ -108,14 +106,15 @@
              points-with-child-as-origin))
 
       (map (lambda (point)
-               (add-points point cumulative-offset))
+               (add-points point absolute-parent-connection-point))
              rotated-points))
+    
 
-    (define (absolute-bounding-rect connection cumulative-offset cumulative-angle)
+    (define (absolute-bounding-rect parent-connection absolute-parent-connection-point absolute-parent-angle)
       (bounding-rect-for-points
-       (absolute-points connection cumulative-offset cumulative-angle)))
+       (absolute-points parent-connection absolute-parent-connection-point absolute-parent-angle)))
 
-    (define/public (tree-bounding-rect-with-zero-offset)
+    (define/public (tree-bounding-rect-without-parent)
       (tree-bounding-rect (connection-zero) point-zero 0))
     
     (define/public (tree-bounding-rect connection cumulative-offset cumulative-angle)      
@@ -138,23 +137,22 @@
           ])
       )
 
-    (define/public (render-with-zero-offset dc)
+    (define/public (render-without-parent dc)
       (render dc (connection-zero) point-zero 0))
 
-    (define/public (render dc connection cumulative-offset cumulative-angle)
+    (define/public (render dc parent-connection absolute-parent-connection-point absolute-parent-angle)
 
-      (define path-to-draw (points->path (absolute-points connection cumulative-offset cumulative-angle)))
       (send dc set-pen "black" 8 'solid)
       (send dc set-brush "white" 'transparent)
-      (send dc draw-path path-to-draw)
+      (send dc draw-path (points->path (absolute-points parent-connection absolute-parent-connection-point absolute-parent-angle)))
 
-      (define total-angle (+ cumulative-angle (get-field angle connection)))
-      (define origin-point (get-field child-point connection))
+      (define absolute-angle (+ absolute-parent-angle (get-field angle parent-connection)))
+      (define origin-point (get-field child-point parent-connection))
       (for ([(child-connection) connections])
         ;distance between current bones parent connection and the connection point for the new bone
-        (define child-offset (offset-for-connection child-connection origin-point cumulative-offset total-angle))
+        (define child-offset (offset-for-connection child-connection origin-point absolute-parent-connection-point absolute-angle))
         
-        (send (get-field child-bone child-connection) render dc child-connection child-offset total-angle)
+        (send (get-field child-bone child-connection) render dc child-connection child-offset absolute-angle)
       ))
 
     (super-new)

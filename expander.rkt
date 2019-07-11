@@ -90,13 +90,13 @@
     (new canvas% [parent frame]
        [paint-callback
         (lambda (canvas dc)
-          (send id render-with-zero-offset dc))]))
+          (send id render-without-parent dc))]))
   (define dc (send canvas get-dc))
   ;todo render connection points
   ;todo render bounding boxes?
   ;todo render point information
   ;todo how to set parameters or preset?
-  (define rect (send id tree-bounding-rect-with-zero-offset))
+  (define rect (send id tree-bounding-rect-without-parent))
   (define rect-width (bounding-rect-width rect))
   (define rect-height (bounding-rect-height rect))
   (define scale (min (/ drawing-width rect-width) (/ drawing-height rect-height)))
