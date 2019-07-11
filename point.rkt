@@ -2,6 +2,8 @@
 
 (provide (all-defined-out))
 
+(require racket/draw)
+
 (struct point (x y z)
   #:auto-value 0
   #:transparent
@@ -79,6 +81,15 @@
 
 (define (point->list point1)
   (list (point-x point1) (point-y point1) (point-z point1)))
+
+(define (points->path points)
+  (let ([p (new dc-path%)])
+    (define firstPoint (car points))
+    (send p move-to (point-x firstPoint) (point-y firstPoint))
+    (for ([(point) points])
+      (send p line-to (point-x point) (point-y point)))
+    (send p line-to (point-x firstPoint) (point-y firstPoint))
+    p))
 
 (struct bounding-rect (min-x max-x min-y max-y)
   #:transparent

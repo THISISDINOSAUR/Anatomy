@@ -4,7 +4,7 @@
 
 (require "point.rkt"
          json
-         racket/draw)
+         )
 
 (define indent "  ")
 
@@ -86,97 +86,75 @@
                        (string-append "\n" indent indent))
        "\n"))
 
-    (define (points-bounding-rect-with-rotation angle rotation-point)
-      (bounding-rect-for-points
-        (map (lambda (point)
-               (rotate-point-about-point point angle rotation-point))
-             (vector->list points))))
+    (define (offset-for-connection connection origin-point total-offset total-angle)
+      (define add-to-offset (subtract-points (get-field parent-point connection) origin-point))
+      (define rotated-add-to-offset (rotate-point add-to-offset total-angle))
+      (add-points total-offset rotated-add-to-offset))
 
-    (define/public (tree-bounding-rect-with-zero-offset)
-      (tree-bounding-rect (connection-zero) point-zero 0))
-    
-    (define/public (tree-bounding-rect connection cumulative-offset cumulative-angle)
-      (define parent-point (get-field parent-point connection))
+    (define (absolute-points connection cumulative-offset cumulative-angle)
       (define child-point (get-field child-point connection))
       (define angle (get-field angle connection))
 
       (define total-angle (+ angle cumulative-angle))
 
-      (define rotated-bounding-rect (points-bounding-rect-with-rotation
-                                     total-angle
-                                     child-point))
+      (define points-with-child-as-origin
+        (map (lambda (point)
+               (subtract-points point child-point))
+             (vector->list points)))
 
-      (define translated-bounding-rect (translate-bounding-rect
-                                        rotated-bounding-rect
-                                        (negate-point child-point)))
-      
-      (define offset-bounding-rect (translate-bounding-rect
-                                        translated-bounding-rect
-                                        cumulative-offset))
+      (define rotated-points
+        (map (lambda (point)
+               (rotate-point point total-angle))
+             points-with-child-as-origin))
+
+      (map (lambda (point)
+               (add-points point cumulative-offset))
+             rotated-points))
+
+    (define (absolute-bounding-rect connection cumulative-offset cumulative-angle)
+      (bounding-rect-for-points
+       (absolute-points connection cumulative-offset cumulative-angle)))
+
+    (define/public (tree-bounding-rect-with-zero-offset)
+      (tree-bounding-rect (connection-zero) point-zero 0))
+    
+    (define/public (tree-bounding-rect connection cumulative-offset cumulative-angle)      
+      (define offset-bounding-rect (absolute-bounding-rect connection cumulative-offset cumulative-angle))
+
+      (define total-angle (+ cumulative-angle (get-field angle connection)))
+      (define origin-point (get-field child-point connection))
       (cond
         [(null? connections) offset-bounding-rect]
         [else
           (define child-rects
             (map (lambda (child-connection)
-                   ;distance between current bones parent connection and the connection point for the new bone
-                   ;rotated appropriatly
-                   (define add-to-offset (subtract-points (get-field parent-point child-connection) child-point))
-                   (define rotated-add-to-offset (rotate-point add-to-offset total-angle))
-                   (define total-new-offset (add-points cumulative-offset rotated-add-to-offset))
-                   (send (get-field child-bone child-connection) tree-bounding-rect child-connection total-new-offset total-angle))
-                 connections))
+                   (define child-offset (offset-for-connection child-connection origin-point cumulative-offset total-angle))
 
+                   (send (get-field child-bone child-connection) tree-bounding-rect child-connection child-offset total-angle))
+                 connections))
       
           (bounding-rect-containing-bounding-rects offset-bounding-rect
                                                    (bounding-rect-containing-bounding-rects-list child-rects))
           ])
       )
-    
-    (define (path)
-      (let ([p (new dc-path%)])
-        (define firstPoint (point-at-index 0))
-        (send p move-to (point-x firstPoint) (point-y firstPoint))
-        (for ([(point) points])
-          (send p line-to (point-x point) (point-y point)))
-        (send p line-to (point-x firstPoint) (point-y firstPoint))
-        p))
 
     (define/public (render-with-zero-offset dc)
       (render dc (connection-zero) point-zero 0))
 
     (define/public (render dc connection cumulative-offset cumulative-angle)
-      (define parent-point (get-field parent-point connection))
-      (define child-point (get-field child-point connection))
-      (define angle (get-field angle connection))
-      (define path-to-draw (path))
 
-      (define total-angle (+ angle cumulative-angle))
-
-      ;drawing context expects anticlockwise rotation in radians
-      (define draw-angle (- (degrees->radians total-angle)))
-      
-      (send path-to-draw translate
-            (- (point-x child-point))
-            (- (point-y child-point)))
-      
-      (send path-to-draw rotate draw-angle)
-      
-      (send path-to-draw translate
-            (point-x cumulative-offset)
-            (point-y cumulative-offset))
-
+      (define path-to-draw (points->path (absolute-points connection cumulative-offset cumulative-angle)))
       (send dc set-pen "black" 8 'solid)
       (send dc set-brush "white" 'transparent)
       (send dc draw-path path-to-draw)
-      
+
+      (define total-angle (+ cumulative-angle (get-field angle connection)))
+      (define origin-point (get-field child-point connection))
       (for ([(child-connection) connections])
         ;distance between current bones parent connection and the connection point for the new bone
-        ;rotated appropriatly
-        (define add-to-offset (subtract-points (get-field parent-point child-connection) child-point))
-        (define rotated-add-to-offset (rotate-point add-to-offset total-angle))
-        (define total-new-offset (add-points cumulative-offset rotated-add-to-offset))
+        (define child-offset (offset-for-connection child-connection origin-point cumulative-offset total-angle))
         
-        (send (get-field child-bone child-connection) render dc child-connection total-new-offset total-angle)
+        (send (get-field child-bone child-connection) render dc child-connection child-offset total-angle)
       ))
 
     (super-new)
