@@ -96,12 +96,13 @@
   ;todo render bounding boxes?
   ;todo render point information
   ;todo how to set parameters or preset?
-  (define rect (add-padding-to-bounding-rect (send id tree-bounding-rect-with-zero-offset) 50))
+  (define rect (send id tree-bounding-rect-with-zero-offset))
   (define rect-width (bounding-rect-width rect))
   (define rect-height (bounding-rect-height rect))
   (define scale (min (/ drawing-width rect-width) (/ drawing-height rect-height)))
+  (send dc translate padding padding)
   (send dc set-scale scale scale)
-  (send dc translate (+ padding (- (bounding-rect-min-x rect))) (+ padding (- (bounding-rect-min-y rect))))
+  (send dc translate (- (bounding-rect-min-x rect)) (- (bounding-rect-min-y rect)))
   (send frame show #t))
 
 (define-macro-cases a-bone-range-operation

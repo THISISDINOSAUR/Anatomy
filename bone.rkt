@@ -165,7 +165,7 @@
             (point-x cumulative-offset)
             (point-y cumulative-offset))
 
-      (send dc set-pen "black" 4 'solid)
+      (send dc set-pen "black" 8 'solid)
       (send dc set-brush "white" 'transparent)
       (send dc draw-path path-to-draw)
       
