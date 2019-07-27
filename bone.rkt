@@ -144,7 +144,9 @@
 
       (send dc set-pen (make-object color% 60 60 60 0.8) 8 'solid)
       (send dc set-brush (make-object color% 255 246 222 0.3) 'solid)
-      (send dc draw-path (points->path (absolute-points parent-connection absolute-parent-connection-point absolute-parent-angle)))
+      (define points-to-draw (absolute-points parent-connection absolute-parent-connection-point absolute-parent-angle))
+      (send dc draw-path (points->path points-to-draw))
+      (draw-point-labels dc points-to-draw)
 
       (define absolute-angle (+ absolute-parent-angle (get-field angle parent-connection)))
       (define origin-point (get-field child-point parent-connection))
@@ -164,11 +166,31 @@
       (send dc draw-ellipse (point-x draw-point) (point-y draw-point) draw-size draw-size)
 
       
-      (send dc set-font (make-font #:size 25 #:family 'modern))
+      (send dc set-font (make-font #:size 15 #:family 'modern))
       (send dc set-text-foreground "red")
       (define text-draw-point (add-points connection-point (point 0 (/ draw-size 2) 0)))
       (send dc draw-text (describe-point-2d-rounded draw-point) (point-x text-draw-point) (point-y text-draw-point)))
 
+    (define (draw-point-labels dc points)
+      (define index 0)
+      (for ([(point) points])
+        (draw-point-label dc point index)
+        (set! index (+ index 1))))
+    
+    (define (draw-point-label dc draw-point index)
+      (send dc set-pen "white" 0 'transparent)
+      (send dc set-brush (make-object color% 61 252 201 0.9) 'solid)
+      (define draw-size 6)
+      (define p (subtract-points draw-point (point (/ draw-size 2) (/ draw-size 2) 0)))
+      (send dc draw-ellipse (point-x p) (point-y p) draw-size draw-size)
+
+      (send dc set-font (make-font #:size 10 #:family 'modern #:weight 'bold))
+      (send dc set-text-foreground (make-object color% 0 204 150))
+      (send dc set-text-background "red")
+      (define text-draw-point (add-points draw-point (point 0 (/ draw-size 2) 0)))
+      (define text (string-append (~a index) ":" (describe-point-2d-rounded draw-point)))
+      (send dc draw-text text (point-x text-draw-point) (point-y text-draw-point)))
+    
     (super-new)
     ))
 
