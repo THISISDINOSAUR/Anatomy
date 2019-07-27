@@ -161,7 +161,13 @@
       (send dc set-brush "white" 'transparent)
       (define draw-size 20)
       (define draw-point (subtract-points connection-point (point (/ draw-size 2) (/ draw-size 2) 0)))
-      (send dc draw-ellipse (point-x draw-point) (point-y draw-point) draw-size draw-size))
+      (send dc draw-ellipse (point-x draw-point) (point-y draw-point) draw-size draw-size)
+
+      
+      (send dc set-font (make-font #:size 25 #:family 'modern))
+      (send dc set-text-foreground "red")
+      (define text-draw-point (add-points connection-point (point 0 (/ draw-size 2) 0)))
+      (send dc draw-text (describe-point-2d-rounded draw-point) (point-x text-draw-point) (point-y text-draw-point)))
 
     (super-new)
     ))
