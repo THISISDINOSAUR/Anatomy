@@ -4,7 +4,7 @@
 
 (require "point.rkt"
          json
-         )
+         racket/gui/base)
 
 (define indent "  ")
 
@@ -142,8 +142,8 @@
 
     (define/public (render dc parent-connection absolute-parent-connection-point absolute-parent-angle)
 
-      (send dc set-pen "black" 8 'solid)
-      (send dc set-brush "white" 'transparent)
+      (send dc set-pen (make-object color% 60 60 60 0.8) 8 'solid)
+      (send dc set-brush (make-object color% 255 246 222 0.3) 'solid)
       (send dc draw-path (points->path (absolute-points parent-connection absolute-parent-connection-point absolute-parent-angle)))
 
       (define absolute-angle (+ absolute-parent-angle (get-field angle parent-connection)))
@@ -151,9 +151,17 @@
       (for ([(child-connection) connections])
         ;distance between current bones parent connection and the connection point for the new bone
         (define child-offset (offset-for-connection child-connection origin-point absolute-parent-connection-point absolute-angle))
-        
+
+        (draw-connection-point dc child-offset)
         (send (get-field child-bone child-connection) render dc child-connection child-offset absolute-angle)
       ))
+    
+    (define (draw-connection-point dc connection-point)
+      (send dc set-pen (make-object color% 200 50 50 0.9) 6 'solid)
+      (send dc set-brush "white" 'transparent)
+      (define draw-size 20)
+      (define draw-point (subtract-points connection-point (point (/ draw-size 2) (/ draw-size 2) 0)))
+      (send dc draw-ellipse (point-x draw-point) (point-y draw-point) draw-size draw-size))
 
     (super-new)
     ))
