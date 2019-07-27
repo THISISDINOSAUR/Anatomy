@@ -92,10 +92,6 @@
         (lambda (canvas dc)
           (send id render-without-parent dc))]))
   (define dc (send canvas get-dc))
-  ;todo render connection points
-  ;todo render bounding boxes?
-  ;todo render point information
-  ;todo how to set parameters or preset?
   (define rect (send id tree-bounding-rect-without-parent))
   (define rect-width (bounding-rect-width rect))
   (define rect-height (bounding-rect-height rect))

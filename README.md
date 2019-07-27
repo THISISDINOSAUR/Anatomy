@@ -3,14 +3,14 @@
 A DSL  capable of specifying parameterised arbitrary skeletons. Designed to be used to create procedural creature generators. For example, a single bird skeleton could be defined, with parameters that modify various aspects of it, so that, depending on the parameter values, different bird species can be represented.
 
 This is the first two steps in the pipeline for THE DINOSAUR GENERATOR, containing both the language, and the server that serves the generated results (as well as associated information, such as information on the allowed parameter values, and the defined presets):  
-Anatomy definition -> Racket server -> Web UI
+Anatomy definition -> Racket server -> Web UI  
+And now also with inbuilt rendering:  
+Anatomy definition -> Racket UI  
   
 
 Example dinosaur, with animated changing parameter values:
 ![Example dinosaur](http://thecreativeperiod.com/elle/images/theDinosaurGeneratorSmall.gif)  
 
-  
-I think it's worth writing a Racket front end to speed up the feedback loop when making changes to an anatomy definition (in the REPL spirit)
 
 ## Current TODO
 
@@ -33,16 +33,10 @@ Absolutely can't be done without relative points (see above). Should otherwise b
 - Preset inheritance  
 Would be useful to define presets relative to other presets (e.g have a general Stegosauria, and then define Stegosauridae relative to that, etc.). Could have a concept of abstract presets, that are for inheriting from only, and don't represent real creatures.
 
-
-### Web UI
-
-- Request timeout  
-Due to request smoothing, if a request takes a long time, it will block all other requests. There should be some kind of timeout on this.
-
 ### dinosaur.anatomy
 
 - Protodinosaur  
-Refactor dinosaur layout so that default position is as close to a protodinosaur as possible.. Then progressively define presets further and further down the phylogentic tree.
+Refactor dinosaur layout so that default position is as close to a protodinosaur as possible. Then progressively define presets further and further down the phylogentic tree.
 
 ## Potential future features
 
@@ -151,6 +145,17 @@ Should be relatively easy to do
 - Bone groups  
 It could be useful to have separate shapes that can be treated as a single bone (e.g. when multiple bones make up a single joint). What this should look like is unclear.
 
+### Racket UI  
+
+- Make debug drawing dynamically sized  
+At the moment, all debug elements are a fixed size, so depending on the scale of the thing being rendered, they may be far too small or far too large
+
+- Add ability to select bones  
+With display to show the position of the cursor relative to the selected bone
+
+- Highlight on mouse over  
+To reduce visual clutter, only show bone labels on mouse over (or when bone is selected?)
+
 ### Server
   
 A server that reads an anatomy, exposes the parameter information, takes in parameter values, and then uses those to regenerate the anatomy, and then outputs the new anatomy.
@@ -163,6 +168,9 @@ At the moment presets are served by the front end giving the correct parameter v
 ### Web UI
 
 A website that uses the server to display the generated creature, and provide an interface to edit the parameters.
+
+- Request timeout  
+Due to request smoothing, if a request takes a long time, it will block all other requests. There should be some kind of timeout on this.
 
 - Request throttling  
 Limit request so a reasonable rate to avoid overloading the server 
