@@ -2,7 +2,8 @@
 
 (provide (all-defined-out))
 
-(require racket/draw)
+(require racket/draw
+         sfont/geometry)
 
 (struct point (x y z)
   #:auto-value 0
@@ -93,6 +94,26 @@
       (send p line-to (point-x point) (point-y point)))
     (send p line-to (point-x firstPoint) (point-y firstPoint))
     p))
+
+(define (horizontal-line-for-point-intersects-line? point1 line)
+  (segment-intersection (vec (point-x point1) (point-y point1))
+                        (vec 999999999999999999999999 (point-y point1))
+                        
+                        (vec (point-x (car line)) (point-y (car line)))
+                        (vec (point-x (car (cdr line))) (point-y (car (cdr line))))))
+
+(define (point-intersects-polygon? point1 polygon)
+  (define index 0)
+  ;(for ([(point) polygon])
+  (define intersections
+    (map (lambda (line-point)
+           (define next-point-index (if (equal? index (- (length polygon) 1)) 0 (+ 1 index)))
+           (define next-point (list-ref polygon next-point-index))
+           (set! index (+ index 1))
+           (horizontal-line-for-point-intersects-line? point1 (list line-point next-point)))
+         polygon))
+  (odd? (- (length intersections) (count false? intersections))))
+  
 
 (struct bounding-rect (min-x max-x min-y max-y)
   #:transparent
