@@ -66,6 +66,15 @@
          (if (empty? highlighted) null (set-field! highlighted? highlighted #t))
          (refresh)
          ]
+         ['left-down
+         (send root-bone set-tree-selected #f)
+         
+         (define mouse-point (point (send event get-x) (send event get-y) 0))
+         (define selected
+           (send root-bone bone-intersected-by-absolute-point-without-parent (screen-point-to-root-bone-point mouse-point)))
+         (if (empty? selected) null (set-field! selected? selected #t))
+         (refresh)
+         ]
         ))
 
     (define (screen-point-to-root-bone-point screen-point)
