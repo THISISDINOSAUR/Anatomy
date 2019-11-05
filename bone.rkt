@@ -177,15 +177,21 @@
       (define points-to-draw (absolute-points parent-connection absolute-parent-connection-point absolute-parent-angle))
       (cond 
         [selected?
-            (draw-point-labels dc points-to-draw)
             (send dc set-brush (make-object color% 200 100 100 0.3) 'solid)]
         [highlighted?
-            (draw-point-labels dc points-to-draw)
             (send dc set-brush (make-object color% 20 20 100 0.3) 'solid)]
         [else
           (send dc set-brush (make-object color% 255 246 222 0.3) 'solid)])
       (send dc set-pen (make-object color% 60 60 60 0.8) 8 'solid)
       (send dc draw-path (points->path points-to-draw))
+
+      (cond 
+        [selected?
+            (draw-point-labels dc points-to-draw)]
+        [highlighted?
+            (draw-point-labels dc points-to-draw)]
+        [else
+          null])
 
       (define absolute-angle (+ absolute-parent-angle (get-field angle parent-connection)))
       (define origin-point (get-field child-point parent-connection))
