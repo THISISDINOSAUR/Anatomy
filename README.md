@@ -17,6 +17,10 @@ Example dinosaur, with animated changing parameter values:
 
 ### Anatomy Language
 
+- Fix points printing wrong points (what values does it print?)
+
+- Fix angle when rendering partial skeletons
+
 - Check what happens when scaling a bone with no parent  
 This case isn't explicitly handled, so I'm not sure what will happen
 
@@ -156,6 +160,11 @@ With display to show the position of the cursor relative to the selected bone
 
 - Highlight on mouse over  
 To reduce visual clutter, only show bone labels on mouse over (or when bone is selected?)
+
+- Draw paths relative to bone
+
+- Dragging points/bones/connection points?
+Might not actually be too hard to implement, so may be worth it (just doing points is probably the most useful and the least complicated to implement)
 
 ### Server
   

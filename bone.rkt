@@ -15,7 +15,8 @@
      [points #f]
      [parent-connection #f]
      [connections (list)]
-     [name ""])
+     [name ""]
+     [highlighted? #f])
 
     (define/public (add-connection! bone connection)
       (set! connections (append connections (list connection)))
@@ -108,7 +109,27 @@
       (map (lambda (point)
                (add-points point absolute-parent-connection-point))
              rotated-points))
-    
+
+    (define/public (bone-intersected-by-absolute-point-without-parent absolute-point)
+      (bone-intersected-by-absolute-point absolute-point (connection-zero) point-zero 0))
+
+    (define/public (bone-intersected-by-absolute-point absolute-point parent-connection absolute-parent-connection-point absolute-parent-angle)
+      (define bone-points (absolute-points parent-connection absolute-parent-connection-point absolute-parent-angle))
+      (cond
+        [(point-intersects-polygon? absolute-point bone-points) this]
+        [else
+         (define absolute-angle (+ absolute-parent-angle (get-field angle parent-connection)))
+         (define origin-point (get-field child-point parent-connection))
+         (define children-intersected
+           (remove* (list null)
+                   (map (lambda (child-connection)
+                          (define child-offset (offset-for-connection child-connection origin-point absolute-parent-connection-point absolute-angle))
+                          (send (get-field child-bone child-connection) bone-intersected-by-absolute-point absolute-point child-connection child-offset absolute-angle))
+                        connections)))
+         (if (empty? children-intersected)
+             null
+             (car children-intersected))]))
+
 
     (define (absolute-bounding-rect parent-connection absolute-parent-connection-point absolute-parent-angle)
       (bounding-rect-for-points
@@ -137,16 +158,24 @@
           ])
       )
 
+    (define/public (set-tree-highlighted flag)
+      (set! highlighted? flag)
+      (for ([(child-connection) connections])
+        (send (get-field child-bone child-connection) set-tree-highlighted flag)))
+
     (define/public (render-without-parent dc)
       (render dc (connection-zero) point-zero 0))
 
     (define/public (render dc parent-connection absolute-parent-connection-point absolute-parent-angle)
 
-      (send dc set-pen (make-object color% 60 60 60 0.8) 8 'solid)
-      (send dc set-brush (make-object color% 255 246 222 0.3) 'solid)
       (define points-to-draw (absolute-points parent-connection absolute-parent-connection-point absolute-parent-angle))
+      (if highlighted?
+          (begin
+            (draw-point-labels dc points-to-draw)
+            (send dc set-brush (make-object color% 20 20 100 0.3) 'solid))
+          (send dc set-brush (make-object color% 255 246 222 0.3) 'solid))
+      (send dc set-pen (make-object color% 60 60 60 0.8) 8 'solid)
       (send dc draw-path (points->path points-to-draw))
-      (draw-point-labels dc points-to-draw)
 
       (define absolute-angle (+ absolute-parent-angle (get-field angle parent-connection)))
       (define origin-point (get-field child-point parent-connection))
@@ -165,7 +194,7 @@
       (define draw-point (subtract-points connection-point (point (/ draw-size 2) (/ draw-size 2) 0)))
       (send dc draw-ellipse (point-x draw-point) (point-y draw-point) draw-size draw-size)
 
-      
+      ;TODO: only render connection points when highlighted (but also render parent connection point)
       (send dc set-font (make-font #:size 15 #:family 'modern))
       (send dc set-text-foreground "red")
       (define text-draw-point (add-points connection-point (point 0 (/ draw-size 2) 0)))
