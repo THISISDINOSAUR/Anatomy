@@ -127,7 +127,7 @@
         [else
           (define child-rects
             (map (lambda (child-connection)
-                   (define child-offset (offset-for-connection child-connection origin-point absolute-parent-connection-point absolute-parent-angle))
+                   (define child-offset (offset-for-connection child-connection origin-point absolute-parent-connection-point total-angle))
 
                    (send (get-field child-bone child-connection) tree-bounding-rect child-connection child-offset total-angle))
                  connections))
