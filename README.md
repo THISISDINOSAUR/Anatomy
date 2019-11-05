@@ -15,11 +15,20 @@ Example dinosaur, with animated changing parameter values:
 
 ## Current TODO
 
-### Anatomy Language
+### Racket GUI  
 
 - Fix points printing wrong points (what values does it print?)
 
 - Fix angle when rendering partial skeletons
+
+- Add display of position of cursor relative to selected bone
+
+- Draw paths relative to bone
+
+- Dragging points/bones/connection points?
+Might not actually be too hard to implement, so may be worth it (just doing points is probably the most useful and the least complicated to implement)
+
+### Anatomy Language
 
 - Check what happens when scaling a bone with no parent  
 This case isn't explicitly handled, so I'm not sure what will happen
@@ -155,17 +164,6 @@ It could be useful to have separate shapes that can be treated as a single bone 
 - Make debug drawing dynamically sized  
 At the moment, all debug elements are a fixed size, so depending on the scale of the thing being rendered, they may be far too small or far too large
 
-- Add ability to select bones  
-With display to show the position of the cursor relative to the selected bone
-
-- Highlight on mouse over  
-To reduce visual clutter, only show bone labels on mouse over (or when bone is selected?)
-
-- Draw paths relative to bone
-
-- Dragging points/bones/connection points?
-Might not actually be too hard to implement, so may be worth it (just doing points is probably the most useful and the least complicated to implement)
-
 ### Server
   
 A server that reads an anatomy, exposes the parameter information, takes in parameter values, and then uses those to regenerate the anatomy, and then outputs the new anatomy.
@@ -300,6 +298,13 @@ The expander's gotten quite large and unorganised, and could do with some reorga
 Essential feature, ability to define and import individual creature definitions (i.e. sets of specific parameter values e.g. a stegosaur)
 
 - Parameters are out of order  
+
+### Racket GUI  
+
+- Add ability to select bones  
+
+- Highlight on mouse over  
+To reduce visual clutter, only show bone labels on mouse over (or when bone is selected?)
 
 ### Server
 
