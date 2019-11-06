@@ -2,7 +2,7 @@
 
 (provide (all-defined-out))
 
-(require "point.rkt"
+(require "structs/point.rkt"
          json
          racket/gui/base)
 

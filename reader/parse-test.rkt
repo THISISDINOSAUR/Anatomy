@@ -1,4 +1,4 @@
-#lang anatomy/parse-only
+#lang anatomy/reader/parse-only
 
 //hips start
 //test = 63

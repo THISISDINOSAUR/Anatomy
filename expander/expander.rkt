@@ -6,9 +6,9 @@
                        "a-definitions.rkt"
                        "a-render.rkt"))
 
-(require "point.rkt"
-         "bone.rkt"
-         "utils.rkt"
+(require "../structs/point.rkt"
+         "../bone.rkt"
+         "../utils.rkt"
          "a-functions.rkt"
          "a-maths.rkt"
          "a-definitions.rkt"

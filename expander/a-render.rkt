@@ -2,9 +2,9 @@
 
 (provide (matching-identifiers-out #rx"^a-" (all-defined-out)))
 
-(require "point.rkt"
-         "bone.rkt"
-         "utils.rkt"
+(require "../structs/point.rkt"
+         "../bone.rkt"
+         "../utils.rkt"
          racket/gui/base)
 
 (define (a-render id)

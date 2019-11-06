@@ -2,7 +2,7 @@
 
 (provide (matching-identifiers-out #rx"^a-" (all-defined-out)))
 
-(require "point.rkt")
+(require "../structs/point.rkt")
 
 (define-macro-cases a-sum
   [(_ VAL) #'VAL]
