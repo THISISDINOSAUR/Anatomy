@@ -34,17 +34,15 @@
   (point (- (point-x point1)) (- (point-y point1)) (- (point-z point1))))
 
 (define (rotate-point point1 angle)
-  (define radians (degrees->radians angle))
-  (point (- (* (point-x point1) (cos radians)) (* (point-y point1) (sin radians)))
-         (+ (* (point-x point1) (sin radians)) (* (point-y point1) (cos radians)))
-         (point-z point1)))
+  (rotate-point-about-point point1 angle point-zero))
 
 (define (rotate-point-about-point point1 angle rotation-point)
   (define radians (degrees->radians angle))
   (define translated-point (subtract-points point1 rotation-point))
-  (define rotated-point (point (- (* (point-x translated-point) (cos radians)) (* (point-y translated-point) (sin radians)))
-         (+ (* (point-x translated-point) (sin radians)) (* (point-y translated-point) (cos radians)))
-         (point-z translated-point)))
+  (define rotated-point 
+    (point (- (* (point-x translated-point) (cos radians)) (* (point-y translated-point) (sin radians)))
+           (+ (* (point-x translated-point) (sin radians)) (* (point-y translated-point) (cos radians)))
+           (point-z translated-point)))
   (add-points rotated-point rotation-point))
 
 (define (average-points points)
