@@ -3,6 +3,8 @@
 (provide (all-defined-out))
 
 (require "structs/point.rkt"
+         "structs/rect.rkt"
+         "structs/polygon.rkt"
          json
          racket/gui/base)
 

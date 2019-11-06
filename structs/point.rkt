@@ -2,8 +2,7 @@
 
 (provide (all-defined-out))
 
-(require racket/draw
-         sfont/geometry)
+(require racket/draw)
 
 (struct point (x y z)
   #:auto-value 0
@@ -92,80 +91,4 @@
       (send p line-to (point-x point) (point-y point)))
     (send p line-to (point-x firstPoint) (point-y firstPoint))
     p))
-
-(define (horizontal-line-for-point-intersects-line? point1 line)
-  (segment-intersection (vec (point-x point1) (point-y point1))
-                        (vec 999999999999999999999999 (point-y point1))
-                        
-                        (vec (point-x (car line)) (point-y (car line)))
-                        (vec (point-x (car (cdr line))) (point-y (car (cdr line))))))
-
-(define (point-intersects-polygon? point1 polygon)
-  (define index 0)
-  ;(for ([(point) polygon])
-  (define intersections
-    (map (lambda (line-point)
-           (define next-point-index (if (equal? index (- (length polygon) 1)) 0 (+ 1 index)))
-           (define next-point (list-ref polygon next-point-index))
-           (set! index (+ index 1))
-           (horizontal-line-for-point-intersects-line? point1 (list line-point next-point)))
-         polygon))
-  (odd? (- (length intersections) (count false? intersections))))
-  
-
-(struct bounding-rect (min-x max-x min-y max-y)
-  #:transparent
-  #:mutable)
-
-(define (bounding-rect-containing-bounding-rects rect1 rect2)
-  (bounding-rect (min (bounding-rect-min-x rect1) (bounding-rect-min-x rect2))
-                 (max (bounding-rect-max-x rect1) (bounding-rect-max-x rect2))
-                 (min (bounding-rect-min-y rect1) (bounding-rect-min-y rect2))
-                 (max (bounding-rect-max-y rect1) (bounding-rect-max-y rect2))))
-
-;This won't work for an empty list since there is no sensible base case
-(define (bounding-rect-containing-bounding-rects-list rects)
-  (foldl bounding-rect-containing-bounding-rects (car rects) rects))
-
-(define (bounding-rect-for-points points)
-  (define x-values
-    (map (lambda (point)
-           (point-x point))
-         points))
-  (define y-values
-    (map (lambda (point)
-           (point-y point))
-         points))
-  (bounding-rect (apply min x-values) (apply max x-values) (apply min y-values) (apply max y-values)))
-
-(define (translate-bounding-rect rect translation)
-  (bounding-rect (+ (bounding-rect-min-x rect) (point-x translation))
-                 (+ (bounding-rect-max-x rect) (point-x translation))
-                 (+ (bounding-rect-min-y rect) (point-y translation))
-                 (+ (bounding-rect-max-y rect) (point-y translation))))
-
-(define (add-padding-to-bounding-rect rect padding)
-  (bounding-rect (- (bounding-rect-min-x rect) padding)
-                 (+ (bounding-rect-max-x rect) padding)
-                 (- (bounding-rect-min-y rect) padding)
-                 (+ (bounding-rect-max-y rect) padding)))
-
-(define (bounding-rect-width rect)
-  (- (bounding-rect-max-x rect) (bounding-rect-min-x rect)))
-
-(define (bounding-rect-height rect)
- (- (bounding-rect-max-y rect) (bounding-rect-min-y rect)))
-
-
-(define (trapesium top-span bottom-span left-span right-span)
-  (define shift (point (/ (max bottom-span top-span) 2.0)
-                       (/ (max left-span right-span) 2.0)
-                       0))
-  (map (lambda (p)
-         (add-points p shift))
-       (list
-        (point (- (/ bottom-span 2.0)) (- (/ left-span 2.0)) 0)
-        (point (/ bottom-span 2.0) (- (/ right-span 2.0)) 0)
-        (point (/ top-span 2.0) (/ right-span 2.0) 0)
-        (point (- (/ top-span 2.0)) (/ left-span 2.0) 0))))
    

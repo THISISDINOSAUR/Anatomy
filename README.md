@@ -17,6 +17,9 @@ Example dinosaur, with animated changing parameter values:
 
 ### Racket GUI  
 
+- Refactor a-render  
+It shouldn't be part of the expander and should be it's own section (I'm looking at you too, JSON handling)
+
 - Fix angle when rendering partial skeletons
 
 - Add display of position of cursor relative to selected bone

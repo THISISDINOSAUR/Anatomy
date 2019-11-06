@@ -3,6 +3,7 @@
 (provide (matching-identifiers-out #rx"^a-" (all-defined-out)))
 
 (require "../structs/point.rkt"
+         "../structs/rect.rkt"
          "../bone.rkt"
          "../utils.rkt"
          racket/gui/base)

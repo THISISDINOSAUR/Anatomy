@@ -2,7 +2,8 @@
 
 (provide (matching-identifiers-out #rx"^a-" (all-defined-out)))
 
-(require "../structs/point.rkt")
+(require "../structs/point.rkt"
+         "../structs/polygon.rkt")
 
 (define (a-trapesium topSpan bottomSpan leftSpan rightSpan)
   (trapesium topSpan bottomSpan leftSpan rightSpan))
