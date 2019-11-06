@@ -8,6 +8,7 @@
 
 (require "../structs/point.rkt"
          "../bone.rkt"
+         "../parameter.rkt"
          "../utils.rkt"
          "a-functions.rkt"
          "a-maths.rkt"

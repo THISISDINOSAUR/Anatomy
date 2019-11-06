@@ -278,31 +278,6 @@
     (super-new)
     ))
 
-(define section%
-  (class object%
-
-    (init-field
-     [bones #f]
-     [name ""])
-
-    (define/public (scale! x y z)
-      (map (lambda (bone)
-             (send bone scale! x y z))
-           bones)
-      (void))
-
-    (define/public (description)
-      (string-append
-       name ": " (string-join
-                      (map (lambda (bone)
-                             (get-field name bone))
-                           bones)
-                      ", ")
-       "\n"))
-
-    (super-new)
-    ))
-
 (define connection%
   (class object%
 
@@ -338,42 +313,27 @@
        [child-point point-zero]
        [angle 0]))
       
-(struct parameter (lower-bound upper-bound default)
-  #:auto-value 0
-  #:transparent
-  #:mutable)
-
-(define (is-valid-parameter-value? param value)
-  (<= (parameter-lower-bound param) value (parameter-upper-bound param)))
-
-(define (describe-parameter parameter1)
-  (string-append (~a (parameter-lower-bound parameter1)) "  > < " (~a (parameter-upper-bound parameter1)) " = " (~a (parameter-default parameter1))))
-
-(define (parameter->json parameter1)
-  (hasheq 'lower-bound (parameter-lower-bound parameter1)
-          'upper-bound (parameter-upper-bound parameter1)
-          'default (parameter-default parameter1)))
-
-(define parameters%
+      (define section%
   (class object%
 
     (init-field
-     [parameters #f]
-     [setters #f]
-     [ordering #f])
+     [bones #f]
+     [name ""])
 
-    (define/public (json)
-      (map (lambda (param-name)
-             (hasheq param-name (parameter->json (hash-ref parameters param-name))))
-           ordering))
+    (define/public (scale! x y z)
+      (map (lambda (bone)
+             (send bone scale! x y z))
+           bones)
+      (void))
 
     (define/public (description)
-      (string-join
-       (map (lambda (param-name)
-              (string-append (symbol->string param-name)
-                             ": "
-                             (describe-parameter (hash-ref parameters param-name))))
-            ordering)
+      (string-append
+       name ": " (string-join
+                      (map (lambda (bone)
+                             (get-field name bone))
+                           bones)
+                      ", ")
        "\n"))
 
-    (super-new)))
+    (super-new)
+    ))

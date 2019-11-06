@@ -4,6 +4,7 @@
 
 (require "../structs/point.rkt"
          "../bone.rkt"
+         "../parameter.rkt"
          "../utils.rkt")
 
 (define-macro (a-variable-definition ID VAL) #'(set! ID VAL))
