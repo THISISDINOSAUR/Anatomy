@@ -17,8 +17,6 @@ Example dinosaur, with animated changing parameter values:
 
 ### Racket GUI  
 
-- Fix points printing wrong points (what values does it print?)
-
 - Fix angle when rendering partial skeletons
 
 - Add display of position of cursor relative to selected bone
@@ -305,6 +303,8 @@ Essential feature, ability to define and import individual creature definitions 
 
 - Highlight on mouse over  
 To reduce visual clutter, only show bone labels on mouse over (or when bone is selected?)
+
+- Fix points printing wrong points (what values does it print?)
 
 ### Server
 

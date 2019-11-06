@@ -187,9 +187,9 @@
 
       (cond 
         [selected?
-            (draw-point-labels dc points-to-draw)]
+            (draw-point-labels dc (vector->list points) points-to-draw)]
         [highlighted?
-            (draw-point-labels dc points-to-draw)]
+            (draw-point-labels dc (vector->list points) points-to-draw)]
         [else
           null])
 
@@ -216,13 +216,14 @@
       (define text-draw-point (add-points connection-point (point 0 (/ draw-size 2) 0)))
       (send dc draw-text (describe-point-2d-rounded draw-point) (point-x text-draw-point) (point-y text-draw-point)))
 
-    (define (draw-point-labels dc points)
+    (define (draw-point-labels dc bone-points draw-points)
       (define index 0)
-      (for ([(point) points])
-        (draw-point-label dc point index)
-        (set! index (+ index 1))))
+      (map (lambda (bone-point draw-point)
+             (draw-point-label dc bone-point draw-point index)
+        (set! index (+ index 1)))
+           bone-points draw-points))
     
-    (define (draw-point-label dc draw-point index)
+    (define (draw-point-label dc bone-point draw-point index)
       (send dc set-pen "white" 0 'transparent)
       (send dc set-brush (make-object color% 61 252 201 0.9) 'solid)
       (define draw-size 6)
@@ -233,7 +234,7 @@
       (send dc set-text-foreground (make-object color% 0 204 150))
       (send dc set-text-background "red")
       (define text-draw-point (add-points draw-point (point 0 (/ draw-size 2) 0)))
-      (define text (string-append (~a index) ":" (describe-point-2d-rounded draw-point)))
+      (define text (string-append (~a index) ":" (describe-point-2d-rounded bone-point)))
       (send dc draw-text text (point-x text-draw-point) (point-y text-draw-point)))
     
     (super-new)
