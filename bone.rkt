@@ -111,6 +111,42 @@
                (add-points point absolute-parent-connection-point))
              rotated-points))
 
+    (define/public (aboslute-point->current-bone-point absolute-point parent-connection absolute-parent-connection-point absolute-parent-angle)
+      (define origin-point (get-field child-point parent-connection))
+      (define total-angle (+ absolute-parent-angle (get-field angle parent-connection)))
+
+      (add-points
+        (rotate-point
+          (subtract-points absolute-point absolute-parent-connection-point)
+          (- total-angle))
+        origin-point))
+
+      ;(add-points 
+        ;(rotate-point 
+        ;  (subtract-points point origin-point) 
+        ;  total-angle) 
+        ;absolute-parent-connection-point))
+
+    (define/public (absolute-point->bone-point-without-parent absolute-point bone)
+     (abolute-point->bone-point absolute-point bone (connection-zero) point-zero 0))
+
+    (define/public (abolute-point->bone-point absolute-point bone parent-connection absolute-parent-connection-point absolute-parent-angle)
+      (cond 
+        [(equal? bone this) 
+          (aboslute-point->current-bone-point absolute-point parent-connection absolute-parent-connection-point absolute-parent-angle)]
+        [else 
+          (define absolute-angle (+ absolute-parent-angle (get-field angle parent-connection)))
+          (define origin-point (get-field child-point parent-connection))
+          (define children-intersected
+           (remove* (list null)
+                   (map (lambda (child-connection)
+                          (define child-offset (offset-for-connection child-connection origin-point absolute-parent-connection-point absolute-angle))
+                          (send (get-field child-bone child-connection) abolute-point->bone-point absolute-point bone child-connection child-offset absolute-angle))
+                        connections)))
+          (if (empty? children-intersected)
+             null
+             (car children-intersected))]))
+
     (define/public (bone-intersected-by-absolute-point-without-parent absolute-point)
       (bone-intersected-by-absolute-point absolute-point (connection-zero) point-zero 0))
 

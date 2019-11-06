@@ -28,7 +28,8 @@
          [parent frame]
          [paint-callback
           (lambda (canvas dc)
-            (send id render-without-parent dc))]
+            (send id render-without-parent dc)
+            (send canvas draw-mouse-label))]
          [root-bone id]
          [padding padding]
          [scale scale]
@@ -51,6 +52,10 @@
 
     (super-new)
 
+    (define mouse-label-point #f)
+    (define absolute-mouse-point #f)
+    (define selected #f)
+
     (send (get-dc) translate padding padding)
     (send (get-dc) set-scale scale scale)
     (send (get-dc) translate translation-x translation-y)
@@ -64,15 +69,33 @@
          (define highlighted
            (send root-bone bone-intersected-by-absolute-point-without-parent (screen-point-to-root-bone-point mouse-point)))
          (if (empty? highlighted) null (set-field! highlighted? highlighted #t))
+         
+         (cond 
+          [(empty? selected)
+           null]
+           [else
+           (set! absolute-mouse-point (screen-point-to-root-bone-point mouse-point))
+            (set! mouse-label-point 
+              (send root-bone absolute-point->bone-point-without-parent absolute-mouse-point selected))
+            ])
+         
          (refresh)
          ]
          ['left-down
          (send root-bone set-tree-selected #f)
+         (set! selected #f)
+         (set! mouse-label-point #f)
          
          (define mouse-point (point (send event get-x) (send event get-y) 0))
-         (define selected
+         (set! selected
            (send root-bone bone-intersected-by-absolute-point-without-parent (screen-point-to-root-bone-point mouse-point)))
-         (if (empty? selected) null (set-field! selected? selected #t))
+         (cond 
+          [(empty? selected)
+           null]
+           [else
+            (set-field! selected? selected #t)
+            (set! absolute-mouse-point (screen-point-to-root-bone-point mouse-point))
+            ])
          (refresh)
          ]
         ))
@@ -83,4 +106,15 @@
         (subtract-points screen-point (point padding padding 0))
         scale)
        (point translation-x translation-y 0)))
+
+    (define/public (draw-mouse-label)
+      (cond 
+        [(and mouse-label-point (not (equal? mouse-label-point null)))
+          (define dc (get-dc))
+          (send dc set-font (make-font #:size 10 #:family 'modern #:weight 'bold))
+          (send dc set-text-foreground (make-object color% 130 50 100))
+          (send dc set-text-background "red")
+          (define text-draw-point (add-points absolute-mouse-point (point 0 10 0)))
+          (send dc draw-text (describe-point-2d-rounded mouse-label-point) (point-x text-draw-point) (point-y text-draw-point))]
+        [else null]))
     ))

@@ -28,6 +28,8 @@ Might not actually be too hard to implement, so may be worth it (just doing poin
 
 ### Anatomy Language
 
+- Refactor bones/structs
+
 - Check what happens when scaling a bone with no parent  
 This case isn't explicitly handled, so I'm not sure what will happen
 
@@ -305,6 +307,8 @@ Essential feature, ability to define and import individual creature definitions 
 To reduce visual clutter, only show bone labels on mouse over (or when bone is selected?)
 
 - Fix points printing wrong points (what values does it print?)
+
+- Add display of position of cursor relative to selected bone
 
 ### Server
 
