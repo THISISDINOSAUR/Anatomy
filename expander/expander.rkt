@@ -8,6 +8,7 @@
 
 (require "../structs/point.rkt"
          "../bone.rkt"
+         "../section.rkt"
          "../parameter.rkt"
          "../utils.rkt"
          "../string.rkt"

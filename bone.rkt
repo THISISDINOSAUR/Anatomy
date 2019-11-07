@@ -6,6 +6,7 @@
          "structs/rect.rkt"
          "structs/polygon.rkt"
          "string.rkt"
+         "connection.rkt"
          racket/gui/base)
 
 (define bone%
@@ -237,43 +238,4 @@
     
     (super-new)
     ))
-
-(define connection%
-  (class object%
-
-    (init-field
-     [parent-point #f]
-     [child-point #f]
-     [angle #f]
-     [child-bone #f])
-
-    (define/public (scale-parent! x y z)
-      (set! parent-point (scale-point-dimension-wise parent-point x y z)))
-
-    (define/public (scale-child! x y z)
-      (set! child-point (scale-point-dimension-wise child-point x y z)))
-
-    (super-new)
-    ))
-
-(define (connection-zero)
-  (new connection%
-       [parent-point point-zero]
-       [child-point point-zero]
-       [angle 0]))
       
-(define section%
-  (class object%
-
-    (init-field
-     [bones #f]
-     [name ""])
-
-    (define/public (scale! x y z)
-      (map (lambda (bone)
-             (send bone scale! x y z))
-           bones)
-      (void))
-
-    (super-new)
-    ))

@@ -4,6 +4,8 @@
 
 (require "../structs/point.rkt"
          "../bone.rkt"
+         "../connection.rkt"
+         "../section.rkt"
          "../parameter.rkt"
          "../utils.rkt")
 
