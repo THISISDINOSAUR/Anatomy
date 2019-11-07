@@ -13,11 +13,6 @@
 (define (describe-parameter parameter1)
   (string-append (~a (parameter-lower-bound parameter1)) "  > < " (~a (parameter-upper-bound parameter1)) " = " (~a (parameter-default parameter1))))
 
-(define (parameter->json parameter1)
-  (hasheq 'lower-bound (parameter-lower-bound parameter1)
-          'upper-bound (parameter-upper-bound parameter1)
-          'default (parameter-default parameter1)))
-
 (define parameters%
   (class object%
 
@@ -25,11 +20,6 @@
      [parameters #f]
      [setters #f]
      [ordering #f])
-
-    (define/public (json)
-      (map (lambda (param-name)
-             (hasheq param-name (parameter->json (hash-ref parameters param-name))))
-           ordering))
 
     (define/public (description)
       (string-join

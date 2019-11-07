@@ -5,7 +5,6 @@
 (require "structs/point.rkt"
          "structs/rect.rkt"
          "structs/polygon.rkt"
-         json
          racket/gui/base)
 
 (define indent "  ")
@@ -57,19 +56,6 @@
       (for ([(connection) connections])
         (send connection scale-parent! x y z))
       )      
-
-    (define (points->json)
-      (vector->list (vector-map (lambda (point) (point->list point)) points)))
-
-    (define (connections->json)
-      (map (lambda (bone-connection)
-             (send bone-connection json))
-           connections))
-
-    (define/public (json)
-      (hasheq 'name name
-              'points (points->json)
-              'connections (connections->json)))
     
     (define/public (description)
       (string-append
@@ -122,12 +108,6 @@
           (subtract-points absolute-point absolute-parent-connection-point)
           (- total-angle))
         origin-point))
-
-      ;(add-points 
-        ;(rotate-point 
-        ;  (subtract-points point origin-point) 
-        ;  total-angle) 
-        ;absolute-parent-connection-point))
 
     (define/public (absolute-point->bone-point-without-parent absolute-point bone)
      (abolute-point->bone-point absolute-point bone (connection-zero) point-zero 0))
@@ -293,12 +273,6 @@
     (define/public (scale-child! x y z)
       (set! child-point (scale-point-dimension-wise child-point x y z)))
 
-    (define/public (json)
-      (hasheq 'parent_point (point->list parent-point)
-                     'child_point (point->list child-point)
-                     'angle angle
-                     'bone (send child-bone json)))
-
     (define/public (description)
         (string-append
          (describe-point parent-point) " ~ " (describe-point child-point) ", " (number->string angle) "°"))
@@ -313,7 +287,7 @@
        [child-point point-zero]
        [angle 0]))
       
-      (define section%
+(define section%
   (class object%
 
     (init-field

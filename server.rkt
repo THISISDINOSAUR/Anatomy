@@ -6,11 +6,13 @@
          web-server/dispatch
          web-server/http/bindings
 	 json
-         "point.rkt"
-         "bone.rkt")
+         "structs/point.rkt"
+         "bone.rkt"
+         "parameter.rkt"
+         "json.rkt")
 
-(require "dinosaur.rkt"
-         (prefix-in presets: "dinosaur-presets.rkt"))
+(require "anatomyFiles/basoTheropod.rkt"
+         (prefix-in presets: "anatomyFiles/dinosaur-presets.rkt"))
 
 (define (response
 	 #:code    [code/kw 200]
@@ -84,11 +86,11 @@
   
      (recalculate)
   
-     (response #:body (jsexpr->bytes (send illium json))
+     (response #:body (jsexpr->bytes (bone->json illium))
                #:mime "application/json")]))
 
 (define (get-parameters req)
-  (response #:body (jsexpr->bytes (send Parameters json))
+  (response #:body (jsexpr->bytes (parameters->json Parameters))
             #:mime "application/json"))
 
 (define (get-presets req)
