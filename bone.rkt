@@ -5,9 +5,8 @@
 (require "structs/point.rkt"
          "structs/rect.rkt"
          "structs/polygon.rkt"
+         "string.rkt"
          racket/gui/base)
-
-(define indent "  ")
 
 (define bone%
   (class object%
@@ -56,25 +55,6 @@
       (for ([(connection) connections])
         (send connection scale-parent! x y z))
       )      
-    
-    (define/public (description)
-      (string-append
-       name ":\n"
-       indent "points:\n"
-       indent indent (string-join
-                      (map describe-point (vector->list points)) ", ") "\n"
-       indent "connections:\n"
-       indent indent (string-join
-                       (map (lambda (bone-connection)
-                              (string-append
-                               name
-                               " ~ "
-                               (get-field name (get-field child-bone bone-connection))
-                               " = "
-                               (send bone-connection description)))
-                            connections)
-                       (string-append "\n" indent indent))
-       "\n"))
 
     (define (offset-for-connection parent-connection origin-point absolute-parent-connection-point absolute-parent-angle)
       (define add-to-offset (subtract-points (get-field parent-point parent-connection) origin-point))
@@ -232,7 +212,7 @@
       (send dc set-font (make-font #:size 15 #:family 'modern))
       (send dc set-text-foreground "red")
       (define text-draw-point (add-points connection-point (point 0 (/ draw-size 2) 0)))
-      (send dc draw-text (describe-point-2d-rounded draw-point) (point-x text-draw-point) (point-y text-draw-point)))
+      (send dc draw-text (point->description-string-2d-rounded draw-point) (point-x text-draw-point) (point-y text-draw-point)))
 
     (define (draw-point-labels dc bone-points draw-points)
       (define index 0)
@@ -252,7 +232,7 @@
       (send dc set-text-foreground (make-object color% 0 204 150))
       (send dc set-text-background "red")
       (define text-draw-point (add-points draw-point (point 0 (/ draw-size 2) 0)))
-      (define text (string-append (~a index) ":" (describe-point-2d-rounded bone-point)))
+      (define text (string-append (~a index) ":" (point->description-string-2d-rounded bone-point)))
       (send dc draw-text text (point-x text-draw-point) (point-y text-draw-point)))
     
     (super-new)
@@ -272,11 +252,6 @@
 
     (define/public (scale-child! x y z)
       (set! child-point (scale-point-dimension-wise child-point x y z)))
-
-    (define/public (description)
-        (string-append
-         (describe-point parent-point) " ~ " (describe-point child-point) ", " (number->string angle) "°"))
-
 
     (super-new)
     ))
@@ -299,15 +274,6 @@
              (send bone scale! x y z))
            bones)
       (void))
-
-    (define/public (description)
-      (string-append
-       name ": " (string-join
-                      (map (lambda (bone)
-                             (get-field name bone))
-                           bones)
-                      ", ")
-       "\n"))
 
     (super-new)
     ))

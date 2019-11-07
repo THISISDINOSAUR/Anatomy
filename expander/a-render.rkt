@@ -6,6 +6,7 @@
          "../structs/rect.rkt"
          "../bone.rkt"
          "../utils.rkt"
+         "../string.rkt"
          racket/gui/base)
 
 (define (a-render id)
@@ -116,6 +117,6 @@
           (send dc set-text-foreground (make-object color% 130 50 100))
           (send dc set-text-background "red")
           (define text-draw-point (add-points absolute-mouse-point (point 0 10 0)))
-          (send dc draw-text (describe-point-2d-rounded mouse-label-point) (point-x text-draw-point) (point-y text-draw-point))]
+          (send dc draw-text (point->description-string-2d-rounded mouse-label-point) (point-x text-draw-point) (point-y text-draw-point))]
         [else null]))
     ))

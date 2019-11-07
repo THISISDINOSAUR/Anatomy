@@ -4,8 +4,7 @@
 
 (require "bone.rkt"
 "parameter.rkt"
-"structs/point.rkt"
-json)
+"structs/point.rkt")
 
 (define (connection->json connection)
       (hasheq 'parent_point (point->list (get-field parent-point connection))
@@ -36,7 +35,7 @@ json)
           'upper-bound (parameter-upper-bound parameter1)
           'default (parameter-default parameter1)))
 
-(define (parameters->json parameters ordering)
+(define (parameters->json parameters)
       (map (lambda (param-name)
-             (hasheq param-name (parameter->json (hash-ref parameters param-name))))
-           ordering))
+             (hasheq param-name (parameter->json (hash-ref (get-field parameters parameters) param-name))))
+           (get-field ordering parameters)))

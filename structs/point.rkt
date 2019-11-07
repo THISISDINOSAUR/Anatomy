@@ -74,12 +74,6 @@
     [_
      void]))
 
-(define (describe-point point1)
-  (string-append "[" (~a (point-x point1)) ", " (~a (point-y point1)) ", " (~a (point-z point1)) "]"))
-
-(define (describe-point-2d-rounded point1)
-  (string-append "[" (~a (exact-round (point-x point1))) "," (~a (exact-round (point-y point1))) "]"))
-
 (define (point->list point1)
   (list (point-x point1) (point-y point1) (point-z point1)))
 

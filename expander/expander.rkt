@@ -10,6 +10,7 @@
          "../bone.rkt"
          "../parameter.rkt"
          "../utils.rkt"
+         "../string.rkt"
          "a-functions.rkt"
          "a-maths.rkt"
          "a-definitions.rkt"
@@ -69,10 +70,14 @@
 
 (define (a-print id)
   (cond
-    [(or (is-a? id bone%) (is-a? id section%) (is-a? id parameters%))
-     (display (send id description))]
+    [(is-a? id bone%)
+     (display (bone->description-string id))]
+    [(is-a? id section%)
+     (display (section->description-string id))]
+    [(is-a? id parameters%)
+     (display (parameters->description-string id))]
     [(point? id)
-     (display (describe-point id))
+     (display (point->description-string id))
      (display "\n")]
     [else
      (write id)
