@@ -71,17 +71,15 @@
 (define (a-print id)
   (cond
     [(is-a? id bone%)
-     (display (bone->description-string id))]
+     (displayln (bone->description-string id))]
     [(is-a? id section%)
-     (display (section->description-string id))]
+     (displayln (section->description-string id))]
     [(is-a? id parameters%)
-     (display (parameters->description-string id))]
+     (displayln (parameters->description-string id))]
     [(point? id)
-     (display (point->description-string id))
-     (display "\n")]
+     (displayln (point->description-string id))]
     [else
-     (write id)
-     (display "\n")]))
+     (displayln id)]))
 
 (define-macro-cases a-bone-range-operation
   [(_ BONE-ID START-INDEX END-INDEX OPERATION POINT-EXPR)
