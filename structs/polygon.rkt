@@ -5,6 +5,11 @@
 (require "point.rkt"
          sfont/geometry)
 
+(define (scale-polygon polygon x y z)
+      (map (lambda (point)
+           (scale-point-dimension-wise point x y z))
+         polygon))
+
 (define (trapesium top-span bottom-span left-span right-span)
   (define shift (point (/ (max bottom-span top-span) 2.0)
                        (/ (max left-span right-span) 2.0)

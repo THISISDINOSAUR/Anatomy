@@ -18,7 +18,7 @@
 (define (bounding-rect-containing-bounding-rects-list rects)
   (foldl bounding-rect-containing-bounding-rects (car rects) rects))
 
-(define (bounding-rect-for-points points)
+(define (points->bounding-rect points)
   (define x-values
     (map (lambda (point)
            (point-x point))

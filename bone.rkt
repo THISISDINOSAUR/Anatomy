@@ -5,6 +5,7 @@
 (require "structs/point.rkt"
          "structs/rect.rkt"
          "structs/polygon.rkt"
+         "structs/polygon-tree.rkt"
          "string.rkt"
          "connection.rkt"
          racket/gui/base)
@@ -18,17 +19,53 @@
      [connections (list)]
      [name ""]
      [highlighted? #f]
-      [selected? #f])
+     [selected? #f]
+     [polygon-tree #f]
+      )
+
+    (super-new)
+
+    (set! polygon-tree
+      (points->root-polygon-tree (vector->list points)))
+    
+  ;(define (polygon-tree-add-child! parent child point-on-parent point-on-child angle)
+
+#|(define connection%
+  (class object%
+
+    (init-field
+     [parent-point #f]
+     [child-point #f]
+     [angle #f]
+     [child-bone #f])|#
 
     (define/public (add-connection! bone connection)
       (set! connections (append connections (list connection)))
-      (set-field! parent-connection bone connection))
+      (set-field! parent-connection bone connection)
+
+      (polygon-tree-add-child! 
+        polygon-tree 
+        (points->root-polygon-tree (vector->list (get-field points bone)) )
+        (get-field parent-point connection)
+        (get-field child-point connection)
+        (get-field angle connection))
+      )
 
     (define/public (point-at-index index)
-      (vector-ref points index))
+      (list-ref (polygon-tree-polygon polygon-tree) index))
+      ;(vector-ref points index))
 
     (define/public (operation-on-index! op point index)
-      (vector-set! points index (op (vector-ref points index) point)))
+      (vector-set! points index (op (vector-ref points index) point))
+      
+      (set-polygon-tree-polygon! polygon-tree 
+        (list-set 
+          (polygon-tree-polygon polygon-tree)
+          (op 
+            (list-ref (polygon-tree-polygon polygon-tree) index)
+            point)
+          index))
+      )
 
     (define/public (operation-on-range! op point start end)
       (for ([i (in-range start (+ end 1))])
@@ -37,7 +74,16 @@
 
     (define/public (operation-on-dimension-of-index! op dimension val index)
       (vector-set! points index
-                   (operation-on-point-dimension op dimension (vector-ref points index) val)))
+                   (operation-on-point-dimension op dimension (vector-ref points index) val))
+                   
+      (set-polygon-tree-polygon! polygon-tree 
+        (list-set 
+          (polygon-tree-polygon polygon-tree)
+          (operation-on-point-dimension op dimension
+            (list-ref (polygon-tree-polygon polygon-tree) index)
+            val)
+          index))
+    )
     
     (define/public (operation-on-dimension-of-range! op dimension val start end)
       (for ([i (in-range start (+ end 1))])
@@ -50,6 +96,8 @@
          points)
       (scale-connections! x y z)
       (send parent-connection scale-child! x y z) ;TODO: check what happens when no parent
+
+      (scale-polygon-tree! polygon-tree x y z)
       )
 
     (define (scale-connections! x y z)
@@ -132,7 +180,7 @@
 
 
     (define (absolute-bounding-rect parent-connection absolute-parent-connection-point absolute-parent-angle)
-      (bounding-rect-for-points
+      (points->bounding-rect
        (absolute-points parent-connection absolute-parent-connection-point absolute-parent-angle)))
 
     (define/public (tree-bounding-rect-without-parent)
@@ -236,6 +284,5 @@
       (define text (string-append (~a index) ":" (point->description-string-2d-rounded bone-point)))
       (send dc draw-text text (point-x text-draw-point) (point-y text-draw-point)))
     
-    (super-new)
     ))
       
