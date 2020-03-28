@@ -22,39 +22,78 @@
     #:transparent
     #:mutable)
 
+(struct placement (point angle)
+    #:auto-value #f
+    #:transparent
+    #:mutable)
+
 (define (points->root-polygon-tree points)
-    (polygon-tree points #f #f #f 0 '()))
+    (polygon-tree points #f #f point-zero 0 '()))
 
 (define (polygon-tree-add-child! parent child point-on-parent point-on-child angle)
-    (append (polygon-tree-children parent) child)
+    (set-polygon-tree-children! parent (append (polygon-tree-children parent) (list child)))
     (set-polygon-tree-parent! child parent)
     (set-polygon-tree-connection-point-on-parent! child point-on-parent)
     (set-polygon-tree-connection-point! child point-on-child)
     (set-polygon-tree-angle! child angle))
 
-(define (scale-polygon-tree! polygon-tree x y z)
-    (set-polygon-tree-polygon! polygon-tree
-        (scale-polygon (polygon-tree-polygon polygon-tree) x y z))
+(define (polygon-tree->polygons tree)
+  (append (list (polygon-tree-polygon tree))
+          (append-map (lambda (child)
+                        (polygon-tree->polygons child))
+                      (polygon-tree-children tree))))
 
-    (set-polygon-tree-connection-point! polygon-tree
-        ((scale-point-dimension-wise (polygon-tree-connection-point polygon-tree) x y z)))
+(define (scale-polygon-tree! tree x y z)
+  (set-polygon-tree-polygon!
+   tree
+   (scale-polygon (polygon-tree-polygon tree) x y z))
 
-    (map (lambda (child)
-            (set-polygon-tree-connection-point! child
-                ((scale-point-dimension-wise (polygon-tree-connection-point-on-parent child) x y z))))
-        (polygon-tree-children polygon-tree))
-      )
+  (set-polygon-tree-connection-point!
+   tree
+   (scale-point-dimension-wise (polygon-tree-connection-point tree) x y z))
+
+  (for ([(child) (polygon-tree-children tree)])
+    (set-polygon-tree-connection-point-on-parent!
+     child
+     (scale-point-dimension-wise (polygon-tree-connection-point-on-parent child) x y z))
+    (scale-polygon-tree! child x y z)))
+
+
+;need method to just scale one node
+;(define (scale-root-only-of-polygon-tree! tree x y z)
+
+ ; )
+
+
+;could make this return pos and angle to be absolute placement in tree
+#|
+(define (polygon-tree->absolute-placement-in-tree tree)
+    (cond 
+        [(equal? (polygon-tree-parent tree) #f)
+            (placement
+                (rotate-point (polygon-tree-connection-point tree) (polygon-tree-angle tree))
+                (polygon-tree-angle tree))]
+        [else
+            point on parent minus its parent rotated by total angle (up to and including parent angle)
+            add child angle to total angle
+
+                rotate child-point about total angle? (I can't decide if conceptually this should be part of it)
+                    (it feels like the angle definitely needs to include the child angle to make the most scale-point-dimension-wise    
+                    which would then mean the point should also inclue the child point)
+                    I think to decide I need to think about how I actually use this information
+                    e.g. to render a polygon, which position do you need?
+
+                    I'm leaning towards it should include this
 
 
 
-(define (polygon-tree-absolute-position-in-tree tree)
     (cond 
         [(equal? (polygon-tree-parent tree) #f)
             (rotate-point (polygon-tree-connection-point tree) (polygon-tree-angle tree))]
         [else
             (+ (polygon-tree-angle tree) 
                 (polygon-tree-absolute-angle-in-tree (polygon-tree-parent tree)))]))
-
+|#
 ;(add-points 
  ;               (rotate-point-around-point 
   ;                  (polygon-tree-connection-point
@@ -62,6 +101,25 @@
 
 ;child point rotated around parent point
 ;add em
+
+#|
+(define (absolute-points parent-connection absolute-parent-connection-point absolute-parent-angle)
+      (define origin-point (get-field child-point parent-connection))
+      (define total-angle (+ absolute-parent-angle (get-field angle parent-connection)))
+
+      (define points-with-child-as-origin
+        (map (lambda (point)
+               (subtract-points point origin-point))
+             (vector->list points)))
+
+      (define rotated-points
+        (map (lambda (point)
+               (rotate-point point total-angle))
+             points-with-child-as-origin))
+
+      (map (lambda (point)
+               (add-points point absolute-parent-connection-point))
+             rotated-points))|#
 
 (define (polygon-tree-absolute-angle-in-tree tree)
     (cond 
