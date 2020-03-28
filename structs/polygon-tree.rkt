@@ -59,10 +59,19 @@
     (scale-polygon-tree! child x y z)))
 
 
-;need method to just scale one node
-;(define (scale-root-only-of-polygon-tree! tree x y z)
+(define (scale-root-only-of-polygon-tree! tree x y z)
+  (set-polygon-tree-polygon!
+   tree
+   (scale-polygon (polygon-tree-polygon tree) x y z))
 
- ; )
+  (set-polygon-tree-connection-point!
+   tree
+   (scale-point-dimension-wise (polygon-tree-connection-point tree) x y z))
+
+  (for ([(child) (polygon-tree-children tree)])
+    (set-polygon-tree-connection-point-on-parent!
+     child
+     (scale-point-dimension-wise (polygon-tree-connection-point-on-parent child) x y z))))
 
 
 ;could make this return pos and angle to be absolute placement in tree
