@@ -48,7 +48,7 @@
   (polygon-tree-add-child! node3 node4
                            (scale-point-dimension-wise (point 150 50 0) x y z)
                            (scale-point-dimension-wise (point 50 50 0) x y z)
-                           -54)
+                           -45)
   (polygon-tree-add-child! node3 node5
                            (scale-point-dimension-wise (point 150 50 0) x y z)
                            (scale-point-dimension-wise (point 50 50 0) x y z)
@@ -112,3 +112,13 @@
 (check-equal? (polygon-tree-polygon node4) (test-polygon))
 (check-equal? (polygon-tree-connection-point-on-parent node4) (point 150 50 0))
 (check-equal? (polygon-tree-connection-point node4) (point 50 50 0))
+
+
+; Test polygon-tree-absolute-angle-in-tree
+(define angle-test (test-tree))
+(set! node1 (test-structure-node1 angle-test))
+(check-equal? (polygon-tree-absolute-angle-in-tree node1) 0)
+(check-equal? (polygon-tree-absolute-angle-in-tree (test-structure-node2 angle-test)) 90)
+(check-equal? (polygon-tree-absolute-angle-in-tree (test-structure-node3 angle-test)) 45)
+(check-equal? (polygon-tree-absolute-angle-in-tree (test-structure-node4 angle-test)) 0)
+(check-equal? (polygon-tree-absolute-angle-in-tree (test-structure-node5 angle-test)) -45)
