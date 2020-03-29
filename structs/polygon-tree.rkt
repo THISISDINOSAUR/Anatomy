@@ -94,6 +94,12 @@
                         (polygon-tree->absolute-polygons child))
                       (polygon-tree-children tree))))
 
+(define (polygon-tree-point->absolute-point tree point)
+  (define placement (polygon-tree->absolute-placement-in-tree tree))
+  (add-points
+   (rotate-point point (placement-angle placement))
+   (placement-point placement)))
+
 (define (polygon-tree->bounding-rect tree)
   (bounding-rect-containing-bounding-rects-list
    (map (lambda (polygon)

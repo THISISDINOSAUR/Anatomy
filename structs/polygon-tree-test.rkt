@@ -214,6 +214,12 @@
 (check-equal?
  (polygon-tree->absolute-polygons (test-structure-node1 absolute-polygons-test))
  absolute-polygons-expected)
+; Test polygon-tree-point->absolute-point
+(define absolute-point-test (test-tree))
+(define test-point-on-tree (point 30 50 0))
+(check-equal?
+ (polygon-tree-point->absolute-point (test-structure-node3 absolute-polygons-test) test-point-on-tree)
+ (point 171.21320343559643 -121.21320343559643 0))
 
 ; Test polygon-tree->bounding-rect
 (define bounding-rect-test (test-tree))
