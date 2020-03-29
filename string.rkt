@@ -4,7 +4,8 @@
 
 (require 
 "parameter.rkt"
-"structs/point.rkt")
+"structs/point.rkt"
+"structs/polygon-tree.rkt")
 
 (define indent "  ")
 
@@ -31,7 +32,7 @@
        (get-field name bone) ":\n"
        indent "points:\n"
        indent indent (string-join
-                      (map point->description-string (vector->list (get-field points bone))) ", ") "\n"
+                      (map point->description-string (polygon-tree-polygon (get-field polygon-tree bone))) ", ") "\n"
        indent "connections:\n"
        indent indent (string-join
                        (map (lambda (bone-connection)
@@ -40,14 +41,19 @@
                                " ~ "
                                (get-field name (get-field child-bone bone-connection))
                                " = "
-                               (connection->description-string bone-connection)))
+                               (polygon-tree->connection-description-string (get-field polygon-tree (get-field child-bone bone-connection)))))
                             (get-field connections bone))
                        (string-append "\n" indent indent))
        ))
 
-(define (connection->description-string connection)
-        (string-append
-         (point->description-string (get-field parent-point connection)) " ~ " (point->description-string (get-field child-point connection)) ", " (number->string (get-field angle connection)) "°"))
+(define (polygon-tree->connection-description-string tree)
+  (string-append
+   (point->description-string (polygon-tree-connection-point-on-parent tree))
+   " ~ "
+   (point->description-string (polygon-tree-connection-point tree))
+   ", "
+   (number->string (polygon-tree-angle tree))
+   "°"))
 
 (define (section->description-string section)
        (get-field name section) ": " (string-join

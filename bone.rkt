@@ -45,8 +45,7 @@
 
       (polygon-tree-add-child! 
         polygon-tree 
-        ;todo: the bone presumably has a polygon tree already we should use
-        (points->root-polygon-tree (vector->list (get-field points bone)) )
+        (get-field polygon-tree bone)
         (get-field parent-point connection)
         (get-field child-point connection)
         (get-field angle connection))
