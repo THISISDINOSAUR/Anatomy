@@ -74,8 +74,6 @@
      (scale-point-dimension-wise (polygon-tree-connection-point-on-parent child) x y z))))
 
 
-;could make this return pos and angle to be absolute placement in tree
-
 (define (polygon-tree->absolute-placement-in-tree tree)
     (cond 
         [(equal? (polygon-tree-parent tree) #f)
@@ -93,60 +91,12 @@
             rotated-con-point))
          (placement current-point current-angle)]))
          
-         #|
-         Collected parent angle + current angle
-           rotate connection point around that angle
-           add that connection point to the collected position
-              (still need to do some work on that collected position?)
+(define (polygon-tree->absolute-polygon tree)
+  (define placement (polygon-tree->absolute-placement-in-tree tree))
+  (move-polygon
+   (rotate-polygon (polygon-tree-polygon tree) (placement-angle placement))
+   (placement-point placement)))
 
-
-         
-            point on parent minus its parent rotated by total angle (up to and including parent angle)
-            add child angle to total angle
-
-                rotate child-point about total angle? (I can't decide if conceptually this should be part of it)
-                    (it feels like the angle definitely needs to include the child angle to make the most scale-point-dimension-wise    
-                    which would then mean the point should also inclue the child point)
-                    I think to decide I need to think about how I actually use this information
-                    e.g. to render a polygon, which position do you need?
-
-                    I'm leaning towards it should include this
-
-
-
-    (cond 
-        [(equal? (polygon-tree-parent tree) #f)
-            (rotate-point (polygon-tree-connection-point tree) (polygon-tree-angle tree))]
-        [else
-            (+ (polygon-tree-angle tree) 
-                (polygon-tree-absolute-angle-in-tree (polygon-tree-parent tree)))]))
-|#
-;(add-points 
- ;               (rotate-point-around-point 
-  ;                  (polygon-tree-connection-point
-   ;                 )))
-
-;child point rotated around parent point
-;add em
-
-#|
-(define (absolute-points parent-connection absolute-parent-connection-point absolute-parent-angle)
-      (define origin-point (get-field child-point parent-connection))
-      (define total-angle (+ absolute-parent-angle (get-field angle parent-connection)))
-
-      (define points-with-child-as-origin
-        (map (lambda (point)
-               (subtract-points point origin-point))
-             (vector->list points)))
-
-      (define rotated-points
-        (map (lambda (point)
-               (rotate-point point total-angle))
-             points-with-child-as-origin))
-
-      (map (lambda (point)
-               (add-points point absolute-parent-connection-point))
-             rotated-points))|#
 
 ;TODO we probably don't need this method
 (define (polygon-tree-absolute-angle-in-tree tree)

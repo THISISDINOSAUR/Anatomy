@@ -136,7 +136,7 @@
 (check-equal? (polygon-tree-absolute-angle-in-tree (test-structure-node4 angle-test)) 0)
 (check-equal? (polygon-tree-absolute-angle-in-tree (test-structure-node5 angle-test)) -45)
 
-
+;TODO this test file could definitely benefit from some methods to check for approximate equality
 ; Test polygon-tree->absolute-placement-in-tree
 (define absolute-placement-test (test-tree))
 (check-equal?
@@ -154,3 +154,44 @@
 (check-equal?
  (polygon-tree->absolute-placement-in-tree (test-structure-node5 absolute-placement-test))
  (placement (point 256.06601717798213 -276.7766952966369 0) -45))
+
+; Test polygon-tree->absolute-polygon
+(define absolute-polygon-test (test-tree))
+(check-equal?
+ (polygon-tree->absolute-polygon (test-structure-node1 absolute-polygon-test))
+ (test-polygon))
+(define node2Expected
+  (list (point 100.0 100.0 0)
+        (point 100.00000000000001 -100.0 0)
+        (point 200.0 -100.0 0)
+        (point 200.0 100.0 0)))
+(check-equal?
+ (polygon-tree->absolute-polygon (test-structure-node2 absolute-polygon-test))
+ node2Expected)
+
+(define node3Expected
+  (list (point 114.64466094067262 -135.35533905932738 0)
+        (point 256.06601717798213 -276.77669529663683 0)
+        (point 326.7766952966369 -206.0660171779821 0)
+        (point 185.35533905932738 -64.64466094067262 0)))
+(check-equal?
+ (polygon-tree->absolute-polygon (test-structure-node3 absolute-polygon-test))
+ node3Expected)
+
+(define node4Expected
+  (list (point 206.06601717798213 -256.06601717798213 0)
+        (point 406.06601717798213 -256.06601717798213 0)
+        (point 406.06601717798213 -156.06601717798213 0)
+        (point 206.06601717798213 -156.06601717798213 0)))
+(check-equal?
+ (polygon-tree->absolute-polygon (test-structure-node4 absolute-polygon-test))
+ node4Expected)
+
+(define node5Expected
+  (list (point 256.06601717798213 -276.7766952966369 0)
+   (point 397.48737341529164 -135.3553390593274 0)
+   (point 326.7766952966369 -64.64466094067265 0)
+   (point 185.35533905932738 -206.06601717798213 0)))
+(check-equal?
+ (polygon-tree->absolute-polygon (test-structure-node5 absolute-polygon-test))
+ node5Expected)
