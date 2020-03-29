@@ -3,6 +3,7 @@
 (provide (all-defined-out))
 
 (require "polygon-tree.rkt"
+         "../render/polygon-tree-render.rkt"
          "polygon.rkt"
          "point.rkt"
          "rect.rkt")
@@ -84,3 +85,90 @@
               (point 397.48737341529164 -135.3553390593274 0)
               (point 326.7766952966369 -64.64466094067265 0)
               (point 185.35533905932738 -206.06601717798213 0))))
+
+(define test-tree-drawable-polygons
+  (list
+   (drawable-polygon
+    (list
+     (labeled-point (point 0 0 0) (point 0 0 0))
+     (labeled-point (point 200 0 0) (point 200 0 0))
+     (labeled-point (point 200 100 0) (point 200 100 0))
+     (labeled-point (point 0 100 0) (point 0 100 0)))
+    (labeled-point (point 0 0 0) (point 0 0 0))
+    (list (labeled-point (point 150 50 0) (point 150 50 0)))
+    #f
+    #f)
+   (drawable-polygon
+    (list
+     (labeled-point (point 100.0 100.0 0) (point 0 0 0))
+     (labeled-point (point 100.00000000000001 -100.0 0) (point 200 0 0))
+     (labeled-point (point 200.0 -100.0 0) (point 200 100 0))
+     (labeled-point (point 200.0 100.0 0) (point 0 100 0)))
+    (labeled-point (point 150.0 50.0 0) (point 50 50 0))
+    (list (labeled-point (point 150.0 -100.0 0) (point 200 50 0)))
+    #f
+    #f)
+   (drawable-polygon
+    (list
+     (labeled-point
+      (point 114.64466094067262 -135.35533905932738 0)
+      (point 0 0 0))
+     (labeled-point
+      (point 256.06601717798213 -276.77669529663683 0)
+      (point 200 0 0))
+     (labeled-point
+      (point 326.7766952966369 -206.0660171779821 0)
+      (point 200 100 0))
+     (labeled-point
+      (point 185.35533905932738 -64.64466094067262 0)
+      (point 0 100 0)))
+    (labeled-point (point 150.0 -100.0 0) (point 0 50 0))
+    (list
+     (labeled-point
+      (point 256.06601717798213 -206.06601717798213 0)
+      (point 150 50 0))
+     (labeled-point
+      (point 256.06601717798213 -206.06601717798213 0)
+      (point 150 50 0)))
+    #f
+    #f)
+   (drawable-polygon
+    (list
+     (labeled-point
+      (point 206.06601717798213 -256.06601717798213 0)
+      (point 0 0 0))
+     (labeled-point
+      (point 406.06601717798213 -256.06601717798213 0)
+      (point 200 0 0))
+     (labeled-point
+      (point 406.06601717798213 -156.06601717798213 0)
+      (point 200 100 0))
+     (labeled-point
+      (point 206.06601717798213 -156.06601717798213 0)
+      (point 0 100 0)))
+    (labeled-point
+     (point 256.06601717798213 -206.06601717798213 0)
+     (point 50 50 0))
+    '()
+    #f
+    #f)
+   (drawable-polygon
+    (list
+     (labeled-point
+      (point 256.06601717798213 -276.7766952966369 0)
+      (point 0 0 0))
+     (labeled-point
+      (point 397.48737341529164 -135.3553390593274 0)
+      (point 200 0 0))
+     (labeled-point
+      (point 326.7766952966369 -64.64466094067265 0)
+      (point 200 100 0))
+     (labeled-point
+      (point 185.35533905932738 -206.06601717798213 0)
+      (point 0 100 0)))
+    (labeled-point
+     (point 256.06601717798213 -206.06601717798213 0)
+     (point 50 50 0))
+    '()
+    #f
+    #f)))
