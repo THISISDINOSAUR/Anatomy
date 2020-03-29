@@ -32,6 +32,7 @@
                         (polygon-tree->polygons child))
                       (polygon-tree-children tree))))
 
+(define (polygon-tree->nodes-list tree)
 (define (scale-polygon-tree! tree x y z)
   (set-polygon-tree-polygon!
    tree

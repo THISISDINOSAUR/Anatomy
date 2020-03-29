@@ -65,6 +65,12 @@
  (polygon-tree->polygons (test-structure-node1 (test-tree)))
  test-polygons)
 
+; Test polygon-tree->nodes-list
+(define test-nodes-list (test-tree))
+(check-equal?
+ (polygon-tree->nodes-list (test-structure-node1 test-nodes-list))
+ test-tree-list)
+
 ; Test scale-polygon-tree!
 (define test-tree-scaled (test-tree))
 (define node1 (test-structure-node1 test-tree-scaled))
