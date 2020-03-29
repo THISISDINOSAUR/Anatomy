@@ -56,9 +56,11 @@
    "°"))
 
 (define (section->description-string section)
-       (get-field name section) ": " (string-join
-                      (map (lambda (bone)
-                             (get-field name bone))
-                           (get-field bones section))
-                      ", ")
-       )
+  (string-append
+   (get-field name section)
+   ": "
+   (string-join
+    (map (lambda (bone)
+           (get-field name bone))
+         (get-field bones section))
+    ", ")))
