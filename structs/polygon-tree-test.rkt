@@ -60,7 +60,9 @@
 
 ; Test polygon-tree->polygons
 (define test-polygons (list (test-polygon) (test-polygon) (test-polygon) (test-polygon) (test-polygon)))
-(check-equal? (polygon-tree->polygons (test-structure-node1 (test-tree))) test-polygons)
+(check-equal?
+ (polygon-tree->polygons (test-structure-node1 (test-tree)))
+ test-polygons)
 
 ; Test scale-polygon-tree!
 (define test-tree-scaled (test-tree))
@@ -70,11 +72,20 @@
   (check-equal? polygon (test-polygon-with-scale 2 2 1)))
 
 (define node2 (test-structure-node2 test-tree-scaled))
-(check-equal? (polygon-tree-connection-point-on-parent node2) (point 300 100 0))
-(check-equal? (polygon-tree-connection-point node2) (point 100 100 0))
+(check-equal?
+ (polygon-tree-connection-point-on-parent node2)
+ (point 300 100 0))
+(check-equal?
+ (polygon-tree-connection-point node2)
+ (point 100 100 0))
+
 (define node5 (test-structure-node5 test-tree-scaled))
-(check-equal? (polygon-tree-connection-point-on-parent node5) (point 300 100 0))
-(check-equal? (polygon-tree-connection-point node5) (point 100 100 0))
+(check-equal?
+ (polygon-tree-connection-point-on-parent node5)
+ (point 300 100 0))
+(check-equal?
+ (polygon-tree-connection-point node5)
+ (point 100 100 0))
 
 
 (define test-tree-scaled-from-node2 (test-tree))
@@ -83,7 +94,9 @@
 (for ([(polygon) (polygon-tree->polygons node2)])
   (check-equal? polygon (test-polygon-with-scale 1.5 1 1)))
 ;root node shouldn't scale
-(check-equal? (polygon-tree-polygon (test-structure-node1 test-tree-scaled-from-node2)) (test-polygon))
+(check-equal?
+ (polygon-tree-polygon (test-structure-node1 test-tree-scaled-from-node2))
+ (test-polygon))
 
 ;connection point on parent (root) shouldn't scale, but everything else should
 (check-equal? (polygon-tree-connection-point-on-parent node2) (point 150 50 0))
@@ -122,3 +135,22 @@
 (check-equal? (polygon-tree-absolute-angle-in-tree (test-structure-node3 angle-test)) 45)
 (check-equal? (polygon-tree-absolute-angle-in-tree (test-structure-node4 angle-test)) 0)
 (check-equal? (polygon-tree-absolute-angle-in-tree (test-structure-node5 angle-test)) -45)
+
+
+; Test polygon-tree->absolute-placement-in-tree
+(define absolute-placement-test (test-tree))
+(check-equal?
+ (polygon-tree->absolute-placement-in-tree (test-structure-node1 absolute-placement-test))
+ (placement point-zero 0))
+(check-equal?
+ (polygon-tree->absolute-placement-in-tree (test-structure-node2 absolute-placement-test))
+ (placement (point 100.0 100.0 0) 90))
+(check-equal?
+ (polygon-tree->absolute-placement-in-tree (test-structure-node3 absolute-placement-test))
+ (placement (point 114.64466094067262 -135.35533905932738 0) 45))
+(check-equal?
+ (polygon-tree->absolute-placement-in-tree (test-structure-node4 absolute-placement-test))
+ (placement (point  206.06601717798213 -256.06601717798213 0) 0))
+(check-equal?
+ (polygon-tree->absolute-placement-in-tree (test-structure-node5 absolute-placement-test))
+ (placement (point 256.06601717798213 -276.7766952966369 0) -45))

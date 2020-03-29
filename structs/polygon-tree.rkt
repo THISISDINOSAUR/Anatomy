@@ -75,7 +75,7 @@
 
 
 ;could make this return pos and angle to be absolute placement in tree
-#|
+
 (define (polygon-tree->absolute-placement-in-tree tree)
     (cond 
         [(equal? (polygon-tree-parent tree) #f)
@@ -83,6 +83,24 @@
                 (rotate-point (polygon-tree-connection-point tree) (polygon-tree-angle tree))
                 (polygon-tree-angle tree))]
         [else
+         (define place (polygon-tree->absolute-placement-in-tree (polygon-tree-parent tree)))
+         (define current-angle (+ (placement-angle place) (polygon-tree-angle tree)))
+         (define rotated-con-point (rotate-point (polygon-tree-connection-point tree) current-angle))
+         (define rotate-parent-con-point (rotate-point (polygon-tree-connection-point-on-parent tree) (placement-angle place)))
+         (define current-point
+           (subtract-points
+            (add-points (placement-point place) rotate-parent-con-point)
+            rotated-con-point))
+         (placement current-point current-angle)]))
+         
+         #|
+         Collected parent angle + current angle
+           rotate connection point around that angle
+           add that connection point to the collected position
+              (still need to do some work on that collected position?)
+
+
+         
             point on parent minus its parent rotated by total angle (up to and including parent angle)
             add child angle to total angle
 
@@ -130,6 +148,7 @@
                (add-points point absolute-parent-connection-point))
              rotated-points))|#
 
+;TODO we probably don't need this method
 (define (polygon-tree-absolute-angle-in-tree tree)
     (cond 
         [(equal? (polygon-tree-parent tree) #f)
