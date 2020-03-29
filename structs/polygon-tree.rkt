@@ -3,7 +3,8 @@
 (provide (all-defined-out))
 
 (require "point.rkt"
-         "polygon.rkt")
+         "polygon.rkt"
+         "rect.rkt")
 
 ;(struct polygon-connection (parent child parent-point child-point angle)
 ;  #:auto-value 0
@@ -105,6 +106,12 @@
                         (polygon-tree->absolute-polygons child))
                       (polygon-tree-children tree))))
 
+(define (polygon-tree->bounding-rect tree)
+  (bounding-rect-containing-bounding-rects-list
+   (map (lambda (polygon)
+         (points->bounding-rect polygon))
+       (polygon-tree->absolute-polygons tree))))
+
 
 ;TODO we probably don't need this method
 (define (polygon-tree-absolute-angle-in-tree tree)
@@ -115,28 +122,7 @@
             (+ (polygon-tree-angle tree) 
                 (polygon-tree-absolute-angle-in-tree (polygon-tree-parent tree)))]))
 
-#|(define (offset-for-connection parent-connection origin-point absolute-parent-connection-point absolute-parent-angle)
-      (define add-to-offset (subtract-points (get-field parent-point parent-connection) origin-point))
-      (define rotated-add-to-offset (rotate-point add-to-offset absolute-parent-angle))
-      (add-points absolute-parent-connection-point rotated-add-to-offset))
-
-    (define (absolute-points parent-connection absolute-parent-connection-point absolute-parent-angle)
-      (define origin-point (get-field child-point parent-connection))
-      (define total-angle (+ absolute-parent-angle (get-field angle parent-connection)))
-
-      (define points-with-child-as-origin
-        (map (lambda (point)
-               (subtract-points point origin-point))
-             (vector->list points)))
-
-      (define rotated-points
-        (map (lambda (point)
-               (rotate-point point total-angle))
-             points-with-child-as-origin))
-
-      (map (lambda (point)
-               (add-points point absolute-parent-connection-point))
-             rotated-points))
+#|
 
     (define/public (aboslute-point->current-bone-point absolute-point parent-connection absolute-parent-connection-point absolute-parent-angle)
       (define origin-point (get-field child-point parent-connection))

@@ -2,6 +2,7 @@
 (require "polygon-tree.rkt"
          "polygon.rkt"
          "point.rkt"
+         "rect.rkt"
          rackunit)
 
 (define (test-polygon-with-scale x y z)
@@ -136,6 +137,8 @@
 (check-equal? (polygon-tree-absolute-angle-in-tree (test-structure-node4 angle-test)) 0)
 (check-equal? (polygon-tree-absolute-angle-in-tree (test-structure-node5 angle-test)) -45)
 
+;TODO this probably needs a test with a root that doesn't have origin 0, angle 0
+
 ;TODO this test file could definitely benefit from some methods to check for approximate equality
 ; Test polygon-tree->absolute-placement-in-tree
 (define absolute-placement-test (test-tree))
@@ -197,3 +200,9 @@
 (check-equal?
  (polygon-tree->absolute-polygons (test-structure-node1 absolute-polygons-test))
  absolute-polygons-expected)
+
+; Test polygon-tree->bounding-rect
+(define bounding-rect-test (test-tree))
+(check-equal?
+ (polygon-tree->bounding-rect (test-structure-node1 bounding-rect-test))
+ (bounding-rect 0.0 406.06601717798213 -276.7766952966369 100.0))
