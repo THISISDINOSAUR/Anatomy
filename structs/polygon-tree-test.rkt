@@ -137,8 +137,6 @@
 (check-equal? (polygon-tree-absolute-angle-in-tree (test-structure-node4 angle-test)) 0)
 (check-equal? (polygon-tree-absolute-angle-in-tree (test-structure-node5 angle-test)) -45)
 
-;TODO this probably needs a test with a root that doesn't have origin 0, angle 0
-
 ;TODO this test file could definitely benefit from some methods to check for approximate equality
 ; Test polygon-tree->absolute-placement-in-tree
 (define absolute-placement-test (test-tree))
@@ -157,6 +155,22 @@
 (check-equal?
  (polygon-tree->absolute-placement-in-tree (test-structure-node5 absolute-placement-test))
  (placement (point 256.06601717798213 -276.7766952966369 0) -45))
+
+; test with root that isn't origin 0, angle 0
+(define root (polygon-tree (test-polygon) #f #f (point 50 50 0) -30'()))
+(set! node2 (points->root-polygon-tree (test-polygon)))
+(polygon-tree-add-child!
+ root
+ node2
+ (point 150 50 0)
+ (point 50 50 0)
+ 90)
+(check-equal?
+ (polygon-tree->absolute-placement-in-tree root)
+ (placement (point -18.301270189221942 -68.30127018922194 0) -30))
+(check-equal?
+ (polygon-tree->absolute-placement-in-tree node2)
+ (placement (point 18.301270189221924 68.30127018922191 0) 60))
 
 ; Test polygon-tree->absolute-polygon
 (define absolute-polygons-expected
@@ -206,3 +220,8 @@
 (check-equal?
  (polygon-tree->bounding-rect (test-structure-node1 bounding-rect-test))
  (bounding-rect 0.0 406.06601717798213 -276.7766952966369 100.0))
+
+(define bounding-rect-sub-tree-test (test-structure-node3 (test-tree)))
+(check-equal?
+ (polygon-tree->bounding-rect bounding-rect-sub-tree-test)
+ (bounding-rect 114.64466094067262 406.06601717798213 -276.7766952966369 -64.64466094067262))

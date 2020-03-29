@@ -6,18 +6,6 @@
          "polygon.rkt"
          "rect.rkt")
 
-;(struct polygon-connection (parent child parent-point child-point angle)
-;  #:auto-value 0
-;  #:transparent
-;  #:mutable)
-
-;maybe polygon parent-point own-point angle children
-
-;(struct polygon-tree (polygon connections)
-;  #:auto-value 0
-;  #:transparent
-;  #:mutable)
-
 (struct polygon-tree (polygon parent connection-point-on-parent connection-point angle children)
     #:auto-value #f
     #:transparent
@@ -79,7 +67,7 @@
     (cond 
         [(equal? (polygon-tree-parent tree) #f)
             (placement
-                (rotate-point (polygon-tree-connection-point tree) (polygon-tree-angle tree))
+                (rotate-point (negate-point (polygon-tree-connection-point tree)) (polygon-tree-angle tree))
                 (polygon-tree-angle tree))]
         [else
          (define place (polygon-tree->absolute-placement-in-tree (polygon-tree-parent tree)))
