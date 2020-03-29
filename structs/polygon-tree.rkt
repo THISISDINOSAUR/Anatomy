@@ -97,6 +97,14 @@
    (rotate-polygon (polygon-tree-polygon tree) (placement-angle placement))
    (placement-point placement)))
 
+;TODO this could be more efficient by not using the polygon-tree->absolute-placement-in-tree method
+;could work the same way as that method, altough would be tricky to keep track of collected placement
+(define (polygon-tree->absolute-polygons tree)
+  (append (list (polygon-tree->absolute-polygon tree))
+          (append-map (lambda (child)
+                        (polygon-tree->absolute-polygons child))
+                      (polygon-tree-children tree))))
+
 
 ;TODO we probably don't need this method
 (define (polygon-tree-absolute-angle-in-tree tree)
