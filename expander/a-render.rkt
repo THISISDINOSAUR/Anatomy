@@ -2,8 +2,10 @@
 
 (provide (matching-identifiers-out #rx"^a-" (all-defined-out)))
 
-(require "../structs/point.rkt"
+(require "../render/polygon-tree-render.rkt"
+         "../structs/point.rkt"
          "../structs/rect.rkt"
+         "../structs/polygon-tree.rkt"
          "../bone.rkt"
          "../utils.rkt"
          "../string.rkt"
@@ -20,10 +22,14 @@
                      [width frame-width]
                      [height frame-height]))
 
-  (define rect (send id tree-bounding-rect-without-parent))
+  ;TODO why do I do all this here and not as part of the canvas?
+  (define rect (polygon-tree->bounding-rect (get-field polygon-tree id)))
   (define rect-width (bounding-rect-width rect))
   (define rect-height (bounding-rect-height rect))
   (define scale (min (/ drawing-width rect-width) (/ drawing-height rect-height)))
+
+  (define drawable-tree
+    (polygon-tree->drawable-polygons (get-field polygon-tree id)))
   
   (define canvas
     (new anatomy-canvas%
@@ -31,8 +37,10 @@
          [paint-callback
           (lambda (canvas dc)
             (send id render-without-parent dc)
+            (draw-drawable-tree drawable-tree dc)
             (send canvas draw-mouse-label))]
          [root-bone id]
+         [drawable-tree drawable-tree]
          [padding padding]
          [scale scale]
          [translation-x (- (bounding-rect-min-x rect))]
@@ -41,12 +49,24 @@
  
   (send frame show #t))
 
+(define (draw-drawable-tree tree dc)
+  (send dc set-brush (make-object color% 255 246 222 0.3) 'solid)
+  (send dc set-pen (make-object color% 60 60 60 0.8) 8 'solid)
+
+  (for ([(drawable-polygon) tree])
+    (send dc draw-path (points->path (drawable-polygon->draw-points drawable-polygon)))))
+
+
+;TODO definitely move this into a seperate file too
+;currently in expander folder
+;expander folder doesn't need to know shit about this (and probs most of above too)
 (define anatomy-canvas%
   (class canvas%
     (inherit get-width get-height get-dc refresh)
 
      (init-field
      [root-bone #f]
+     [drawable-tree #f]
      [padding 0]
      [scale 1]
      [translation-x 0]

@@ -17,6 +17,11 @@
          (labeled-point point label))
        polygon labels))
 
+(define (labeled-polygon->polygon labeled-polygon)
+  (map (lambda (labeled-point)
+         (labeled-point-point labeled-point))
+       labeled-polygon))
+
 (struct drawable-polygon (labeled-polygon
                           labeled-connection-point
                           labeled-child-connection-points
@@ -25,6 +30,9 @@
   #:auto-value #f
   #:transparent
   #:mutable)
+
+(define (drawable-polygon->draw-points polygon)
+  (labeled-polygon->polygon (drawable-polygon-labeled-polygon polygon)))
 
 (define (polygon-tree->drawable-polygon tree)
   (drawable-polygon
