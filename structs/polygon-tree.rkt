@@ -33,6 +33,11 @@
                       (polygon-tree-children tree))))
 
 (define (polygon-tree->nodes-list tree)
+  (append (list tree)
+          (append-map (lambda (child)
+                        (polygon-tree->nodes-list child))
+                      (polygon-tree-children tree))))
+
 (define (scale-polygon-tree! tree x y z)
   (set-polygon-tree-polygon!
    tree
