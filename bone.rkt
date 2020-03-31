@@ -61,11 +61,10 @@
       (set-polygon-tree-polygon! polygon-tree 
         (list-set 
           (polygon-tree-polygon polygon-tree)
+          index
           (op 
             (list-ref (polygon-tree-polygon polygon-tree) index)
-            point)
-          index))
-      )
+            point))))
 
     (define/public (operation-on-range! op point start end)
       (for ([i (in-range start (+ end 1))])
@@ -76,14 +75,14 @@
       (vector-set! points index
                    (operation-on-point-dimension op dimension (vector-ref points index) val))
                    
+    (define/public (operation-on-dimension-of-index! op dimension val index)                   
       (set-polygon-tree-polygon! polygon-tree 
         (list-set 
           (polygon-tree-polygon polygon-tree)
+          index
           (operation-on-point-dimension op dimension
             (list-ref (polygon-tree-polygon polygon-tree) index)
-            val)
-          index))
-    )
+            val))))
     
     (define/public (operation-on-dimension-of-range! op dimension val start end)
       (for ([i (in-range start (+ end 1))])
