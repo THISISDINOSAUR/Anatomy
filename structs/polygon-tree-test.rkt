@@ -80,16 +80,6 @@
 (check-equal? (polygon-tree-connection-point-on-parent node4) (point 150 50 0))
 (check-equal? (polygon-tree-connection-point node4) (point 50 50 0))
 
-
-; Test polygon-tree-absolute-angle-in-tree
-(define angle-test (test-tree))
-(set! node1 (test-structure-node1 angle-test))
-(check-equal? (polygon-tree-absolute-angle-in-tree node1) 0)
-(check-equal? (polygon-tree-absolute-angle-in-tree (test-structure-node2 angle-test)) 90)
-(check-equal? (polygon-tree-absolute-angle-in-tree (test-structure-node3 angle-test)) 45)
-(check-equal? (polygon-tree-absolute-angle-in-tree (test-structure-node4 angle-test)) 0)
-(check-equal? (polygon-tree-absolute-angle-in-tree (test-structure-node5 angle-test)) -45)
-
 ;TODO this test file could definitely benefit from some methods to check for approximate equality
 ; Test polygon-tree->absolute-placement-in-tree
 (define absolute-placement-test (test-tree))
