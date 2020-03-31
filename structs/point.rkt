@@ -36,6 +36,9 @@
 (define (rotate-point point1 angle)
   (rotate-point-about-point point1 angle point-zero))
 
+(define (point-invert-y point1)
+  (point (point-x point1) (- (point-y point1)) (point-z point1)))
+
 ; THIS DID ROTATE ANTICLOCKWISE, BUT NOW DOES CLOCKWISE
 ; we changed the handidness of the system
 ; y used to point down, now it points up

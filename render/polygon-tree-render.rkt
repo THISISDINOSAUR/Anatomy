@@ -12,15 +12,20 @@
   #:transparent
   #:mutable)
 
-(define (polygon->labeled-polygon polygon labels)
-  (map (lambda (point label)
-         (labeled-point point label))
-       polygon labels))
+(struct labeled-polygon (polygon labels)
+  #:auto-value #f
+  #:transparent
+  #:mutable)
 
-(define (labeled-polygon->polygon labeled-polygon)
-  (map (lambda (labeled-point)
-         (labeled-point-point labeled-point))
-       labeled-polygon))
+(define (point->drawable-labeled-point point label)
+  (labeled-point (point-invert-y point) label))
+
+(define (polygon->drawable-labeled-polygon polygon labels)
+  (labeled-polygon
+   (map (lambda (point)
+         (point-invert-y point))
+       polygon)
+  labels))
 
 (struct drawable-polygon (labeled-polygon
                           labeled-connection-point
@@ -32,14 +37,14 @@
   #:mutable)
 
 (define (drawable-polygon->draw-points polygon)
-  (labeled-polygon->polygon (drawable-polygon-labeled-polygon polygon)))
+  (labeled-polygon-polygon (drawable-polygon-labeled-polygon polygon)))
 
 (define (polygon-tree->drawable-polygon tree)
   (drawable-polygon
-     (polygon->labeled-polygon (polygon-tree->absolute-polygon tree) (polygon-tree-polygon tree))
-     (labeled-point (polygon-tree-point->absolute-point tree (polygon-tree-connection-point tree)) (polygon-tree-connection-point tree))
+     (polygon->drawable-labeled-polygon (polygon-tree->absolute-polygon tree) (polygon-tree-polygon tree))
+     (point->drawable-labeled-point (polygon-tree-point->absolute-point tree (polygon-tree-connection-point tree)) (polygon-tree-connection-point tree))
      (map (lambda (child)
-            (labeled-point
+            (point->drawable-labeled-point
              (polygon-tree-point->absolute-point tree (polygon-tree-connection-point-on-parent child))
              (polygon-tree-connection-point-on-parent child)))
           (polygon-tree-children tree))
@@ -53,5 +58,11 @@
    (append-map (lambda (child)
                  (polygon-tree->drawable-polygons child))
                (polygon-tree-children tree))))
-         
+
+(define (drawable-polygons->bounding-rect drawable-polygons)
+  (define polygons
+    (map (lambda (polygon)
+           (labeled-polygon-polygon (drawable-polygon-labeled-polygon polygon)))
+         drawable-polygons))
+  (polygons->bounding-rect polygons))
   

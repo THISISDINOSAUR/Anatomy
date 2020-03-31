@@ -15,20 +15,12 @@
   (define frame-width 1300)
   (define frame-height 750)
   (define padding 50)
-  (define drawing-width (- frame-width (* 2 padding)))
-  (define drawing-height (- frame-height (* 2 padding)))
   (define frame (new frame%
                      [label (get-field name id)]
                      [width frame-width]
                      [height frame-height]))
 
-  ;TODO why do I do all this here and not as part of the canvas?
-  (define rect (polygon-tree->bounding-rect (get-field polygon-tree id)))
-  (define rect-width (bounding-rect-width rect))
-  (define rect-height (bounding-rect-height rect))
-  (define scale (min (/ drawing-width rect-width) (/ drawing-height rect-height)))
-
-  (define drawable-tree
+  (define drawable-polygons
     (polygon-tree->drawable-polygons (get-field polygon-tree id)))
   
   (define canvas
@@ -37,24 +29,46 @@
          [paint-callback
           (lambda (canvas dc)
             (send id render-without-parent dc)
-            (draw-drawable-tree drawable-tree dc)
+            (draw-drawable-polygons drawable-polygons dc)
             (send canvas draw-mouse-label))]
          [root-bone id]
-         [drawable-tree drawable-tree]
-         [padding padding]
-         [scale scale]
-         [translation-x (- (bounding-rect-min-x rect))]
-         [translation-y (- (bounding-rect-min-y rect))]
-         ))
+         [drawable-polygons drawable-polygons]
+         [width frame-width]
+         [height frame-height]
+         [padding padding]))
  
   (send frame show #t))
 
-(define (draw-drawable-tree tree dc)
+(define (draw-drawable-polygons polygons dc)
+  (for ([(drawable-polygon) polygons])
+    (draw-polygon drawable-polygon dc)
+    
+    (draw-connection-point (drawable-polygon-labeled-connection-point drawable-polygon) dc)))
+
+(define (draw-polygon polygon dc)
   (send dc set-brush (make-object color% 255 246 222 0.3) 'solid)
   (send dc set-pen (make-object color% 60 60 60 0.8) 8 'solid)
+  (send dc draw-path (points->path (drawable-polygon->draw-points polygon))))
 
-  (for ([(drawable-polygon) tree])
-    (send dc draw-path (points->path (drawable-polygon->draw-points drawable-polygon)))))
+(define (draw-connection-point con-point dc)
+  (send dc set-pen (make-object color% 200 50 50 0.9) 6 'solid)
+  (send dc set-brush "white" 'transparent)
+  (define draw-size 20)
+  (define draw-point (subtract-points (labeled-point-point con-point) (point (/ draw-size 2) (/ draw-size 2) 0)))
+  (send dc draw-ellipse (point-x draw-point) (point-y draw-point) draw-size draw-size)
+
+  ;TODO: only render connection points when highlighted (but also render parent connection point)
+  ;will also need to change connection point label depending on parent or child
+  ;at the moment it just renders the point on the child
+  (send dc set-font (make-font #:size 15 #:family 'modern))
+  (send dc set-text-foreground "red")
+  (define text-draw-point (add-points (labeled-point-point con-point) (point 0 (/ draw-size 2) 0)))
+  (send dc draw-text (point->description-string-2d-rounded (labeled-point-label con-point)) (point-x text-draw-point) (point-y text-draw-point)))
+   
+;TODO ANGLES ARE THE WRONG WAY AROUND AND I DON'T KNOW WHY
+;I think we drawing upside down
+;I want, and assume, y is up, but I think it's down when we drawing
+;this means we need an additional translation step :O
 
 
 ;TODO definitely move this into a seperate file too
@@ -66,11 +80,10 @@
 
      (init-field
      [root-bone #f]
-     [drawable-tree #f]
-     [padding 0]
-     [scale 1]
-     [translation-x 0]
-     [translation-y 0])
+     [drawable-polygons #f]
+     [width 0]
+     [height 0]
+     [padding 0])
 
     (super-new)
 
@@ -78,6 +91,15 @@
     (define absolute-mouse-point #f)
     (define selected #f)
 
+    (define drawing-width (- width (* 2 padding)))
+    (define drawing-height (- height (* 2 padding)))
+    (define rect (drawable-polygons->bounding-rect drawable-polygons))
+    (define rect-width (bounding-rect-width rect))
+    (define rect-height (bounding-rect-height rect))
+    (define scale (min (/ drawing-width rect-width) (/ drawing-height rect-height)))
+    (define translation-x (- (bounding-rect-min-x rect)))
+    (define translation-y (- (bounding-rect-min-y rect)))
+    
     (send (get-dc) translate padding padding)
     (send (get-dc) set-scale scale scale)
     (send (get-dc) translate translation-x translation-y)
