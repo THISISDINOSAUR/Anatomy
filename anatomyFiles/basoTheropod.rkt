@@ -49,7 +49,6 @@ coracoid~sternalPlate = 2 ~ last, 15
 //body end
 
 //neck start
-//TODO maybe need to inverst some stuff here?
 cervicalLastEndHeight = distanceBetween(dorsalSpine[0], dorsalSpine[last])
 cervicalFirstStartHeight = 87
 neckHeightDifference = cervicalLastEndHeight - cervicalFirstStartHeight
@@ -79,7 +78,6 @@ cranium~mandible = average(3, 4) ~ average(0, 1), 0
 
 
 //tail start
-//TODO maybe here too
 tailFirstStartHeight = distanceBetween(sacrum[1], sacrum[2])
 tailFirstEndHeight = 100
 tailFirstLength = 350
@@ -150,6 +148,9 @@ arm = humerus, ulnaRadius, frontFoot
 
 //arm2 = humerus2, ulnaRadius2, frontFoot2
 
+//illium.scale(5, 2)
+//scapula[7] += [900, 900]
+
 print illium
 print dorsalSpine
-render dorsalSpine
+render illium

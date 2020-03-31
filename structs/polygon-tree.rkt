@@ -2,7 +2,8 @@
 
 (provide (all-defined-out))
 
-(require "point.rkt"
+(require struct-update
+         "point.rkt"
          "polygon.rkt"
          "rect.rkt")
 
@@ -10,6 +11,8 @@
     #:auto-value #f
     #:transparent
     #:mutable)
+
+(define-struct-updaters polygon-tree)
 
 (struct placement (point angle)
     #:auto-value #f
@@ -92,8 +95,9 @@
    (rotate-polygon (polygon-tree-polygon tree) (placement-angle placement))
    (placement-point placement)))
 
-;TODO this could be more efficient by not using the polygon-tree->absolute-placement-in-tree method
+;this could be more efficient by not using the polygon-tree->absolute-placement-in-tree method
 ;could work the same way as that method, altough would be tricky to keep track of collected placement
+;at the moment there's no need, since this only runs once
 (define (polygon-tree->absolute-polygons tree)
   (append (list (polygon-tree->absolute-polygon tree))
           (append-map (lambda (child)
