@@ -2,8 +2,6 @@
 
 (provide (all-defined-out))
 
-;TODO rename this file
-
 (require struct-update
          "../structs/polygon-tree.rkt"
          "../structs/point.rkt"

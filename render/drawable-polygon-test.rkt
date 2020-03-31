@@ -1,5 +1,5 @@
 #lang br
-(require "polygon-tree-render.rkt"
+(require "drawable-polygon.rkt"
          "../structs/polygon-tree.rkt"
          "../structs/polygon-tree-test-structure.rkt"
          "../structs/polygon.rkt"

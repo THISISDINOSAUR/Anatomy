@@ -7,7 +7,7 @@
 
 (provide (matching-identifiers-out #rx"^a-" (all-defined-out)))
 
-(require "../render/polygon-tree-render.rkt"
+(require "../render/drawable-polygon.rkt"
          "../structs/point.rkt"
          "../structs/rect.rkt"
          "../structs/polygon-tree.rkt"
