@@ -100,11 +100,19 @@
                         (polygon-tree->absolute-polygons child))
                       (polygon-tree-children tree))))
 
-(define (polygon-tree-point->absolute-point tree point)
+(define (polygon-tree-point->absolute-point point tree)
   (define placement (polygon-tree->absolute-placement-in-tree tree))
   (add-points
    (rotate-point point (placement-angle placement))
    (placement-point placement)))
+
+(define (absolute-point->polygon-tree-point point tree)
+  (define placement (polygon-tree->absolute-placement-in-tree tree))
+  (rotate-point
+   (subtract-points
+    point
+    (placement-point placement))
+   (- (placement-angle placement))))
 
 (define (polygon-tree->bounding-rect tree)
   (bounding-rect-containing-bounding-rects-list
