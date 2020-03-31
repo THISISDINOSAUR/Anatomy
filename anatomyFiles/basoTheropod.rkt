@@ -7,8 +7,6 @@ Parameters = {
 	test: 0.2 > < 1.8 = 0.43
 }
 
-//TODO at the moment y axis points down. This is not desirable
-
 //hips start
 illium = [0,0], [-115, -24], [-81, 89], [40, 135], [90, 111], [100, 75], [28, 48], [84, 14]
 

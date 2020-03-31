@@ -46,10 +46,10 @@
 (define (polygon-tree->drawable-polygon tree)
   (drawable-polygon
      (polygon->drawable-labeled-polygon (polygon-tree->absolute-polygon tree) (polygon-tree-polygon tree))
-     (point->drawable-labeled-point (polygon-tree-point->absolute-point tree (polygon-tree-connection-point tree)) (polygon-tree-connection-point tree))
+     (point->drawable-labeled-point (polygon-tree-point->absolute-point (polygon-tree-connection-point tree) tree) (polygon-tree-connection-point tree))
      (map (lambda (child)
             (point->drawable-labeled-point
-             (polygon-tree-point->absolute-point tree (polygon-tree-connection-point-on-parent child))
+             (polygon-tree-point->absolute-point (polygon-tree-connection-point-on-parent child) tree)
              (polygon-tree-connection-point-on-parent child)))
           (polygon-tree-children tree))
      #f

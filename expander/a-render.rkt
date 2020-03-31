@@ -1,5 +1,10 @@
 #lang br
 
+;MAIN TODO
+;connection point display
+;mouse point display
+;cleanup
+
 (provide (matching-identifiers-out #rx"^a-" (all-defined-out)))
 
 (require "../render/polygon-tree-render.rkt"

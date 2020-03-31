@@ -95,9 +95,9 @@
            (scale-point-dimension-wise point x y z))
          points)
       (scale-connections! x y z)
-      (send parent-connection scale-child! x y z) ;TODO: check what happens when no parent
+      ;(send parent-connection scale-child! x y z) ;TODO: check what happens when no parent
 
-      (scale-polygon-tree! polygon-tree x y z)
+      (scale-root-only-of-polygon-tree! polygon-tree x y z)
       )
 
     (define (scale-connections! x y z)

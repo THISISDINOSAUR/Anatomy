@@ -70,21 +70,21 @@
 
 
 (define (polygon-tree->absolute-placement-in-tree tree)
-    (cond 
-        [(equal? (polygon-tree-parent tree) #f)
-            (placement
-                (rotate-point (negate-point (polygon-tree-connection-point tree)) (polygon-tree-angle tree))
-                (polygon-tree-angle tree))]
-        [else
-         (define place (polygon-tree->absolute-placement-in-tree (polygon-tree-parent tree)))
-         (define current-angle (+ (placement-angle place) (polygon-tree-angle tree)))
-         (define rotated-con-point (rotate-point (polygon-tree-connection-point tree) current-angle))
-         (define rotate-parent-con-point (rotate-point (polygon-tree-connection-point-on-parent tree) (placement-angle place)))
-         (define current-point
-           (subtract-points
-            (add-points (placement-point place) rotate-parent-con-point)
-            rotated-con-point))
-         (placement current-point current-angle)]))
+  (cond 
+    [(equal? (polygon-tree-parent tree) #f)
+     (placement
+      (rotate-point (negate-point (polygon-tree-connection-point tree)) (polygon-tree-angle tree))
+      (polygon-tree-angle tree))]
+    [else
+     (define place (polygon-tree->absolute-placement-in-tree (polygon-tree-parent tree)))
+     (define current-angle (+ (placement-angle place) (polygon-tree-angle tree)))
+     (define rotated-con-point (rotate-point (polygon-tree-connection-point tree) current-angle))
+     (define rotate-parent-con-point (rotate-point (polygon-tree-connection-point-on-parent tree) (placement-angle place)))
+     (define current-point
+       (subtract-points
+        (add-points (placement-point place) rotate-parent-con-point)
+        rotated-con-point))
+     (placement current-point current-angle)]))
          
 (define (polygon-tree->absolute-polygon tree)
   (define placement (polygon-tree->absolute-placement-in-tree tree))
