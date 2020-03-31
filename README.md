@@ -20,8 +20,6 @@ Example dinosaur, with animated changing parameter values:
 - Refactor a-render  
 It shouldn't be part of the expander and should be it's own section (I'm looking at you too, JSON handling)
 
-- Fix angle when rendering partial skeletons
-
 - Add display of position of cursor relative to selected bone
 
 - Draw paths relative to bone
@@ -30,11 +28,6 @@ It shouldn't be part of the expander and should be it's own section (I'm looking
 Might not actually be too hard to implement, so may be worth it (just doing points is probably the most useful and the least complicated to implement)
 
 ### Anatomy Language
-
-- Refactor bones/structs
-
-- Check what happens when scaling a bone with no parent  
-This case isn't explicitly handled, so I'm not sure what will happen
 
 - Allow empty params definition (or no params definition)  
 
@@ -302,6 +295,11 @@ Essential feature, ability to define and import individual creature definitions 
 
 - Parameters are out of order  
 
+- Refactor bones/structs
+
+- Check what happens when scaling a bone with no parent  
+This case isn't explicitly handled, so I'm not sure what will happen
+
 ### Racket GUI  
 
 - Add ability to select bones  
@@ -312,6 +310,8 @@ To reduce visual clutter, only show bone labels on mouse over (or when bone is s
 - Fix points printing wrong points (what values does it print?)
 
 - Add display of position of cursor relative to selected bone
+
+- Fix angle when rendering partial skeletons
 
 ### Server
 
