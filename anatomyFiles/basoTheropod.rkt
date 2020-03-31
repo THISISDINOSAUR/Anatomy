@@ -153,4 +153,5 @@ arm = humerus, ulnaRadius, frontFoot
 //arm2 = humerus2, ulnaRadius2, frontFoot2
 
 print illium
-render illium
+print dorsalSpine
+render dorsalSpine

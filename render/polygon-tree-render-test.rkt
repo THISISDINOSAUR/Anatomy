@@ -7,7 +7,6 @@
          "../structs/rect.rkt"
          rackunit)
 
-;TODO check all these numbers once we have paper
 ; Test polygon-tree->drawable-polygon
 (define test-drawable-polygon (test-tree))
 (define expected (list-ref test-tree-drawable-polygons 2))
