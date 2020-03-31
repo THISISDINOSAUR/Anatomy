@@ -11,14 +11,6 @@
          "string.rkt"
          racket/gui/base)
 
-(define connection%
-  (class object%
-
-    (init-field
-     [child-bone #f])
-
-    (super-new)))
-
 (define bone%
   (class object%
 
@@ -34,11 +26,10 @@
       (points->root-polygon-tree (vector->list points)))
     
     (define/public (add-connection! bone
-                                    connection
                                     point-on-parent
                                     point-on-child
                                     angle)
-      (set! connections (append connections (list connection)))
+      (set! connections (append connections (list bone)))
 
       (polygon-tree-add-child! 
         polygon-tree 
