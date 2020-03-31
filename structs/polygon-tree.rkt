@@ -107,7 +107,9 @@
    (placement-point placement)))
 
 (define (absolute-point->polygon-tree-point point tree)
-  (define placement (polygon-tree->absolute-placement-in-tree tree))
+  (absolute-point->placement-point point (polygon-tree->absolute-placement-in-tree tree)))
+
+(define (absolute-point->placement-point point placement)
   (rotate-point
    (subtract-points
     point
@@ -119,95 +121,3 @@
    (map (lambda (polygon)
          (points->bounding-rect polygon))
        (polygon-tree->absolute-polygons tree))))
-
-
-;TODO we probably don't need this method
-(define (polygon-tree-absolute-angle-in-tree tree)
-    (cond 
-        [(equal? (polygon-tree-parent tree) #f)
-            (polygon-tree-angle tree)]
-        [else
-            (+ (polygon-tree-angle tree) 
-                (polygon-tree-absolute-angle-in-tree (polygon-tree-parent tree)))]))
-
-#|
-
-    (define/public (aboslute-point->current-bone-point absolute-point parent-connection absolute-parent-connection-point absolute-parent-angle)
-      (define origin-point (get-field child-point parent-connection))
-      (define total-angle (+ absolute-parent-angle (get-field angle parent-connection)))
-
-      (add-points
-        (rotate-point
-          (subtract-points absolute-point absolute-parent-connection-point)
-          (- total-angle))
-        origin-point))
-
-(define/public (absolute-point->bone-point-without-parent absolute-point bone)
-     (abolute-point->bone-point absolute-point bone (connection-zero) point-zero 0))
-
-    (define/public (abolute-point->bone-point absolute-point bone parent-connection absolute-parent-connection-point absolute-parent-angle)
-      (cond 
-        [(equal? bone this) 
-          (aboslute-point->current-bone-point absolute-point parent-connection absolute-parent-connection-point absolute-parent-angle)]
-        [else 
-          (define absolute-angle (+ absolute-parent-angle (get-field angle parent-connection)))
-          (define origin-point (get-field child-point parent-connection))
-          (define children-intersected
-           (remove* (list null)
-                   (map (lambda (child-connection)
-                          (define child-offset (offset-for-connection child-connection origin-point absolute-parent-connection-point absolute-angle))
-                          (send (get-field child-bone child-connection) abolute-point->bone-point absolute-point bone child-connection child-offset absolute-angle))
-                        connections)))
-          (if (empty? children-intersected)
-             null
-             (car children-intersected))]))
-|#
-
-;(set! connections (append connections (list connection)))
-#|
-(define thing%
-  (class object%
-
-    (init-field
-     [parent #f]
-     [child #f]
-     [value #f])
-
-    (super-new)
-    ))
-
-
-  (define parent 
-    (new thing% 
-        [parent #f] 
-        [child #f]
-        [value 1]))
-
-(define child 
-    (new thing%
-        [parent parent]
-        [child #f]
-        [value 2]))
-
-(set-field! child parent child)
-(println (get-field value parent))
-(set-field! value (get-field parent child) 5)
-(println (get-field value parent))
-
-(struct thing2 (parent child value)
-  #:auto-value 0
-  #:transparent
-  #:mutable)
-
-(define parent2 
-    (thing2 #f #f 1))
-
-(define child2
-    (thing2 parent2 #f 2))
-
-(set-thing2-child! parent2 child2)
-
-(println (thing2-value parent2))
-(set-thing2-value! (thing2-parent child2) 5)
-(println (thing2-value parent2))
-|#
