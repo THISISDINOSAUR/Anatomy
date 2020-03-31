@@ -9,16 +9,22 @@
          "structs/polygon.rkt"
          "structs/polygon-tree.rkt"
          "string.rkt"
-         "connection.rkt"
          racket/gui/base)
+
+(define connection%
+  (class object%
+
+    (init-field
+     [child-bone #f])
+
+    (super-new)))
 
 (define bone%
   (class object%
 
     (init-field
      [points #f]
-     [parent-connection #f]
-     [connections (list)]
+     [connections '()]
      [name ""]
      [polygon-tree #f])
 
@@ -27,17 +33,19 @@
     (set! polygon-tree
       (points->root-polygon-tree (vector->list points)))
     
-    (define/public (add-connection! bone connection)
+    (define/public (add-connection! bone
+                                    connection
+                                    point-on-parent
+                                    point-on-child
+                                    angle)
       (set! connections (append connections (list connection)))
-      (set-field! parent-connection bone connection)
 
       (polygon-tree-add-child! 
         polygon-tree 
         (get-field polygon-tree bone)
-        (get-field parent-point connection)
-        (get-field child-point connection)
-        (get-field angle connection))
-      )
+        point-on-parent
+        point-on-child
+        angle))
 
     (define/public (point-at-index index)
       (list-ref (polygon-tree-polygon polygon-tree) index))
