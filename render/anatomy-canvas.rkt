@@ -23,10 +23,6 @@
   (define canvas
     (new anatomy-canvas%
          [parent frame]
-         [paint-callback
-          (lambda (canvas dc)
-            (draw-drawable-polygons (get-field drawable-polygons canvas) dc)
-            (send canvas draw-mouse-label-if-needed))]
          [root-bone bone]
          [drawable-polygons (polygon-tree->drawable-polygons (get-field polygon-tree bone))]
          [width frame-width]
@@ -63,6 +59,11 @@
     (send (get-dc) translate padding padding)
     (send (get-dc) set-scale scale scale)
     (send (get-dc) translate translation-x translation-y)
+
+    (define/override (on-paint)
+      (define dc (get-dc))
+      (draw-drawable-polygons drawable-polygons dc)
+      (draw-mouse-label-if-needed))
 
     (define/override (on-event event)
       (case (send event get-event-type)
