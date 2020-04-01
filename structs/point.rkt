@@ -92,4 +92,8 @@
       (send p line-to (point-x point) (point-y point)))
     (send p line-to (point-x firstPoint) (point-y firstPoint))
     p))
-   
+
+(define (round-point point1)
+  (point (exact-round (point-x point1))
+         (exact-round (point-y point1))
+         (exact-round (point-z point1))))

@@ -64,7 +64,7 @@
   (define text (string-append (~a index) ":" label))
   (send dc draw-text text (point-x text-draw-point) (point-y text-draw-point)))
     
-
+;todo render connection point with noparent differently
 (define (draw-connection-point con-point draw-label? dc)
   (send dc set-pen (make-object color% 200 50 50 0.9) 6 'solid)
   (send dc set-brush "white" 'transparent)

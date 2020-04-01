@@ -1,7 +1,6 @@
 #lang racket
 
 ;MAIN TODO
-;connection point display
 ;mouse point display
 
 (provide (all-defined-out))

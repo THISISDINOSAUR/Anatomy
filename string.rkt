@@ -13,7 +13,7 @@
   (string-append "[" (~a (point-x point1)) ", " (~a (point-y point1)) ", " (~a (point-z point1)) "]"))
 
 (define (point->description-string-2d-rounded point1)
-  (string-append "[" (~a (exact-round (point-x point1))) "," (~a (exact-round (point-y point1))) "]"))
+  (point->description-string (round-point point1)))
 
 (define (parameter->description-string parameter1)
   (string-append (~a (parameter-lower-bound parameter1)) "  > < " (~a (parameter-upper-bound parameter1)) " = " (~a (parameter-default parameter1))))
@@ -47,22 +47,36 @@
        ))
 
 (define (polygon-tree->connection-description-string tree)
-  (string-append
-   (point->description-string (polygon-tree-connection-point-on-parent tree))
-   " ~ "
-   (point->description-string (polygon-tree-connection-point tree))
-   ", "
-   (~a (exact-round (polygon-tree-angle tree)))
-   "°"))
+  (connection-description
+   (polygon-tree-connection-point-on-parent tree)
+   (polygon-tree-connection-point tree)
+   (polygon-tree-angle tree)
+   (polygon-tree-parent tree)))
 
 (define (polygon-tree->connection-description-string-2d-rounded tree)
-  (string-append
-   (point->description-string-2d-rounded (polygon-tree-connection-point-on-parent tree))
-   " ~ "
-   (point->description-string-2d-rounded (polygon-tree-connection-point tree))
-   ", "
-   (number->string (polygon-tree-angle tree))
-   "°"))
+  (define parent (polygon-tree-connection-point-on-parent tree))
+  (connection-description
+   (if (equal? parent #f)
+       parent
+       (round-point parent))
+   (round-point (polygon-tree-connection-point tree))
+   (exact-round (polygon-tree-angle tree))
+   (polygon-tree-parent tree)))
+
+(define (connection-description point-on-parent connection-point angle parent)
+  (if (equal? parent #f)
+      (string-append
+       (point->description-string connection-point)
+       ", "
+       (~a angle)
+       "°")
+      (string-append
+       (point->description-string point-on-parent)
+       " ~ "
+       (point->description-string connection-point)
+       ", "
+       (~a angle)
+       "°")))
 
 (define (section->description-string section)
   (string-append
