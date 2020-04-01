@@ -17,9 +17,6 @@ Example dinosaur, with animated changing parameter values:
 
 ### Racket GUI  
 
-- Refactor a-render  
-It shouldn't be part of the expander and should be it's own section (I'm looking at you too, JSON handling)
-
 - Add display of position of cursor relative to selected bone
 
 - Draw paths relative to bone
@@ -300,6 +297,9 @@ Essential feature, ability to define and import individual creature definitions 
 - Check what happens when scaling a bone with no parent  
 This case isn't explicitly handled, so I'm not sure what will happen
 
+- Refactor a-render  
+It shouldn't be part of the expander and should be it's own section (I'm looking at you too, JSON handling)
+
 ### Racket GUI  
 
 - Add ability to select bones  
@@ -312,6 +312,8 @@ To reduce visual clutter, only show bone labels on mouse over (or when bone is s
 - Add display of position of cursor relative to selected bone
 
 - Fix angle when rendering partial skeletons
+
+- Fix connection point labels
 
 ### Server
 
