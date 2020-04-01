@@ -38,10 +38,10 @@
          (point->description-string-2d-rounded label-point))
        label-points)))
 
-;TODO should have  original-placement field?
 (struct drawable-polygon (labeled-polygon
                           labeled-connection-point
                           labeled-child-connection-points
+                          original-placement
                           highlighted?
                           selected?)
   #:auto-value #f
@@ -66,6 +66,7 @@
              (polygon-tree-point->absolute-point (polygon-tree-connection-point-on-parent child) tree)
              (polygon-tree->connection-description-string-2d-rounded child)))
           (polygon-tree-children tree))
+     (polygon-tree->absolute-placement-in-tree tree)
      #f
      #f))
 

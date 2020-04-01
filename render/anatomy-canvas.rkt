@@ -1,8 +1,5 @@
 #lang racket
 
-;MAIN TODO
-;mouse point display
-
 (provide (all-defined-out))
 
 (require "../render/draw.rkt"
@@ -51,8 +48,8 @@
 
     (super-new)
 
-    (define mouse-label-point #f)
-    (define mouse-point #f)
+    (define mouse-labeled-point-for-selected #f)
+    (define selected '())
 
     (define drawing-width (- width (* 2 padding)))
     (define drawing-height (- height (* 2 padding)))
@@ -76,7 +73,7 @@
           highlighted
           (drawable-polygons-intersected-by-point
            drawable-polygons
-           (screen-point-to-root-bone-point mouse-p)))
+           (screen-point-to-root-drawable-polygon-point mouse-p)))
 
          (set! drawable-polygons
                (map (lambda (polygon)
@@ -85,25 +82,17 @@
                           (drawable-polygon-highlighted?-set polygon #f)))
                     drawable-polygons))
          
-         (cond 
-           [(equal? mouse-label-point #f)
-            null]
-           [else
-            (set! mouse-point mouse-p)
-            ;(set! mouse-label-point 
-               ;   (send root-bone absolute-point->bone-point-without-parent mouse-p selected))
-            ])
+         (update-mouse-labeled-point-for-selected mouse-p)
          
-         (refresh)
-         ]
+         (refresh)]
         ['left-down
 
          (define mouse-p (point (send event get-x) (send event get-y) 0))
-         (define
+         (set!
           selected
           (drawable-polygons-intersected-by-point
            drawable-polygons
-           (screen-point-to-root-bone-point mouse-p)))
+           (screen-point-to-root-drawable-polygon-point mouse-p)))
 
          (set! drawable-polygons
                (map (lambda (polygon)
@@ -113,32 +102,45 @@
                     drawable-polygons))
          ;todo: add ability to rotate through overlapping bones
          
-         (set! mouse-label-point #f)
-         
-         (cond 
-           [(empty? selected)
-            (set! mouse-point #f)]
-           [else
-            (set! mouse-point mouse-p)])
+         (update-mouse-labeled-point-for-selected mouse-p)
 
          (refresh)]))
 
-    (define (screen-point-to-root-bone-point screen-point)
+    (define (screen-point-to-root-drawable-polygon-point screen-point)
       (subtract-points
        (divide-point
         (subtract-points screen-point (point padding padding 0))
         scale)
        (point translation-x translation-y 0)))
 
-    ;TODO this is going to be such a pain
+    (define (update-mouse-labeled-point-for-selected mouse-point)
+      (cond 
+        [(equal? selected '())
+         (set! mouse-labeled-point-for-selected #f)]
+        [else
+         (define selected-polygon (car selected))
+         (define point
+           (point-invert-y
+            (screen-point-to-root-drawable-polygon-point mouse-point)))
+         (set!
+          mouse-labeled-point-for-selected
+          (point->drawable-labeled-point
+           point
+           (absolute-point->placement-point
+            point
+            (drawable-polygon-original-placement selected-polygon))))]))
+    
     (define/public (draw-mouse-label)
       (cond 
-        [(and mouse-label-point (not (equal? mouse-label-point null)))
+        [(not (equal? mouse-labeled-point-for-selected #f))
           (define dc (get-dc))
           (send dc set-font (make-font #:size 10 #:family 'modern #:weight 'bold))
           (send dc set-text-foreground (make-object color% 130 50 100))
           (send dc set-text-background "red")
-          (define text-draw-point (add-points mouse-point (point 0 10 0)))
-          (send dc draw-text (point->description-string-2d-rounded mouse-label-point) (point-x text-draw-point) (point-y text-draw-point))]
+          (define text-draw-point
+            (add-points
+             (labeled-point-point mouse-labeled-point-for-selected)
+             (point 0 10 0)))
+          (send dc draw-text (labeled-point-label mouse-labeled-point-for-selected) (point-x text-draw-point) (point-y text-draw-point))]
         [else null]))
     ))
