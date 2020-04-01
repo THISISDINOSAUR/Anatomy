@@ -1,6 +1,7 @@
 #lang racket
 
-(provide draw-drawable-polygons)
+(provide draw-drawable-polygons
+         draw-mouse-label)
 
 (require "../render/drawable-polygon.rkt"
          "../structs/point.rkt"
@@ -78,3 +79,13 @@
      (define text-draw-point (add-points (labeled-point-point con-point) (point 0 (/ draw-size 2) 0)))
      (send dc draw-text (labeled-point-label con-point) (point-x text-draw-point) (point-y text-draw-point))]
     [else null]))
+
+(define (draw-mouse-label labeled-mouse-point dc)
+  (send dc set-font (make-font #:size 10 #:family 'modern #:weight 'bold))
+  (send dc set-text-foreground (make-object color% 130 50 100))
+  (send dc set-text-background "red")
+  (define text-draw-point
+    (add-points
+     (labeled-point-point labeled-mouse-point)
+     (point 0 10 0)))
+  (send dc draw-text (labeled-point-label labeled-mouse-point) (point-x text-draw-point) (point-y text-draw-point)))

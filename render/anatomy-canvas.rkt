@@ -26,7 +26,7 @@
          [paint-callback
           (lambda (canvas dc)
             (draw-drawable-polygons (get-field drawable-polygons canvas) dc)
-            (send canvas draw-mouse-label))]
+            (send canvas draw-mouse-label-if-needed))]
          [root-bone bone]
          [drawable-polygons (polygon-tree->drawable-polygons (get-field polygon-tree bone))]
          [width frame-width]
@@ -130,17 +130,9 @@
             point
             (drawable-polygon-original-placement selected-polygon))))]))
     
-    (define/public (draw-mouse-label)
+    (define/public (draw-mouse-label-if-needed)
       (cond 
         [(not (equal? mouse-labeled-point-for-selected #f))
-          (define dc (get-dc))
-          (send dc set-font (make-font #:size 10 #:family 'modern #:weight 'bold))
-          (send dc set-text-foreground (make-object color% 130 50 100))
-          (send dc set-text-background "red")
-          (define text-draw-point
-            (add-points
-             (labeled-point-point mouse-labeled-point-for-selected)
-             (point 0 10 0)))
-          (send dc draw-text (labeled-point-label mouse-labeled-point-for-selected) (point-x text-draw-point) (point-y text-draw-point))]
+          (draw-mouse-label mouse-labeled-point-for-selected (get-dc))]
         [else null]))
     ))
