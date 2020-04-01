@@ -9,7 +9,6 @@
   #:transparent
   #:mutable)
 
-;TODO this should be a procedure? All caps?
 (define point-zero (point 0 0 0))
 
 (define (add-points point1 point2)
