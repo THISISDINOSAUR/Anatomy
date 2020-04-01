@@ -71,7 +71,7 @@
   (define draw-size 20)
   (define draw-point (subtract-points (labeled-point-point con-point) (point (/ draw-size 2) (/ draw-size 2) 0)))
   (send dc draw-ellipse (point-x draw-point) (point-y draw-point) draw-size draw-size)
-  (println draw-label?)
+
   (cond
     [draw-label?
      (send dc set-font (make-font #:size 15 #:family 'modern))
