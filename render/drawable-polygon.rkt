@@ -6,7 +6,8 @@
          "../structs/polygon-tree.rkt"
          "../structs/point.rkt"
          "../structs/polygon.rkt"
-         "../structs/rect.rkt")
+         "../structs/rect.rkt"
+         "../string.rkt")
 
 (struct labeled-point (point label)
   #:auto-value #f
@@ -18,15 +19,19 @@
   #:transparent
   #:mutable)
 
-(define (point->drawable-labeled-point point label)
-  (labeled-point (point-invert-y point) label))
+(define (point->drawable-labeled-point point label-point)
+  (labeled-point
+   (point-invert-y point)
+   (point->description-string-2d-rounded label-point)))
 
-(define (polygon->drawable-labeled-polygon polygon labels)
+(define (polygon->drawable-labeled-polygon polygon label-points)
   (labeled-polygon
    (map (lambda (point)
          (point-invert-y point))
        polygon)
-  labels))
+   (map (lambda (label-point)
+         (point->description-string-2d-rounded label-point))
+       label-points)))
 
 ;TODO should have  original-placement field?
 (struct drawable-polygon (labeled-polygon
