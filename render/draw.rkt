@@ -12,8 +12,20 @@
 (define (draw-drawable-polygons polygons dc)
   (for ([(drawable-polygon) polygons])
     (draw-polygon drawable-polygon dc)
-    
-    (draw-connection-point (drawable-polygon-labeled-connection-point drawable-polygon) dc)))
+
+    (cond
+     [(or (drawable-polygon-selected? drawable-polygon) (drawable-polygon-highlighted? drawable-polygon))
+      (draw-connection-point
+       (drawable-polygon-labeled-connection-point drawable-polygon)
+       #t
+       dc)
+      (for ([(connection-point) (drawable-polygon-labeled-child-connection-points drawable-polygon)])
+        (draw-connection-point connection-point #t dc))]
+     [else
+      (draw-connection-point
+       (drawable-polygon-labeled-connection-point drawable-polygon)
+       #f
+       dc)])))
 
 (define (draw-polygon polygon dc)
   (cond 
@@ -53,16 +65,17 @@
   (send dc draw-text text (point-x text-draw-point) (point-y text-draw-point)))
     
 
-(define (draw-connection-point con-point dc)
+(define (draw-connection-point con-point draw-label? dc)
   (send dc set-pen (make-object color% 200 50 50 0.9) 6 'solid)
   (send dc set-brush "white" 'transparent)
   (define draw-size 20)
   (define draw-point (subtract-points (labeled-point-point con-point) (point (/ draw-size 2) (/ draw-size 2) 0)))
-  (send dc draw-ellipse (point-x draw-point) (point-y draw-point) draw-size draw-size))
-;TODO: only render connection points when highlighted (but also render parent connection point)
-;will also need to change connection point label depending on parent or child
-;at the moment it just renders the point on the child, probs also want angle
-;(send dc set-font (make-font #:size 15 #:family 'modern))
-;(send dc set-text-foreground "red")
-;(define text-draw-point (add-points (labeled-point-point con-point) (point 0 (/ draw-size 2) 0)))
-;(send dc draw-text (point->description-string-2d-rounded (labeled-point-label con-point)) (point-x text-draw-point) (point-y text-draw-point)))
+  (send dc draw-ellipse (point-x draw-point) (point-y draw-point) draw-size draw-size)
+  (println draw-label?)
+  (cond
+    [draw-label?
+     (send dc set-font (make-font #:size 15 #:family 'modern))
+     (send dc set-text-foreground "red")
+     (define text-draw-point (add-points (labeled-point-point con-point) (point 0 (/ draw-size 2) 0)))
+     (send dc draw-text (labeled-point-label con-point) (point-x text-draw-point) (point-y text-draw-point))]
+    [else null]))

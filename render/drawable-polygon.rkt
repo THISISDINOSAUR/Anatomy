@@ -20,9 +20,14 @@
   #:mutable)
 
 (define (point->drawable-labeled-point point label-point)
+  (point-and-label->drawable-labeled-point
+   point
+   (point->description-string-2d-rounded label-point)))
+
+(define (point-and-label->drawable-labeled-point point label)
   (labeled-point
    (point-invert-y point)
-   (point->description-string-2d-rounded label-point)))
+   label))
 
 (define (polygon->drawable-labeled-polygon polygon label-points)
   (labeled-polygon
@@ -50,12 +55,16 @@
 
 (define (polygon-tree->drawable-polygon tree)
   (drawable-polygon
-     (polygon->drawable-labeled-polygon (polygon-tree->absolute-polygon tree) (polygon-tree-polygon tree))
-     (point->drawable-labeled-point (polygon-tree-point->absolute-point (polygon-tree-connection-point tree) tree) (polygon-tree-connection-point tree))
+     (polygon->drawable-labeled-polygon
+      (polygon-tree->absolute-polygon tree)
+      (polygon-tree-polygon tree))
+     (point-and-label->drawable-labeled-point
+      (polygon-tree-point->absolute-point (polygon-tree-connection-point tree) tree)
+      (polygon-tree->connection-description-string-2d-rounded tree))
      (map (lambda (child)
-            (point->drawable-labeled-point
+            (point-and-label->drawable-labeled-point
              (polygon-tree-point->absolute-point (polygon-tree-connection-point-on-parent child) tree)
-             (polygon-tree-connection-point-on-parent child)))
+             (polygon-tree->connection-description-string-2d-rounded child)))
           (polygon-tree-children tree))
      #f
      #f))

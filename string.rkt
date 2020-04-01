@@ -52,6 +52,15 @@
    " ~ "
    (point->description-string (polygon-tree-connection-point tree))
    ", "
+   (~a (exact-round (polygon-tree-angle tree)))
+   "°"))
+
+(define (polygon-tree->connection-description-string-2d-rounded tree)
+  (string-append
+   (point->description-string-2d-rounded (polygon-tree-connection-point-on-parent tree))
+   " ~ "
+   (point->description-string-2d-rounded (polygon-tree-connection-point tree))
+   ", "
    (number->string (polygon-tree-angle tree))
    "°"))
 
