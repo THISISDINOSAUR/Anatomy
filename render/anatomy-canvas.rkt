@@ -44,7 +44,7 @@
 
     (super-new)
 
-    (define drawable-polygons (hash-values drawable-polygons-hash))
+    (define drawable-polygons (hash-keys drawable-polygons-hash))
 
     (define mouse-labeled-point-for-selected #f)
     (define selected '())
@@ -108,6 +108,27 @@
          (update-mouse-labeled-point-for-selected mouse-p)
 
          (refresh)]))
+
+    (define/override (on-char ke)
+      (define key-code (send ke get-key-code))
+      (case key-code
+        ['release
+         null]
+        [else
+         (match key-code
+           [(== #\d)
+            (println "pressy pressy")]
+           [(== #\p)
+            (for ([polygon selected])
+              (displayln (bone->description-string
+                          (hash-ref drawable-polygons-hash polygon))))]
+           [_
+            void])]))
+
+    (define (key-code-downcase k)
+      (cond
+        [(char? k) (char-downcase k)]
+        [else k]))
 
     (define (screen-point-to-root-drawable-polygon-point screen-point)
       (subtract-points
