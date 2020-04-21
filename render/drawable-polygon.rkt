@@ -46,7 +46,27 @@
                           selected?)
   #:auto-value #f
   #:transparent
-  #:mutable)
+  #:mutable
+
+  ;Don't include UI state in equality checks
+  ;TODO: maybe should approach storing UI state differently, we'll see how it progresses
+  #:methods
+  gen:equal+hash
+  [(define (equal-proc a b equal?-recur)
+     (and (equal?-recur (drawable-polygon-labeled-polygon a) (drawable-polygon-labeled-polygon b))
+          (equal?-recur (drawable-polygon-labeled-connection-point a) (drawable-polygon-labeled-connection-point b))
+          (equal?-recur (drawable-polygon-labeled-child-connection-points a) (drawable-polygon-labeled-child-connection-points b))
+          (equal?-recur (drawable-polygon-original-placement a) (drawable-polygon-original-placement b))))
+   (define (hash-proc a hash-recur)
+     (+ (hash-recur (drawable-polygon-labeled-polygon a))
+        (hash-recur (drawable-polygon-labeled-connection-point a))
+        (hash-recur (drawable-polygon-labeled-child-connection-points a))
+        (hash-recur (drawable-polygon-original-placement a))))
+   (define (hash2-proc a hash2-recur)
+     (+ (hash2-recur (drawable-polygon-labeled-polygon a))
+        (hash2-recur (drawable-polygon-labeled-connection-point a))
+        (hash2-recur (drawable-polygon-labeled-child-connection-points a))
+        (hash2-recur (drawable-polygon-original-placement a))))])
 
 (define-struct-updaters drawable-polygon)
 
@@ -73,7 +93,7 @@
 (define (bone->drawable-polygons-pairs bone)
   (define tree (get-field polygon-tree bone))
   (append
-   (list (cons bone (polygon-tree->drawable-polygon tree)))
+   (list (cons (polygon-tree->drawable-polygon tree) bone))
    (append-map (lambda (child)
                  (bone->drawable-polygons-pairs child))
                (get-field connections bone))))
