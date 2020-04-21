@@ -70,13 +70,14 @@
      #f
      #f))
 
-(define (polygon-tree->drawable-polygons tree)
+(define (bone->drawable-polygons-pairs bone)
+  (define tree (get-field polygon-tree bone))
   (append
-   (list
-    (polygon-tree->drawable-polygon tree))
+   (list (cons bone (polygon-tree->drawable-polygon tree)))
    (append-map (lambda (child)
-                 (polygon-tree->drawable-polygons child))
-               (polygon-tree-children tree))))
+                 (bone->drawable-polygons-pairs child))
+               (get-field connections bone))))
+
 
 (define (drawable-polygon->polygon polygon)
   (labeled-polygon-polygon (drawable-polygon-labeled-polygon polygon)))

@@ -24,7 +24,7 @@
     (new anatomy-canvas%
          [parent frame]
          [root-bone bone]
-         [drawable-polygons (polygon-tree->drawable-polygons (get-field polygon-tree bone))]
+         [drawable-polygons-hash (make-hash (bone->drawable-polygons-pairs bone))]
          [width frame-width]
          [height frame-height]
          [padding padding]))
@@ -37,12 +37,14 @@
 
      (init-field
      [root-bone #f]
-     [drawable-polygons #f]
+     [drawable-polygons-hash #f]
      [width 0]
      [height 0]
      [padding 0])
 
     (super-new)
+
+    (define drawable-polygons (hash-values drawable-polygons-hash))
 
     (define mouse-labeled-point-for-selected #f)
     (define selected '())

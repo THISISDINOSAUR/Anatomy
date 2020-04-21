@@ -13,10 +13,3 @@
 (check-equal?
  (polygon-tree->drawable-polygon (test-structure-node3 test-drawable-polygon))
  expected)
-
-; Test polygon-tree->drawable-polygons
-(define test-drawable-polygons (test-tree))
-(check-equal?
- (polygon-tree->drawable-polygons (test-structure-node1 test-drawable-polygons))
- test-tree-drawable-polygons)
-
