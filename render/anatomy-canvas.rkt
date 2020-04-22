@@ -46,6 +46,8 @@
 
     (define drawable-polygons (hash-keys drawable-polygons-hash))
 
+    (define draw-mode #f)
+    (define just-entered-draw-mode #f)
     (define mouse-labeled-point-for-selected #f)
     (define selected '())
 
@@ -70,7 +72,7 @@
     (define/override (on-event event)
       (case (send event get-event-type)
         ['motion
-         
+         ;TODO if in draw mode, no do highlight
          (define mouse-p (point (send event get-x) (send event get-y) 0))
          (define
           highlighted
@@ -89,26 +91,36 @@
          
          (refresh)]
         ['left-down
-
          (define mouse-p (point (send event get-x) (send event get-y) 0))
-         (set!
-          selected
-          (drawable-polygons-intersected-by-point
-           drawable-polygons
-           (screen-point-to-root-drawable-polygon-point mouse-p)))
+         (cond
+           [draw-mode
+            ;TODO handle no bones selected
+            (display
+             (string-append
+              (if just-entered-draw-mode "" ", ")
+              (point->description-string-2d-rounded
+               (screen-point-to-polygon-point mouse-p (car selected)))))
+            (set! just-entered-draw-mode #f)]
+           [else
+            (set!
+             selected
+             (drawable-polygons-intersected-by-point
+              drawable-polygons
+              (screen-point-to-root-drawable-polygon-point mouse-p)))
 
-         (set! drawable-polygons
-               (map (lambda (polygon)
-                      (if (member polygon selected)
-                          (drawable-polygon-selected?-set polygon #t)
-                          (drawable-polygon-selected?-set polygon #f)))
-                    drawable-polygons))
-         ;todo: add ability to rotate through overlapping bones
+            (set! drawable-polygons
+                  (map (lambda (polygon)
+                         (if (member polygon selected)
+                             (drawable-polygon-selected?-set polygon #t)
+                             (drawable-polygon-selected?-set polygon #f)))
+                       drawable-polygons))
+            ;todo: add ability to rotate through overlapping bones
          
-         (update-mouse-labeled-point-for-selected mouse-p)
+            (update-mouse-labeled-point-for-selected mouse-p)
 
-         (refresh)]))
-
+            (refresh)])
+         ]))
+;todo print point on click? (even when not draw mode)
     (define/override (on-char ke)
       (define key-code (send ke get-key-code))
       (case key-code
@@ -117,7 +129,7 @@
         [else
          (match key-code
            [(== #\d)
-            (println "pressy pressy")]
+            (toggle-draw-mode)]
            [(== #\p)
             (for ([polygon selected])
               (displayln (bone->description-string
@@ -129,6 +141,26 @@
       (cond
         [(char? k) (char-downcase k)]
         [else k]))
+
+    (define (toggle-draw-mode)
+      (cond
+        [draw-mode
+         (display "]")
+         (set! draw-mode #f)
+         (set! just-entered-draw-mode #f)]
+        [else
+         (display "[")
+         (set! draw-mode #t)
+         (set! just-entered-draw-mode #t)]))
+
+    (define (screen-point-to-polygon-point screen-point polygon)
+      (absolute-point->placement-point
+       (screen-point-to-root-polygon-point screen-point)
+       (drawable-polygon-original-placement polygon)))
+
+    (define (screen-point-to-root-polygon-point screen-point)
+      (point-invert-y
+            (screen-point-to-root-drawable-polygon-point screen-point)))
 
     (define (screen-point-to-root-drawable-polygon-point screen-point)
       (subtract-points
@@ -144,15 +176,12 @@
         [else
          (define selected-polygon (car selected))
          (define point
-           (point-invert-y
-            (screen-point-to-root-drawable-polygon-point mouse-point)))
+           (screen-point-to-root-polygon-point mouse-point))
          (set!
           mouse-labeled-point-for-selected
           (point->drawable-labeled-point
            point
-           (absolute-point->placement-point
-            point
-            (drawable-polygon-original-placement selected-polygon))))]))
+           (screen-point-to-polygon-point mouse-point selected-polygon)))]))
     
     (define/public (draw-mouse-label-if-needed)
       (cond 
