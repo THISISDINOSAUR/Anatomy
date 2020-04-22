@@ -72,23 +72,28 @@
     (define/override (on-event event)
       (case (send event get-event-type)
         ['motion
-         ;TODO if in draw mode, no do highlight
          (define mouse-p (point (send event get-x) (send event get-y) 0))
-         (define
-          highlighted
-          (drawable-polygons-intersected-by-point
-           drawable-polygons
-           (screen-point-to-root-drawable-polygon-point mouse-p)))
+         (cond
+           [draw-mode
+            (set! drawable-polygons
+                  (map (lambda (polygon)
+                         (drawable-polygon-highlighted?-set polygon #f))
+                  drawable-polygons))]
+           [else
+            (define
+              highlighted
+              (drawable-polygons-intersected-by-point
+               drawable-polygons
+               (screen-point-to-root-drawable-polygon-point mouse-p)))
 
-         (set! drawable-polygons
-               (map (lambda (polygon)
-                      (if (member polygon highlighted)
-                          (drawable-polygon-highlighted?-set polygon #t)
-                          (drawable-polygon-highlighted?-set polygon #f)))
-                    drawable-polygons))
+            (set! drawable-polygons
+                  (map (lambda (polygon)
+                         (if (member polygon highlighted)
+                             (drawable-polygon-highlighted?-set polygon #t)
+                             (drawable-polygon-highlighted?-set polygon #f)))
+                       drawable-polygons))])
          
          (update-mouse-labeled-point-for-selected mouse-p)
-         
          (refresh)]
         ['left-down
          (define mouse-p (point (send event get-x) (send event get-y) 0))
@@ -120,7 +125,7 @@
 
             (refresh)])
          ]))
-;todo print point on click? (even when not draw mode)
+
     (define/override (on-char ke)
       (define key-code (send ke get-key-code))
       (case key-code
@@ -131,6 +136,7 @@
            [(== #\d)
             (toggle-draw-mode)]
            [(== #\p)
+            ;todo printing when in draw mode?
             (for ([polygon selected])
               (displayln (bone->description-string
                           (hash-ref drawable-polygons-hash polygon))))]
@@ -145,11 +151,10 @@
     (define (toggle-draw-mode)
       (cond
         [draw-mode
-         (display "]")
+         (displayln "")
          (set! draw-mode #f)
          (set! just-entered-draw-mode #f)]
         [else
-         (display "[")
          (set! draw-mode #t)
          (set! just-entered-draw-mode #t)]))
 
