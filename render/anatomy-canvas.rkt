@@ -70,6 +70,8 @@
     (define/override (on-paint)
       (define dc (get-dc))
       (draw-drawable-polygons drawable-polygons dc)
+      (draw-drawn-polygons drawn-polygons dc)
+      (draw-currently-drawing-points draw-mode-points dc)
       (draw-mouse-label-if-needed))
 
     (define/override (on-event event)
@@ -102,11 +104,16 @@
          (define mouse-p (point (send event get-x) (send event get-y) 0))
          (cond
            [draw-mode
+            (define label
+              (point->description-string-2d-rounded
+               (screen-point-to-polygon-point mouse-p (car selected))))
+            (set! draw-mode-points
+                  (append draw-mode-points
+                          (list (labeled-point (screen-point-to-root-drawable-polygon-point mouse-p) label))))
             (display
              (string-append
               (if just-entered-draw-mode "" ", ")
-              (point->description-string-2d-rounded
-               (screen-point-to-polygon-point mouse-p (car selected)))))
+              label))
             (set! just-entered-draw-mode #f)]
            [else
             (set!
@@ -155,7 +162,15 @@
         [draw-mode
          (displayln "")
          (set! draw-mode #f)
-         (set! just-entered-draw-mode #f)]
+         (set! just-entered-draw-mode #f)
+
+         (cond
+           [(not (equal? draw-mode-points '()))
+            (set! drawn-polygons
+                  (append
+                   drawn-polygons
+                   (list (labeled-points->labeled-polygon draw-mode-points))))
+            (set! draw-mode-points '())])]
         [(not (equal? selected '()))
          (set! draw-mode #t)
          (set! just-entered-draw-mode #t)]))
@@ -167,7 +182,7 @@
 
     (define (screen-point-to-root-polygon-point screen-point)
       (point-invert-y
-            (screen-point-to-root-drawable-polygon-point screen-point)))
+       (screen-point-to-root-drawable-polygon-point screen-point)))
 
     (define (screen-point-to-root-drawable-polygon-point screen-point)
       (subtract-points

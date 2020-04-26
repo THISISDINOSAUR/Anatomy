@@ -38,6 +38,15 @@
          (point->description-string-2d-rounded label-point))
        label-points)))
 
+(define (labeled-points->labeled-polygon points)
+  (labeled-polygon
+   (map (lambda (point)
+         (labeled-point-point point))
+       points)
+   (map (lambda (point)
+         (labeled-point-label point))
+       points)))
+
 (struct drawable-polygon (labeled-polygon
                           labeled-connection-point
                           labeled-child-connection-points

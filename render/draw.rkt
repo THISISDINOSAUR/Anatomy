@@ -1,6 +1,8 @@
 #lang racket
 
-(provide draw-drawable-polygons
+(provide draw-drawn-polygons
+         draw-currently-drawing-points
+         draw-drawable-polygons
          draw-mouse-label)
 
 (require "../render/drawable-polygon.rkt"
@@ -9,6 +11,20 @@
          "../structs/polygon-tree.rkt"
          "../bone.rkt"
          racket/gui/base)
+
+(define (draw-drawn-polygons polygons dc)
+  (for ([(polygon) polygons])
+    (send dc set-brush (make-object color% 255 100 100 0.3) 'solid)
+    (send dc set-pen (make-object color% 110 60 60 0.8) 8 'solid)
+    (send dc draw-path (points->path (labeled-polygon-polygon polygon)))
+    (draw-polygon-labels polygon dc)))
+
+(define (draw-currently-drawing-points points dc)
+  (if (equal? points '())
+      void
+      (draw-drawn-polygons
+       (list (labeled-points->labeled-polygon points))
+       dc)))
 
 (define (draw-drawable-polygons polygons dc)
   (for ([(drawable-polygon) polygons])
@@ -40,11 +56,10 @@
   (send dc draw-path (points->path (drawable-polygon->draw-points polygon)))
 
   (if (or (drawable-polygon-selected? polygon) (drawable-polygon-highlighted? polygon))
-      (draw-polygon-labels polygon dc)
+      (draw-polygon-labels (drawable-polygon-labeled-polygon polygon) dc)
       null))
 
-(define (draw-polygon-labels polygon dc)
-  (define labeled-polygon (drawable-polygon-labeled-polygon polygon))
+(define (draw-polygon-labels labeled-polygon dc)
   (define index 0)
   (map (lambda (point label)
          (draw-point-label point label index dc)
