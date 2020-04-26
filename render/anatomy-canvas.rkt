@@ -48,6 +48,9 @@
 
     (define draw-mode #f)
     (define just-entered-draw-mode #f)
+    (define draw-mode-points '())
+    (define drawn-polygons '())
+    
     (define mouse-labeled-point-for-selected #f)
     (define selected '())
 
@@ -99,7 +102,6 @@
          (define mouse-p (point (send event get-x) (send event get-y) 0))
          (cond
            [draw-mode
-            ;TODO handle no bones selected
             (display
              (string-append
               (if just-entered-draw-mode "" ", ")
@@ -154,7 +156,7 @@
          (displayln "")
          (set! draw-mode #f)
          (set! just-entered-draw-mode #f)]
-        [else
+        [(not (equal? selected '()))
          (set! draw-mode #t)
          (set! just-entered-draw-mode #t)]))
 
