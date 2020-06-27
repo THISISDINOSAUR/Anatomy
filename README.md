@@ -17,8 +17,6 @@ Example dinosaur, with animated changing parameter values:
 
 ### Racket GUI  
 
-- Add display of position of cursor relative to selected bone
-
 - Draw paths relative to bone
 
 - Dragging points/bones/connection points?
@@ -251,9 +249,11 @@ Same as above but for wing types.
 - Beak generator   
 Similar to above. Could be a nice self contained project that also has the potential to be part of a larger project. Due to the relative simplicity, could be a good test bed for forays into 3D.
 
-- Bird feet or footprint generator
+- Bird feet or footprint generator  
 Similar to above. The nice appeal of footprints is it would be even easier, but would still tell you a lot about the bird. Would make a neat twitter bot. what would be especially cool is if I made a feet generator, and then used that to make a footprint generator.
 
+- Fossil generator  
+An easier project than above for an MVP since it can build on existing work and be the first Racket twitter bot.
 
   
 
