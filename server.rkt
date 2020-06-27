@@ -1,3 +1,8 @@
+;instructions for when you inevitably forget
+;run racket server.rkt from the command line
+;go to http://127.0.0.1:8080/dinosaur
+;make sure the anatomy file doesn't use render (or ideally print)
+
 #lang racket
 
 (require racket/list
@@ -11,7 +16,7 @@
          "parameter.rkt"
          "json.rkt")
 
-(require "anatomyFiles/basoTheropod.rkt"
+(require "anatomyFiles/dinosaur.rkt"
          (prefix-in presets: "anatomyFiles/dinosaur-presets.rkt"))
 
 (define (response

@@ -74,7 +74,7 @@
   #'(list BONE-IDS ...))
 
 (define (a-bone-duplicate bone-id)
-  (vector->list (get-field points bone-id)))
+  (polygon-tree-polygon (get-field polygon-tree bone-id)))
 
 
 ;Connection point evaluation
