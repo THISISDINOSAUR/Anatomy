@@ -14,9 +14,10 @@
 (define bone%
   (class object%
 
+    (init points)
+
     (init-field
-     [points #f]
-     [connections '()]
+     [connections '()] ;connections are only required for when the name of child bones is required (e.g. printing bones)
      [name ""]
      [polygon-tree #f])
 
