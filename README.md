@@ -17,24 +17,12 @@ Example dinosaur, with animated changing parameter values:
 
 ### Racket GUI  
 
-- Refactor a-render  
-It shouldn't be part of the expander and should be it's own section (I'm looking at you too, JSON handling)
-
-- Fix angle when rendering partial skeletons
-
-- Add display of position of cursor relative to selected bone
-
 - Draw paths relative to bone
 
 - Dragging points/bones/connection points?
 Might not actually be too hard to implement, so may be worth it (just doing points is probably the most useful and the least complicated to implement)
 
 ### Anatomy Language
-
-- Refactor bones/structs
-
-- Check what happens when scaling a bone with no parent  
-This case isn't explicitly handled, so I'm not sure what will happen
 
 - Allow empty params definition (or no params definition)  
 
@@ -261,9 +249,11 @@ Same as above but for wing types.
 - Beak generator   
 Similar to above. Could be a nice self contained project that also has the potential to be part of a larger project. Due to the relative simplicity, could be a good test bed for forays into 3D.
 
-- Bird feet or footprint generator
+- Bird feet or footprint generator  
 Similar to above. The nice appeal of footprints is it would be even easier, but would still tell you a lot about the bird. Would make a neat twitter bot. what would be especially cool is if I made a feet generator, and then used that to make a footprint generator.
 
+- Fossil generator  
+An easier project than above for an MVP since it can build on existing work and be the first Racket twitter bot.
 
   
 
@@ -302,6 +292,14 @@ Essential feature, ability to define and import individual creature definitions 
 
 - Parameters are out of order  
 
+- Refactor bones/structs
+
+- Check what happens when scaling a bone with no parent  
+This case isn't explicitly handled, so I'm not sure what will happen
+
+- Refactor a-render  
+It shouldn't be part of the expander and should be it's own section (I'm looking at you too, JSON handling)
+
 ### Racket GUI  
 
 - Add ability to select bones  
@@ -312,6 +310,10 @@ To reduce visual clutter, only show bone labels on mouse over (or when bone is s
 - Fix points printing wrong points (what values does it print?)
 
 - Add display of position of cursor relative to selected bone
+
+- Fix angle when rendering partial skeletons
+
+- Fix connection point labels
 
 ### Server
 

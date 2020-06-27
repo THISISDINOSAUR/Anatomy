@@ -4,7 +4,6 @@
 
 (require "../structs/point.rkt"
          "../bone.rkt"
-         "../connection.rkt"
          "../section.rkt"
          "../parameter.rkt"
          "../utils.rkt")
@@ -25,12 +24,11 @@
       (set-field! name ID (~a 'ID))))
 
 (define-macro (a-connection-definition BONE-ID1 BONE-ID2 POINT-EXPR-OR-FUNC1 POINT-EXPR-OR-FUNC2 ANGLE)
-  #'(send BONE-ID1 add-connection! BONE-ID2
-          (new connection%
-           [parent-point (POINT-EXPR-OR-FUNC1 BONE-ID1)]
-           [child-point (POINT-EXPR-OR-FUNC2 BONE-ID2)]
-           [angle ANGLE]
-           [child-bone BONE-ID2])))
+  #'(send BONE-ID1 add-connection!
+          BONE-ID2
+          (POINT-EXPR-OR-FUNC1 BONE-ID1)
+          (POINT-EXPR-OR-FUNC2 BONE-ID2)
+          ANGLE))
 
 (define-macro-cases a-point
   [(a-point X Y) #'(point X Y 0)]

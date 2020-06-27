@@ -2,7 +2,8 @@
 
 (provide (all-defined-out))
 
-(require "point.rkt")
+(require "point.rkt"
+         "polygon.rkt")
 
 (struct bounding-rect (min-x max-x min-y max-y)
   #:transparent
@@ -18,7 +19,7 @@
 (define (bounding-rect-containing-bounding-rects-list rects)
   (foldl bounding-rect-containing-bounding-rects (car rects) rects))
 
-(define (bounding-rect-for-points points)
+(define (points->bounding-rect points)
   (define x-values
     (map (lambda (point)
            (point-x point))
@@ -28,6 +29,12 @@
            (point-y point))
          points))
   (bounding-rect (apply min x-values) (apply max x-values) (apply min y-values) (apply max y-values)))
+
+(define (polygons->bounding-rect polygons)
+  (bounding-rect-containing-bounding-rects-list
+   (map (lambda (polygon)
+         (points->bounding-rect polygon))
+        polygons)))
 
 (define (translate-bounding-rect rect translation)
   (bounding-rect (+ (bounding-rect-min-x rect) (point-x translation))

@@ -35,12 +35,19 @@
 (define (rotate-point point1 angle)
   (rotate-point-about-point point1 angle point-zero))
 
+(define (point-invert-y point1)
+  (point (point-x point1) (- (point-y point1)) (point-z point1)))
+
+; THIS DID ROTATE ANTICLOCKWISE, BUT NOW DOES CLOCKWISE
+; we changed the handidness of the system
+; y used to point down, now it points up
+;https://stackoverflow.com/questions/2259476/rotating-a-point-about-another-point-2d
 (define (rotate-point-about-point point1 angle rotation-point)
   (define radians (degrees->radians angle))
   (define translated-point (subtract-points point1 rotation-point))
   (define rotated-point 
-    (point (- (* (point-x translated-point) (cos radians)) (* (point-y translated-point) (sin radians)))
-           (+ (* (point-x translated-point) (sin radians)) (* (point-y translated-point) (cos radians)))
+    (point (+ (* (point-x translated-point) (cos radians)) (* (point-y translated-point) (sin radians)))
+           (+ (- (* (point-x translated-point) (sin radians))) (* (point-y translated-point) (cos radians)))
            (point-z translated-point)))
   (add-points rotated-point rotation-point))
 
@@ -85,4 +92,8 @@
       (send p line-to (point-x point) (point-y point)))
     (send p line-to (point-x firstPoint) (point-y firstPoint))
     p))
-   
+
+(define (round-point point1)
+  (point (exact-round (point-x point1))
+         (exact-round (point-y point1))
+         (exact-round (point-z point1))))
