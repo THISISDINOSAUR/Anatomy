@@ -1,5 +1,7 @@
 #lang racket
 
+;TODO: draw bone names? Seems useful, bone struct has the info, just need to give to drawable polygon
+
 (define OUTLINE-THICKNESS 3)
 
 (provide draw-drawn-polygons

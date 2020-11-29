@@ -2,6 +2,13 @@
 
 (provide (all-defined-out))
 
+;TODO add edit mode where you can drag points
+;TODO draw mode without a bone selected (maybe with origin at the cursor). Not sure what to do about rotation tho
+
+
+;gaps in bones?
+;soft body
+
 (require "../render/draw.rkt"
          "../render/drawable-polygon.rkt"
          "../structs/point.rkt"
@@ -9,7 +16,8 @@
          "../structs/polygon-tree.rkt"
          "../string.rkt"
          "../bone.rkt"
-         racket/gui/base)
+         racket/gui/base
+         (prefix-in image: 2htdp/image))
 
 (define (create-and-show-anatomy-canvas bone)
   (define frame-width 1300)
@@ -23,6 +31,7 @@
   (define canvas
     (new anatomy-canvas%
          [parent frame]
+         [style '(transparent)]
          [root-bone bone]
          [drawable-polygons-hash (make-hash (bone->drawable-polygons-pairs bone))]
          [width frame-width]
@@ -44,6 +53,9 @@
 
     (super-new)
 
+    (define reference-image (read-bitmap  "../references/herrerCropped.JPG" #:backing-scale 0.2))
+    (define reference-image-hip (read-bitmap  "../references/herrerHipCropped.JPG" #:backing-scale 0.27))
+    
     (define drawable-polygons (hash-keys drawable-polygons-hash))
 
     (define draw-mode #f)
@@ -69,10 +81,21 @@
 
     (define/override (on-paint)
       (define dc (get-dc))
+
+      ;(draw-reference-image reference-image 950 -150)
+      (draw-reference-image reference-image-hip -120 270)
+
       (draw-drawable-polygons drawable-polygons dc)
       (draw-drawn-polygons drawn-polygons dc)
       (draw-currently-drawing-points draw-mode-points dc)
       (draw-mouse-label-if-needed))
+
+    (define (draw-reference-image image x y)
+      (define dc (get-dc))
+      (send dc draw-bitmap	
+       image
+       (+ x (/ (- (image:image-width image)) 2))
+       (+ y (/ (- (image:image-height image)) 2))))
 
     (define/override (on-event event)
       (case (send event get-event-type)
