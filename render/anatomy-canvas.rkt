@@ -64,6 +64,9 @@
     (define just-entered-draw-mode #f)
     (define draw-mode-points '())
     (define drawn-polygons '())
+    (define draw-origin #f)
+
+    (define mouse-position #f)
     
     (define mouse-labeled-point-for-selected #f)
 
@@ -95,7 +98,7 @@
       ;(draw-reference-image reference-image 950 -150)
       (draw-reference-image reference-image-hip -120 270)
 
-      (draw-drawable-polygons drawable-polygons dc)
+      (draw-drawable-polygons drawable-polygons draw-mode dc)
       (draw-drawn-polygons drawn-polygons dc)
       (draw-currently-drawing-points draw-mode-points dc)
       (draw-mouse-label-if-needed))
@@ -111,6 +114,7 @@
       (case (send event get-event-type)
         ['motion
          (define mouse-p (point (send event get-x) (send event get-y) 0))
+         (set! mouse-position mouse-p)
          (cond
            [draw-mode
             (set! drawable-polygons
@@ -136,18 +140,7 @@
         ['left-down
          (define mouse-p (point (send event get-x) (send event get-y) 0))
          (cond
-           [draw-mode
-            (define label
-              (point->description-string-2d-rounded
-               (screen-point-to-polygon-point mouse-p (car (selected)))))
-            (set! draw-mode-points
-                  (append draw-mode-points
-                          (list (labeled-point (screen-point-to-root-drawable-polygon-point mouse-p) label))))
-            (display
-             (string-append
-              (if just-entered-draw-mode "" ", ")
-              label))
-            (set! just-entered-draw-mode #f)]
+           [draw-mode (draw-mode-mouse-down mouse-p)]
            [else
             (define intersected
               (drawable-polygons-intersected-by-point
@@ -166,6 +159,28 @@
 
             (refresh)])
          ]))
+
+    (define (draw-mode-mouse-down mouse-p)
+       (define
+         label
+         (point->description-string-2d-rounded
+          (cond
+            [(equal? (selected) '())
+             (subtract-points mouse-p draw-origin)]
+            [else
+             (screen-point-to-polygon-point mouse-p (car (selected)))])))
+               
+      (set!
+       draw-mode-points
+       (append
+        draw-mode-points
+        (list (labeled-point (screen-point-to-root-drawable-polygon-point mouse-p) label))))
+               
+      (display
+       (string-append
+        (if just-entered-draw-mode "" ", ")
+        label))
+      (set! just-entered-draw-mode #f))
 
     (define/override (on-char ke)
       (define key-code (send ke get-key-code))
@@ -216,6 +231,7 @@
          (displayln "")
          (set! draw-mode #f)
          (set! just-entered-draw-mode #f)
+         (set! draw-origin #f)
 
          (cond
            [(not (equal? draw-mode-points '()))
@@ -224,9 +240,10 @@
                    drawn-polygons
                    (list (labeled-points->labeled-polygon draw-mode-points))))
             (set! draw-mode-points '())])]
-        [(not (equal? selected '()))
+        [else
          (set! draw-mode #t)
-         (set! just-entered-draw-mode #t)]))
+         (set! just-entered-draw-mode #t)
+         (set! draw-origin mouse-position)]))
 
     (define (screen-point-to-polygon-point screen-point polygon)
       (absolute-point->placement-point
@@ -245,22 +262,23 @@
        (point translation-x translation-y 0)))
 
     (define (update-mouse-labeled-point-for-selected mouse-point)
-      (cond 
-        [(equal? (selected) '())
+      (cond
+        [(and (equal? (selected) '()) (equal? draw-origin #f))
          (set! mouse-labeled-point-for-selected #f)]
         [else
-         (define selected-polygon (car (selected)))
-         (define point
-           (screen-point-to-root-polygon-point mouse-point))
+         (define
+           label-point
+           (if (equal? (selected) '())
+               (subtract-points mouse-point draw-origin)
+               (screen-point-to-polygon-point mouse-point (car (selected)))))
          (set!
           mouse-labeled-point-for-selected
           (point->drawable-labeled-point
-           point
-           (screen-point-to-polygon-point mouse-point selected-polygon)))]))
+           (screen-point-to-root-polygon-point mouse-point)
+           label-point))]))
     
     (define/public (draw-mouse-label-if-needed)
       (cond 
         [(not (equal? mouse-labeled-point-for-selected #f))
           (draw-mouse-label mouse-labeled-point-for-selected (get-dc))]
-        [else null]))
-    ))
+        [else null]))))

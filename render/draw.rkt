@@ -36,9 +36,9 @@
        (list (labeled-points->labeled-polygon points))
        dc)))
 
-(define (draw-drawable-polygons polygons dc)
+(define (draw-drawable-polygons polygons draw-mode dc)
   (for ([(drawable-polygon) polygons])
-    (draw-polygon drawable-polygon dc)
+    (draw-polygon drawable-polygon draw-mode dc)
 
     (cond
      [(or (drawable-polygon-selected? drawable-polygon) (drawable-polygon-highlighted? drawable-polygon))
@@ -54,15 +54,16 @@
        #f
        dc)])))
 
-(define (draw-polygon polygon dc)
+(define (draw-polygon polygon draw-mode dc)
+  (define fill-alpha (if draw-mode 0.1 0.3))
   (cond 
     [(drawable-polygon-selected? polygon)
-     (send dc set-brush (make-object color% 200 100 100 0.3) 'solid)]
+     (send dc set-brush (make-object color% 200 100 100 fill-alpha) 'solid)]
     [(drawable-polygon-highlighted? polygon)
-     (send dc set-brush (make-object color% 20 20 100 0.3) 'solid)]
+     (send dc set-brush (make-object color% 20 20 100 fill-alpha) 'solid)]
     [else
-     (send dc set-brush (make-object color% 255 246 222 0.3) 'solid)])
-  (send dc set-pen (make-object color% 60 60 60 0.8) OUTLINE-THICKNESS 'solid)
+     (send dc set-brush (make-object color% 255 246 222 fill-alpha) 'solid)])
+  (send dc set-pen (make-object color% 60 60 60 (if draw-mode 0.2 0.8)) OUTLINE-THICKNESS 'solid)
   (send dc draw-path (points->path (drawable-polygon->draw-points polygon)))
 
   (if (or (drawable-polygon-selected? polygon) (drawable-polygon-highlighted? polygon))
