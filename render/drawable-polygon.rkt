@@ -100,7 +100,7 @@
      #f))
 
 (define (bone->drawable-polygons-pairs bone)
-  (define tree (get-field polygon-tree bone))
+  (define tree (get-field poly-tree bone))
   (append
    (list (cons (polygon-tree->drawable-polygon tree) bone))
    (append-map (lambda (child)
@@ -110,6 +110,9 @@
 
 (define (drawable-polygon->polygon polygon)
   (labeled-polygon-polygon (drawable-polygon-labeled-polygon polygon)))
+
+(define (drawable-polygon->label-points polygon)
+  (labeled-polygon-labels (drawable-polygon-labeled-polygon polygon)))
 
 (define (drawable-polygons->bounding-rect drawable-polygons)
   (define polygons
@@ -127,4 +130,22 @@
            polygon
            null))
         drawable-polygons)))
+
+(define (rotate-drawable-polygon-around-parent drawable angle)
+  (drawable-polygon-replace-polygon
+   drawable
+   (rotate-polygon-about-point
+    (drawable-polygon->polygon drawable) angle (labeled-point-point (drawable-polygon-labeled-connection-point drawable)))))
+
+(define (drawable-polygon-replace-polygon drawable new-polygon)
+  (drawable-polygon
+   (labeled-polygon
+     new-polygon
+    (drawable-polygon->label-points drawable))
+   (drawable-polygon-labeled-connection-point drawable)
+   (drawable-polygon-labeled-child-connection-points drawable)
+   (drawable-polygon-original-placement drawable)
+   (drawable-polygon-highlighted? drawable)
+   (drawable-polygon-selected? drawable)))
+  
   

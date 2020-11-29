@@ -33,6 +33,8 @@
          [parent frame]
          [style '(transparent)]
          [root-bone bone]
+
+         ;drawable-polygons to bones
          [drawable-polygons-hash (make-hash (bone->drawable-polygons-pairs bone))]
          [width frame-width]
          [height frame-height]
@@ -64,7 +66,6 @@
     (define drawn-polygons '())
     
     (define mouse-labeled-point-for-selected #f)
-    (define selected '())
 
     (define drawing-width (- width (* 2 padding)))
     (define drawing-height (- height (* 2 padding)))
@@ -78,6 +79,15 @@
     (send (get-dc) translate padding padding)
     (send (get-dc) set-scale scale scale)
     (send (get-dc) translate translation-x translation-y)
+
+    (define (selected)
+      (filter
+       (lambda (drawable) (drawable-polygon-selected? drawable))
+       drawable-polygons))
+      
+
+    (define (refresh-drawable-polygons-from-hash)
+      (set! drawable-polygons (hash-keys drawable-polygons-hash)))
 
     (define/override (on-paint)
       (define dc (get-dc))
@@ -129,7 +139,7 @@
            [draw-mode
             (define label
               (point->description-string-2d-rounded
-               (screen-point-to-polygon-point mouse-p (car selected))))
+               (screen-point-to-polygon-point mouse-p (car (selected)))))
             (set! draw-mode-points
                   (append draw-mode-points
                           (list (labeled-point (screen-point-to-root-drawable-polygon-point mouse-p) label))))
@@ -139,15 +149,14 @@
               label))
             (set! just-entered-draw-mode #f)]
            [else
-            (set!
-             selected
-             (drawable-polygons-intersected-by-point
-              drawable-polygons
-              (screen-point-to-root-drawable-polygon-point mouse-p)))
+            (define intersected
+              (drawable-polygons-intersected-by-point
+               drawable-polygons
+               (screen-point-to-root-drawable-polygon-point mouse-p)))
 
             (set! drawable-polygons
                   (map (lambda (polygon)
-                         (if (member polygon selected)
+                         (if (member polygon intersected)
                              (drawable-polygon-selected?-set polygon #t)
                              (drawable-polygon-selected?-set polygon #f)))
                        drawable-polygons))
@@ -169,9 +178,15 @@
             (toggle-draw-mode)]
            [(== #\p)
             ;todo printing when in draw mode?
-            (for ([polygon selected])
+            (for ([polygon (selected)])
               (displayln (bone->description-string
                           (hash-ref drawable-polygons-hash polygon))))]
+           [(== #\q)
+            (for ([polygon (selected)])
+              (rotate-drawable-polygon polygon #t))]
+           [(== #\e)
+            (for ([polygon (selected)])
+              (rotate-drawable-polygon polygon #f))]
            [_
             void])]))
 
@@ -179,6 +194,21 @@
       (cond
         [(char? k) (char-downcase k)]
         [else k]))
+
+    (define (rotate-drawable-polygon polygon clockwise)
+      (define rotation (if clockwise 10 -10))
+      (define new-polygon
+        (rotate-drawable-polygon-around-parent polygon rotation))
+
+      (define bone (hash-ref drawable-polygons-hash polygon))
+      (hash-remove! drawable-polygons-hash polygon)
+      (hash-set! drawable-polygons-hash new-polygon bone)
+      
+      (refresh-drawable-polygons-from-hash)
+
+      (define new-angle (- (send bone angle) rotation))
+      (send bone set-angle! new-angle)
+      (println new-angle))
 
     (define (toggle-draw-mode)
       (cond
@@ -216,10 +246,10 @@
 
     (define (update-mouse-labeled-point-for-selected mouse-point)
       (cond 
-        [(equal? selected '())
+        [(equal? (selected) '())
          (set! mouse-labeled-point-for-selected #f)]
         [else
-         (define selected-polygon (car selected))
+         (define selected-polygon (car (selected)))
          (define point
            (screen-point-to-root-polygon-point mouse-point))
          (set!

@@ -2,6 +2,12 @@
 
 ;TODO: draw bone names? Seems useful, bone struct has the info, just need to give to drawable polygon
 
+;when in drawing mode should maybe hide the point labels of the selected bone
+;or at least draw it with reduced opacity
+
+;some function where you can select a bone and then rotate it around its parent point would be useful
+;maybe just press q and e?
+
 (define OUTLINE-THICKNESS 3)
 
 (provide draw-drawn-polygons
@@ -100,8 +106,8 @@
     [else null]))
 
 (define (draw-mouse-label labeled-mouse-point dc)
-  (send dc set-font (make-font #:size 10 #:family 'modern #:weight 'bold))
-  (send dc set-text-foreground (make-object color% 130 50 100))
+  (send dc set-font (make-font #:size 15 #:family 'modern #:weight 'bold))
+  (send dc set-text-foreground (make-object color% 176 44 232))
   (send dc set-text-background "red")
   (define text-draw-point
     (add-points

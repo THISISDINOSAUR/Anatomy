@@ -74,7 +74,7 @@
   #'(list BONE-IDS ...))
 
 (define (a-bone-duplicate bone-id)
-  (polygon-tree-polygon (get-field polygon-tree bone-id)))
+  (polygon-tree-polygon (get-field poly-tree bone-id)))
 
 
 ;Connection point evaluation
@@ -96,16 +96,16 @@
 ;TODO nothing should use bone points directly anymore
 (define-macro-cases a-average-bone-points
   [(_ BONE-ID "all")
-   #'(average-points (polygon-tree-polygon (get-field polygon-tree BONE-ID)))]
+   #'(average-points (polygon-tree-polygon (get-field poly-tree BONE-ID)))]
   [(_ BONE-ID POINT-EXPRS ...)
    #'(average-points (expand-connection-point-expressions (list POINT-EXPRS ...) BONE-ID))])
 
 (define (expand-connection-point-expression point-expr bone)
   (match point-expr
     [(== "last")
-     (last (polygon-tree-polygon (get-field polygon-tree bone)))]
+     (last (polygon-tree-polygon (get-field poly-tree bone)))]
     [(? number?)
-     (vector-ref (list->vector (polygon-tree-polygon (get-field polygon-tree bone))) point-expr)]
+     (vector-ref (list->vector (polygon-tree-polygon (get-field poly-tree bone))) point-expr)]
     [_
      point-expr]
     ))

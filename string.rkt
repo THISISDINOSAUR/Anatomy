@@ -33,7 +33,7 @@
        (get-field name bone) ":\n"
        indent "points:\n"
        indent indent (string-join
-                      (map point->description-string (polygon-tree-polygon (get-field polygon-tree bone))) ", ") "\n"
+                      (map point->description-string (polygon-tree-polygon (get-field poly-tree bone))) ", ") "\n"
        indent "connections:\n"
        indent indent (string-join
                        (map (lambda (child)
@@ -42,7 +42,7 @@
                                " ~ "
                                (get-field name child)
                                " = "
-                               (polygon-tree->connection-description-string (get-field polygon-tree child))))
+                               (polygon-tree->connection-description-string (get-field poly-tree child))))
                             (get-field connections bone))
                        (string-append "\n" indent indent))
        ))

@@ -15,6 +15,11 @@
          (rotate-point point angle))
        polygon))
 
+(define (rotate-polygon-about-point polygon angle rotation-point)
+  (map (lambda (point)
+         (rotate-point-about-point point angle rotation-point))
+       polygon))
+
 (define (move-polygon polygon offset)
   (map (lambda (point)
          (add-points point offset))

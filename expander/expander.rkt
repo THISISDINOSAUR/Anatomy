@@ -128,12 +128,12 @@
      index]))
 
 (define (last-index-of-bone bone-id)
-  (- (length (polygon-tree-polygon (get-field polygon-tree bone-id))) 1))
+  (- (length (polygon-tree-polygon (get-field poly-tree bone-id))) 1))
 
 (define (a-point-from-bone-index bone-id index)
   (match index
     [(== "last")
-     (last  (polygon-tree-polygon (get-field polygon-tree bone-id)))]
+     (last  (polygon-tree-polygon (get-field poly-tree bone-id)))]
     [_
      (send bone-id point-at-index index)]))
 
