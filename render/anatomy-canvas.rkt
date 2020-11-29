@@ -164,7 +164,7 @@
         ['release
          null]
         [else
-         (match key-code
+         (match (key-code-downcase key-code)
            [(== #\d)
             (toggle-draw-mode)]
            [(== #\p)
