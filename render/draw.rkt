@@ -1,5 +1,7 @@
 #lang racket
 
+(define OUTLINE-THICKNESS 3)
+
 (provide draw-drawn-polygons
          draw-currently-drawing-points
          draw-drawable-polygons
@@ -15,7 +17,7 @@
 (define (draw-drawn-polygons polygons dc)
   (for ([(polygon) polygons])
     (send dc set-brush (make-object color% 255 100 100 0.3) 'solid)
-    (send dc set-pen (make-object color% 110 60 60 0.8) 8 'solid)
+    (send dc set-pen (make-object color% 110 60 60 0.8) OUTLINE-THICKNESS 'solid)
     (send dc draw-path (points->path (labeled-polygon-polygon polygon)))
     (draw-polygon-labels polygon dc)))
 
@@ -52,7 +54,7 @@
      (send dc set-brush (make-object color% 20 20 100 0.3) 'solid)]
     [else
      (send dc set-brush (make-object color% 255 246 222 0.3) 'solid)])
-  (send dc set-pen (make-object color% 60 60 60 0.8) 8 'solid)
+  (send dc set-pen (make-object color% 60 60 60 0.8) OUTLINE-THICKNESS 'solid)
   (send dc draw-path (points->path (drawable-polygon->draw-points polygon)))
 
   (if (or (drawable-polygon-selected? polygon) (drawable-polygon-highlighted? polygon))
