@@ -4,8 +4,6 @@
 
 ;TODO add edit mode where you can drag points
 
-;TODO when starting a mode , should use current mouse point as connection point, and output point on parent, 0,0, and angle
-
 ;gaps in bones?
 ;soft body
 
@@ -238,7 +236,8 @@
          (set! draw-mode #t)
          (set! just-entered-draw-mode #t)
          (set! draw-with-mouse-as-origin use-mouse-as-origin)
-         (set! draw-origin mouse-position)]))
+         (set! draw-origin mouse-position)
+         (displayln (string-append (labeled-point-label mouse-labeled-point-for-selected) " ~ [0, 0], 0"))]))
 
     (define (screen-point-to-polygon-point screen-point polygon)
       (absolute-point->placement-point
