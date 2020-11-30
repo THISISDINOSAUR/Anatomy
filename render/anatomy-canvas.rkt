@@ -3,7 +3,14 @@
 (provide (all-defined-out))
 
 ;TODO add edit mode where you can drag points
+
 ;TODO draw mode without a bone selected (maybe with origin at the cursor). Not sure what to do about rotation tho
+;TODO NEXT solve the rotation problem
+;I guess you need to know the absolute rotation of the parent?
+; we should ahve that info through drawable-polygon.original-placement
+; maybe you select a bone, and then press a different key (a?) and that gives you the mouse relative drawing
+
+;Maybe instead of giving the rotation like taht, It should draw in the space of that bone, but with the mouse as the origin
 
 
 ;gaps in bones?
@@ -62,6 +69,7 @@
 
     (define draw-mode #f)
     (define just-entered-draw-mode #f)
+    (define draw-with-mouse-as-origin #f)
     (define draw-mode-points '())
     (define drawn-polygons '())
     (define draw-origin #f)
@@ -161,25 +169,16 @@
          ]))
 
     (define (draw-mode-mouse-down mouse-p)
-       (define
-         label
-         (point->description-string-2d-rounded
-          (cond
-            [(equal? (selected) '())
-             (subtract-points mouse-p draw-origin)]
-            [else
-             (screen-point-to-polygon-point mouse-p (car (selected)))])))
-               
       (set!
        draw-mode-points
        (append
         draw-mode-points
-        (list (labeled-point (screen-point-to-root-drawable-polygon-point mouse-p) label))))
+        (list mouse-labeled-point-for-selected)))
                
       (display
        (string-append
         (if just-entered-draw-mode "" ", ")
-        label))
+        (labeled-point-label mouse-labeled-point-for-selected)))
       (set! just-entered-draw-mode #f))
 
     (define/override (on-char ke)
@@ -190,7 +189,9 @@
         [else
          (match (key-code-downcase key-code)
            [(== #\d)
-            (toggle-draw-mode)]
+            (toggle-draw-mode #f)]
+           [(== #\a)
+            (toggle-draw-mode #t)]
            [(== #\p)
             ;todo printing when in draw mode?
             (for ([polygon (selected)])
@@ -225,7 +226,7 @@
       (send bone set-angle! new-angle)
       (println new-angle))
 
-    (define (toggle-draw-mode)
+    (define (toggle-draw-mode use-mouse-as-origin)
       (cond
         [draw-mode
          (displayln "")
@@ -243,6 +244,7 @@
         [else
          (set! draw-mode #t)
          (set! just-entered-draw-mode #t)
+         (set! draw-with-mouse-as-origin use-mouse-as-origin)
          (set! draw-origin mouse-position)]))
 
     (define (screen-point-to-polygon-point screen-point polygon)
@@ -270,7 +272,10 @@
            label-point
            (if (equal? (selected) '())
                (subtract-points mouse-point draw-origin)
-               (screen-point-to-polygon-point mouse-point (car (selected)))))
+               (if draw-with-mouse-as-origin
+                   (rotate-point (subtract-points mouse-point draw-origin)
+                           (placement-angle (drawable-polygon-original-placement (car (selected)))))
+                   (screen-point-to-polygon-point mouse-point (car (selected))))))
          (set!
           mouse-labeled-point-for-selected
           (point->drawable-labeled-point
