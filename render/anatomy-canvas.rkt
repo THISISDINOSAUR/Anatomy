@@ -4,14 +4,7 @@
 
 ;TODO add edit mode where you can drag points
 
-;TODO draw mode without a bone selected (maybe with origin at the cursor). Not sure what to do about rotation tho
-;TODO NEXT solve the rotation problem
-;I guess you need to know the absolute rotation of the parent?
-; we should ahve that info through drawable-polygon.original-placement
-; maybe you select a bone, and then press a different key (a?) and that gives you the mouse relative drawing
-
-;Maybe instead of giving the rotation like taht, It should draw in the space of that bone, but with the mouse as the origin
-
+;TODO when starting a mode , should use current mouse point as connection point, and output point on parent, 0,0, and angle
 
 ;gaps in bones?
 ;soft body
@@ -147,6 +140,7 @@
          (refresh)]
         ['left-down
          (define mouse-p (point (send event get-x) (send event get-y) 0))
+         (update-mouse-labeled-point-for-selected mouse-p)
          (cond
            [draw-mode (draw-mode-mouse-down mouse-p)]
            [else
@@ -163,8 +157,6 @@
                        drawable-polygons))
             ;todo: add ability to rotate through overlapping bones
          
-            (update-mouse-labeled-point-for-selected mouse-p)
-
             (refresh)])
          ]))
 
@@ -232,6 +224,7 @@
          (displayln "")
          (set! draw-mode #f)
          (set! just-entered-draw-mode #f)
+         (set! draw-with-mouse-as-origin #f)
          (set! draw-origin #f)
 
          (cond
@@ -273,8 +266,11 @@
            (if (equal? (selected) '())
                (subtract-points mouse-point draw-origin)
                (if draw-with-mouse-as-origin
-                   (rotate-point (subtract-points mouse-point draw-origin)
-                           (placement-angle (drawable-polygon-original-placement (car (selected)))))
+                   (divide-point
+                    (point-invert-y
+                     (rotate-point (subtract-points mouse-point draw-origin)
+                                   (placement-angle (drawable-polygon-original-placement (car (selected))))))
+                    scale)
                    (screen-point-to-polygon-point mouse-point (car (selected))))))
          (set!
           mouse-labeled-point-for-selected
