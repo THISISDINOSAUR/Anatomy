@@ -6,6 +6,7 @@
 
 ;gaps in bones?
 ;soft body
+;how to do highly repeated bones? (e.g. vertebrae)
 
 (require "../render/draw.rkt"
          "../render/drawable-polygon.rkt"
@@ -53,8 +54,10 @@
 
     (super-new)
 
-    (define reference-image (read-bitmap  "../references/herrerCropped.JPG" #:backing-scale 0.2))
+    (define reference-image-head (read-bitmap  "../references/herrerCropped.JPG" #:backing-scale 0.2))
     (define reference-image-hip (read-bitmap  "../references/herrerHipCropped.JPG" #:backing-scale 0.27))
+    (define reference-image-spine (read-bitmap "../references/herrerSpineCropped.JPG" #:backing-scale 0.27))
+    (define reference-image-whole (read-bitmap "../references/herrerWholeResized.JPG" #:backing-scale 0.27))
     
     (define drawable-polygons (hash-keys drawable-polygons-hash))
 
@@ -94,8 +97,11 @@
     (define/override (on-paint)
       (define dc (get-dc))
 
-      ;(draw-reference-image reference-image 950 -150)
-      (draw-reference-image reference-image-hip -120 270)
+      ;(draw-reference-image reference-image-head 950 -150)
+      ;(draw-reference-image reference-image-spine 540 -70)
+      (draw-reference-image reference-image-whole -230 220)
+      ;(draw-reference-image reference-image-hip -120 270)
+      
 
       (draw-drawable-polygons drawable-polygons draw-mode dc)
       (draw-drawn-polygons drawn-polygons dc)
