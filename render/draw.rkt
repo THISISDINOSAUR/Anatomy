@@ -3,12 +3,11 @@
 ;TODO: draw bone names? Seems useful, bone struct has the info, just need to give to drawable polygon
 
 ;when in drawing mode should maybe hide the point labels of the selected bone
-;or at least draw it with reduced opacity
+;or at least reduce their opacity
 
-;some function where you can select a bone and then rotate it around its parent point would be useful
-;maybe just press q and e?
+;TODO z ordering?
 
-(define OUTLINE-THICKNESS 3)
+(define OUTLINE-THICKNESS 5)
 
 (provide draw-drawn-polygons
          draw-currently-drawing-points
