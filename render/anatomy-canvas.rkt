@@ -10,8 +10,6 @@
 
 ;TODO add ability to select drawn bones/draw multiple in a row
 
-;TODO do drawn points only show up if you move the mouse? seems like it...
-
 (require "../render/draw.rkt"
          "../render/drawable-polygon.rkt"
          "../render/canvas-state.rkt"
@@ -132,9 +130,9 @@
        (+ y (/ (- (image:image-height image)) 2))))
 
     (define/override (on-event event)
+      (define mouse-p (point (send event get-x) (send event get-y) 0))
       (case (send event get-event-type)
         ['motion
-         (define mouse-p (point (send event get-x) (send event get-y) 0))
          (set! mouse-position mouse-p)
          (cond
            [(in-draw-mode?)
@@ -155,10 +153,8 @@
                              (drawable-polygon-highlighted?-set polygon #t)
                              (drawable-polygon-highlighted?-set polygon #f)))
                        drawable-polygons))])
-         
-         (update-mouse-labeled-point-for-selected mouse-p)]
+         ]
         ['left-down
-         (define mouse-p (point (send event get-x) (send event get-y) 0))
          (update-mouse-labeled-point-for-selected mouse-p)
          (cond
            [(in-draw-mode?) (draw-mode-mouse-down mouse-p)]
@@ -177,6 +173,7 @@
             ;todo: add ability to rotate through overlapping bones
             ])
          ])
+      (update-mouse-labeled-point-for-selected mouse-p)
       (refresh))
     
     (define (draw-mode-mouse-down mouse-p)
