@@ -10,6 +10,7 @@
 
 (require "../render/draw.rkt"
          "../render/drawable-polygon.rkt"
+         "../render/canvas-state.rkt"
          "../structs/point.rkt"
          "../structs/rect.rkt"
          "../structs/polygon-tree.rkt"
@@ -18,14 +19,23 @@
          racket/gui/base
          (prefix-in image: 2htdp/image))
 
+(define frame-width 1300)
+(define frame-height 750)
+(define padding 50)
+(define frame (new frame%
+                   [label "Bone name pending"]
+                   [width frame-width]
+                   [height frame-height]))
+
+(define interface-mode-message
+  (new message%
+       [parent frame]
+       [label DEFAULT-MODE-LABEL]
+       [auto-resize #t]))	 
+
+
 (define (create-and-show-anatomy-canvas bone)
-  (define frame-width 1300)
-  (define frame-height 750)
-  (define padding 50)
-  (define frame (new frame%
-                     [label (get-field name bone)]
-                     [width frame-width]
-                     [height frame-height]))
+  (send frame set-label (get-field name bone))
   
   (define canvas
     (new anatomy-canvas%
@@ -61,12 +71,13 @@
     
     (define drawable-polygons (hash-keys drawable-polygons-hash))
 
-    (define draw-mode #f)
-    (define just-entered-draw-mode #f)
-    (define draw-with-mouse-as-origin #f)
-    (define draw-mode-points '())
+    (define interface-mode DEFAULT-MODE)
+    (define interface-mode-state #f)
+
+    (define (in-draw-mode?)
+      (equal? interface-mode DRAW-MODE))
+    
     (define drawn-polygons '())
-    (define draw-origin #f)
 
     (define mouse-position #f)
     
@@ -103,9 +114,10 @@
       ;(draw-reference-image reference-image-hip -120 270)
       
 
-      (draw-drawable-polygons drawable-polygons draw-mode dc)
+      (draw-drawable-polygons drawable-polygons interface-mode dc)
       (draw-drawn-polygons drawn-polygons dc)
-      (draw-currently-drawing-points draw-mode-points dc)
+      (cond [(in-draw-mode?)
+             (draw-currently-drawing-points (draw-mode-state-drawn-points interface-mode-state) dc)])
       (draw-mouse-label-if-needed))
 
     (define (draw-reference-image image x y)
@@ -121,7 +133,7 @@
          (define mouse-p (point (send event get-x) (send event get-y) 0))
          (set! mouse-position mouse-p)
          (cond
-           [draw-mode
+           [(in-draw-mode?)
             (set! drawable-polygons
                   (map (lambda (polygon)
                          (drawable-polygon-highlighted?-set polygon #f))
@@ -146,7 +158,7 @@
          (define mouse-p (point (send event get-x) (send event get-y) 0))
          (update-mouse-labeled-point-for-selected mouse-p)
          (cond
-           [draw-mode (draw-mode-mouse-down mouse-p)]
+           [(in-draw-mode?) (draw-mode-mouse-down mouse-p)]
            [else
             (define intersected
               (drawable-polygons-intersected-by-point
@@ -163,19 +175,19 @@
          
             (refresh)])
          ]))
-
+    
     (define (draw-mode-mouse-down mouse-p)
-      (set!
-       draw-mode-points
+      (set-draw-mode-state-drawn-points!
+       interface-mode-state
        (append
-        draw-mode-points
+        (draw-mode-state-drawn-points interface-mode-state)
         (list mouse-labeled-point-for-selected)))
                
       (display
        (string-append
-        (if just-entered-draw-mode "" ", ")
+        (if (draw-mode-state-just-entered? interface-mode-state) "" ", ")
         (labeled-point-label mouse-labeled-point-for-selected)))
-      (set! just-entered-draw-mode #f))
+      (set-draw-mode-state-just-entered?! interface-mode-state #f))
 
     (define/override (on-char ke)
       (define key-code (send ke get-key-code))
@@ -183,24 +195,39 @@
         ['release
          null]
         [else
-         (match (key-code-downcase key-code)
-           [(== #\d)
-            (toggle-draw-mode #f)]
-           [(== #\a)
-            (toggle-draw-mode #t)]
-           [(== #\p)
-            ;todo printing when in draw mode?
-            (for ([polygon (selected)])
-              (displayln (bone->description-string
-                          (hash-ref drawable-polygons-hash polygon))))]
-           [(== #\q)
-            (for ([polygon (selected)])
-              (rotate-drawable-polygon polygon #t))]
-           [(== #\e)
-            (for ([polygon (selected)])
-              (rotate-drawable-polygon polygon #f))]
-           [_
-            void])]))
+         (match interface-mode
+           [(== DEFAULT-MODE)
+            (match (key-code-downcase key-code)
+              [(== #\d)
+               (enable-draw-mode #f)]
+              [(== #\n)
+               (cond [(not (equal? (selected) '()))
+                      (enable-name-bone-mode)])]
+           
+              [(== #\p)
+               (for ([polygon (selected)])
+                 (displayln (bone->description-string
+                             (hash-ref drawable-polygons-hash polygon))))]
+           
+              ;connection labels don't update when rotating a polygon like this (or the data model at all)
+              [(== #\q)
+               (for ([polygon (selected)])
+                 (rotate-drawable-polygon polygon #t))]
+              [(== #\e)
+               (for ([polygon (selected)])
+                 (rotate-drawable-polygon polygon #f))]
+              
+              [_ void])]
+           
+           [(== NAME-BONE-MODE)
+            void]
+           
+           [(== DRAW-MODE)
+            (match (key-code-downcase key-code)
+              [(== #\return)
+               (end-draw-mode)]
+              [_ void]
+              )])]))
 
     (define (key-code-downcase k)
       (cond
@@ -222,28 +249,88 @@
       (send bone set-angle! new-angle)
       (println new-angle))
 
-    (define (toggle-draw-mode use-mouse-as-origin)
-      (cond
-        [draw-mode
-         (displayln "")
-         (set! draw-mode #f)
-         (set! just-entered-draw-mode #f)
-         (set! draw-with-mouse-as-origin #f)
-         (set! draw-origin #f)
+    (define (enable-name-bone-mode)
+      (set! interface-mode NAME-BONE-MODE)
+      (send interface-mode-message set-label NAME-BONE-MODE-LABEL)
+      (set! interface-mode-state
+            (name-bone-mode-state
+             ""
+             mouse-position
+             (labeled-point-label mouse-labeled-point-for-selected)
+             (car (selected))))
 
+      (define new-bone-name-dialog
+        (new dialog%
+             [label "New bone name:"]
+             [width 300]
+             [height 100]))
+
+      (define text-field
+        (new text-field%	 
+             [parent new-bone-name-dialog]
+             [label #f]
+             [callback
+              (lambda (text-field event)
+                (case (send event get-event-type)
+                  ['text-field-enter
+                    (set-name-bone-mode-state-name! interface-mode-state (send text-field get-value))
+                    (send new-bone-name-dialog show #f)
+                    (end-name-bone-mode)]))]))
+      
+      (send new-bone-name-dialog show #t)
+      )
+      
+    (define (end-name-bone-mode)
+      (enable-draw-mode interface-mode-state))
+
+      
+    (define (enable-draw-mode name-bone-mode-state)
+      (set! interface-mode DRAW-MODE)
+      (send interface-mode-message set-label DRAW-MODE-LABEL)
+      (cond
+        [name-bone-mode-state
+          (set! interface-mode-state
+            (draw-mode-state
+             #t
+             #t
+             '()
+             (name-bone-mode-state-draw-origin name-bone-mode-state)
+             (name-bone-mode-state-draw-origin-in-parent-bone-label name-bone-mode-state)
+             (name-bone-mode-state-name name-bone-mode-state)
+             (name-bone-mode-state-parent-polygon name-bone-mode-state)))
+          (display (string-append (name-bone-mode-state-name name-bone-mode-state) " = "))
+          ]
+        [else
+         (define label (if mouse-labeled-point-for-selected
+                           (labeled-point-label mouse-labeled-point-for-selected)
+                           #f))
+         (define selected-polygon (if (equal? (selected) '())
+                                      #f
+                                      (car (selected))))
+         (set! interface-mode-state
+            (draw-mode-state #t #f '() mouse-position label #f selected-polygon))]))
+          
+
+    (define (end-draw-mode)
+      (displayln "")
+      (cond [(draw-mode-state-name interface-mode-state)
+             (define parent-bone (hash-ref drawable-polygons-hash (draw-mode-state-parent-polygon interface-mode-state)))
+             (displayln (string-append (get-field name parent-bone) " ~ " (draw-mode-state-name interface-mode-state) " = "
+                                       (draw-mode-state-draw-origin-in-parent-bone-label interface-mode-state) " ~ [0, 0], 0"))
+             (displayln "")])
+             
+      (set! interface-mode DEFAULT-MODE)
+      (send interface-mode-message set-label DEFAULT-MODE-LABEL)
+
+      (define drawn-points (draw-mode-state-drawn-points interface-mode-state))
          (cond
-           [(not (equal? draw-mode-points '()))
+           [(not (equal? drawn-points '()))
             (set! drawn-polygons
                   (append
                    drawn-polygons
-                   (list (labeled-points->labeled-polygon draw-mode-points))))
-            (set! draw-mode-points '())])]
-        [else
-         (set! draw-mode #t)
-         (set! just-entered-draw-mode #t)
-         (set! draw-with-mouse-as-origin use-mouse-as-origin)
-         (set! draw-origin mouse-position)
-         (displayln (string-append (labeled-point-label mouse-labeled-point-for-selected) " ~ [0, 0], 0"))]))
+                   (list (labeled-points->labeled-polygon drawn-points))))
+            ]))
+      
 
     (define (screen-point-to-polygon-point screen-point polygon)
       (absolute-point->placement-point
@@ -263,19 +350,21 @@
 
     (define (update-mouse-labeled-point-for-selected mouse-point)
       (cond
-        [(and (equal? (selected) '()) (equal? draw-origin #f))
+        [(and (equal? (selected) '()) (not (in-draw-mode?)))
          (set! mouse-labeled-point-for-selected #f)]
         [else
          (define
            label-point
            (if (equal? (selected) '())
-               (subtract-points mouse-point draw-origin)
-               (if draw-with-mouse-as-origin
+               (subtract-points mouse-point (draw-mode-state-draw-origin interface-mode-state))
+                                
+               (if (and (in-draw-mode?) (draw-mode-state-use-initial-mouse-as-origin? interface-mode-state))
                    (divide-point
                     (point-invert-y
-                     (rotate-point (subtract-points mouse-point draw-origin)
+                     (rotate-point (subtract-points mouse-point (draw-mode-state-draw-origin interface-mode-state))
                                    (placement-angle (drawable-polygon-original-placement (car (selected))))))
                     scale)
+                   
                    (screen-point-to-polygon-point mouse-point (car (selected))))))
          (set!
           mouse-labeled-point-for-selected
