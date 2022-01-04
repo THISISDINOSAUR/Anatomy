@@ -8,6 +8,10 @@
 ;soft body
 ;how to do highly repeated bones? (e.g. vertebrae)
 
+;TODO add ability to select drawn bones/draw multiple in a row
+
+;TODO do drawn points only show up if you move the mouse? seems like it...
+
 (require "../render/draw.rkt"
          "../render/drawable-polygon.rkt"
          "../render/canvas-state.rkt"
@@ -152,8 +156,7 @@
                              (drawable-polygon-highlighted?-set polygon #f)))
                        drawable-polygons))])
          
-         (update-mouse-labeled-point-for-selected mouse-p)
-         (refresh)]
+         (update-mouse-labeled-point-for-selected mouse-p)]
         ['left-down
          (define mouse-p (point (send event get-x) (send event get-y) 0))
          (update-mouse-labeled-point-for-selected mouse-p)
@@ -172,9 +175,9 @@
                              (drawable-polygon-selected?-set polygon #f)))
                        drawable-polygons))
             ;todo: add ability to rotate through overlapping bones
-         
-            (refresh)])
-         ]))
+            ])
+         ])
+      (refresh))
     
     (define (draw-mode-mouse-down mouse-p)
       (set-draw-mode-state-drawn-points!
