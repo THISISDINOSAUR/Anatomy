@@ -76,6 +76,8 @@
     (define interface-mode DEFAULT-MODE)
     (define interface-mode-state #f)
 
+    (define show-point-labels? #t)
+
     (define (in-draw-mode?)
       (equal? interface-mode DRAW-MODE))
     
@@ -116,11 +118,17 @@
       ;(draw-reference-image reference-image-hip -120 270)
       
 
-      (draw-drawable-polygons drawable-polygons interface-mode dc)
-      (draw-drawn-polygons drawn-polygons dc)
+      (draw-drawable-polygons drawable-polygons show-point-labels? interface-mode dc)
+      (draw-drawn-polygons drawn-polygons show-point-labels? dc)
       (cond [(in-draw-mode?)
              (draw-currently-drawing-points (draw-mode-state-drawn-points interface-mode-state) dc)])
       (draw-mouse-label-if-needed))
+
+     (define/public (draw-mouse-label-if-needed)
+      (cond 
+        [(not (equal? mouse-labeled-point-for-selected #f))
+          (draw-mouse-label mouse-labeled-point-for-selected (get-dc))]
+        [else null]))
 
     (define (draw-reference-image image x y)
       (define dc (get-dc))
@@ -195,39 +203,44 @@
         ['release
          null]
         [else
-         (match interface-mode
-           [(== DEFAULT-MODE)
-            (match (key-code-downcase key-code)
-              [(== #\d)
-               (enable-draw-mode #f)]
-              [(== #\n)
-               (cond [(not (equal? (selected) '()))
-                      (enable-name-bone-mode)])]
+         (match (key-code-downcase key-code)
+           [(== #\h)
+            (set! show-point-labels? (not show-point-labels?))
+            (refresh)]
+           [_
+            (match interface-mode
+              [(== DEFAULT-MODE)
+               (match (key-code-downcase key-code)
+                 [(== #\d)
+                  (enable-draw-mode #f)]
+                 [(== #\n)
+                  (cond [(not (equal? (selected) '()))
+                         (enable-name-bone-mode)])]
            
-              [(== #\p)
-               (for ([polygon (selected)])
-                 (displayln (bone->description-string
-                             (hash-ref drawable-polygons-hash polygon))))]
+                 [(== #\p)
+                  (for ([polygon (selected)])
+                    (displayln (bone->description-string
+                                (hash-ref drawable-polygons-hash polygon))))]
            
-              ;connection labels don't update when rotating a polygon like this (or the data model at all)
-              [(== #\q)
-               (for ([polygon (selected)])
-                 (rotate-drawable-polygon polygon #t))]
-              [(== #\e)
-               (for ([polygon (selected)])
-                 (rotate-drawable-polygon polygon #f))]
+                 ;connection labels don't update when rotating a polygon like this (or the data model at all)
+                 [(== #\q)
+                  (for ([polygon (selected)])
+                    (rotate-drawable-polygon polygon #t))]
+                 [(== #\e)
+                  (for ([polygon (selected)])
+                    (rotate-drawable-polygon polygon #f))]
               
-              [_ void])]
+                 [_ void])]
            
-           [(== NAME-BONE-MODE)
-            void]
+              [(== NAME-BONE-MODE)
+               void]
            
-           [(== DRAW-MODE)
-            (match (key-code-downcase key-code)
-              [(== #\return)
-               (end-draw-mode)]
-              [_ void]
-              )])]))
+              [(== DRAW-MODE)
+               (match (key-code-downcase key-code)
+                 [(== #\return)
+                  (end-draw-mode)]
+                 [_ void]
+                 )])])]))
 
     (define (key-code-downcase k)
       (cond
@@ -348,6 +361,8 @@
         scale)
        (point translation-x translation-y 0)))
 
+    ;todo, why save state here? this really should be a function for "mouse-labeled-point-for-selected"
+    ;esp since we save the mouse point anyeway (maybe that's why, maybe we never used to save the mouse point) 
     (define (update-mouse-labeled-point-for-selected mouse-point)
       (cond
         [(and (equal? (selected) '()) (not (in-draw-mode?)))
@@ -372,8 +387,4 @@
            (screen-point-to-root-polygon-point mouse-point)
            label-point))]))
     
-    (define/public (draw-mouse-label-if-needed)
-      (cond 
-        [(not (equal? mouse-labeled-point-for-selected #f))
-          (draw-mouse-label mouse-labeled-point-for-selected (get-dc))]
-        [else null]))))
+   ))

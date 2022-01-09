@@ -22,39 +22,42 @@
          "../bone.rkt"
          racket/gui/base)
 
-(define (draw-drawn-polygons polygons dc)
+(define (draw-drawn-polygons polygons draw-labels? dc)
   (for ([(polygon) polygons])
     (send dc set-brush (make-object color% 255 100 100 0.3) 'solid)
     (send dc set-pen (make-object color% 110 60 60 0.8) OUTLINE-THICKNESS 'solid)
     (send dc draw-path (points->path (labeled-polygon-polygon polygon)))
-    (draw-polygon-labels polygon dc)))
+    (if draw-labels?
+        (draw-polygon-labels polygon dc)
+        void)))
 
 (define (draw-currently-drawing-points points dc)
   (if (equal? points '())
       void
       (draw-drawn-polygons
        (list (labeled-points->labeled-polygon points))
+       #t
        dc)))
 
-(define (draw-drawable-polygons polygons interface-mode dc)
+(define (draw-drawable-polygons polygons draw-labels? interface-mode dc)
   (for ([(drawable-polygon) polygons])
-    (draw-polygon drawable-polygon interface-mode dc)
+    (draw-polygon drawable-polygon draw-labels? interface-mode dc)
 
     (cond
      [(or (drawable-polygon-selected? drawable-polygon) (drawable-polygon-highlighted? drawable-polygon))
       (draw-connection-point
        (drawable-polygon-labeled-connection-point drawable-polygon)
-       #t
+       draw-labels?
        dc)
       (for ([(connection-point) (drawable-polygon-labeled-child-connection-points drawable-polygon)])
-        (draw-connection-point connection-point #t dc))]
+        (draw-connection-point connection-point draw-labels? dc))]
      [else
       (draw-connection-point
        (drawable-polygon-labeled-connection-point drawable-polygon)
        #f
        dc)])))
 
-(define (draw-polygon polygon interface-mode dc)
+(define (draw-polygon polygon draw-labels? interface-mode dc)
   (define draw-mode? (equal? interface-mode DRAW-MODE))
   (define fill-alpha (if draw-mode? 0.1 0.3))
   (cond 
@@ -67,7 +70,7 @@
   (send dc set-pen (make-object color% 60 60 60 (if draw-mode? 0.2 0.8)) OUTLINE-THICKNESS 'solid)
   (send dc draw-path (points->path (drawable-polygon->draw-points polygon)))
 
-  (if (or (drawable-polygon-selected? polygon) (drawable-polygon-highlighted? polygon))
+  (if (and draw-labels? (or (drawable-polygon-selected? polygon) (drawable-polygon-highlighted? polygon)))
       (draw-polygon-labels (drawable-polygon-labeled-polygon polygon) dc)
       null))
 
