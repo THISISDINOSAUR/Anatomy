@@ -74,8 +74,11 @@ Should be relatively straightforward to implement, but quite involved, and with 
 Almost certainly useful, but currently no current need for them, as any functions I might want to add it typically makes sense to add as built in functions. Before I can do this, I need to know how I will handle scope, return types, and function parameters. Will likely consider implementing when the need arises.
 
 - Multiline comments  
-Should be straightforward, no reason not to implement
-
+Should be straightforward, no reason not to implement. 
+  
+- Holes in bones  
+E.g. eye sockets. No idea what the syntax for this should look like, but should be resonably easy to add. 
+  
 - Maths with short form connection point indexing  
 E.g.   
 `illium~pubis = average(0,last) + [20, 30]...`   
