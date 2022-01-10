@@ -314,7 +314,8 @@
                                       (car (selected))))
          (set! interface-mode-state
             (draw-mode-state #t #f '() '() mouse-position (mouse-label-point) #f selected-polygon))])
-      (set! interface-mode DRAW-MODE))
+      (set! interface-mode DRAW-MODE)
+      (refresh))
           
 
     (define (end-draw-mode)
