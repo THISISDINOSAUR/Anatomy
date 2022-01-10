@@ -27,16 +27,14 @@
     (send dc set-brush (make-object color% 255 100 100 0.3) 'solid)
     (send dc set-pen (make-object color% 110 60 60 0.8) OUTLINE-THICKNESS 'solid)
     (send dc draw-path (points->path (labeled-polygon-polygon polygon)))
-    (if draw-labels?
-        (draw-polygon-labels polygon dc)
-        void)))
+    (draw-polygon-points polygon draw-labels? dc)))
 
-(define (draw-currently-drawing-points points dc)
+(define (draw-currently-drawing-points points draw-labels? dc)
   (if (equal? points '())
       void
       (draw-drawn-polygons
        (list (labeled-points->labeled-polygon points))
-       #t
+       draw-labels?
        dc)))
 
 (define (draw-drawable-polygons polygons draw-labels? interface-mode dc)
@@ -70,30 +68,31 @@
   (send dc set-pen (make-object color% 60 60 60 (if draw-mode? 0.2 0.8)) OUTLINE-THICKNESS 'solid)
   (send dc draw-path (points->path (drawable-polygon->draw-points polygon)))
 
-  (if (and draw-labels? (or (drawable-polygon-selected? polygon) (drawable-polygon-highlighted? polygon)))
-      (draw-polygon-labels (drawable-polygon-labeled-polygon polygon) dc)
+  (if (or (drawable-polygon-selected? polygon) (drawable-polygon-highlighted? polygon))
+      (draw-polygon-points (drawable-polygon-labeled-polygon polygon) draw-labels? dc)
       null))
 
-(define (draw-polygon-labels labeled-polygon dc)
+(define (draw-polygon-points labeled-polygon draw-labels? dc)
   (define index 0)
   (map (lambda (point label)
-         (draw-point-label point label index dc)
+         (draw-point point (if draw-labels? label #f) index dc)
          (set! index (+ index 1)))
        (labeled-polygon-polygon labeled-polygon) (labeled-polygon-labels labeled-polygon)))
 
-(define (draw-point-label draw-point label index dc)
+(define (draw-point draw-point label index dc)
   (send dc set-pen "white" 0 'transparent)
   (send dc set-brush (make-object color% 61 252 201 0.9) 'solid)
   (define draw-size 6)
   (define p (subtract-points draw-point (point (/ draw-size 2) (/ draw-size 2) 0)))
   (send dc draw-ellipse (point-x p) (point-y p) draw-size draw-size)
 
-  (send dc set-font (make-font #:size 10 #:family 'modern #:weight 'bold))
-  (send dc set-text-foreground (make-object color% 0 204 150))
-  (send dc set-text-background "red")
-  (define text-draw-point (add-points draw-point (point 0 (/ draw-size 2) 0)))
-  (define text (string-append (~a index) ":" label))
-  (send dc draw-text text (point-x text-draw-point) (point-y text-draw-point)))
+  (cond [label
+         (send dc set-font (make-font #:size 10 #:family 'modern #:weight 'bold))
+         (send dc set-text-foreground (make-object color% 0 204 150))
+         (send dc set-text-background "red")
+         (define text-draw-point (add-points draw-point (point 0 (/ draw-size 2) 0)))
+         (define text (string-append (~a index) ":" label))
+         (send dc draw-text text (point-x text-draw-point) (point-y text-draw-point))]))
     
 (define (draw-connection-point con-point draw-label? dc)
   (send dc set-pen (make-object color% 200 50 50 0.9) 6 'solid)
