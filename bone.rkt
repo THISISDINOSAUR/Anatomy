@@ -24,7 +24,7 @@
     (super-new)
 
     (set! poly-tree
-      (points->root-polygon-tree (vector->list points)))
+      (points->root-polygon-tree points))
     
     (define/public (add-connection! bone
                                     point-on-parent

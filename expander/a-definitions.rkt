@@ -39,7 +39,7 @@
 
 (define (a-bone points-list)
   (new bone%
-       [points (list->vector points-list)]))
+       [points  points-list]))
 
 (define-macro (a-parameters PARAMETER ...)
   #'(new parameters%
