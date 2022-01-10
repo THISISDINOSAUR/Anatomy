@@ -14,7 +14,7 @@
 
 (struct name-bone-mode-state (name
                               draw-origin
-                              draw-origin-in-parent-bone-label
+                              draw-origin-in-parent-bone
                               parent-polygon)
   #:auto-value #f
   #:transparent
@@ -23,8 +23,9 @@
 (struct draw-mode-state (just-entered?
                          use-initial-mouse-as-origin?
                          drawn-points
+                         drawn-points-relative-to-initial-mouse
                          draw-origin
-                         draw-origin-in-parent-bone-label
+                         draw-origin-in-parent-bone
                          name
                          parent-polygon)
   #:auto-value #f
