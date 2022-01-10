@@ -293,6 +293,8 @@
 
       
     (define (enable-draw-mode name-bone-mode-state)
+      (displayln "")
+      
       (send interface-mode-message set-label DRAW-MODE-LABEL)
       (cond
         [name-bone-mode-state
@@ -320,7 +322,7 @@
 
     (define (end-draw-mode)
       (displayln "")
-
+      
       (define drawn-points (draw-mode-state-drawn-points-relative-to-initial-mouse interface-mode-state))
       (cond
         [(not (equal? drawn-points '()))
@@ -335,7 +337,6 @@
 
                 (displayln (string-append (get-field name parent-bone) " ~ " (draw-mode-state-name interface-mode-state) " = "
                                           (point->description-string-2d-rounded connection-point-on-parent) " ~ [0, 0], 0"))
-                (displayln "")
 
                 (send parent-bone add-connection! new-bone connection-point-on-parent point-zero 0)])
 
