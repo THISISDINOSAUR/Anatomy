@@ -85,8 +85,6 @@
 
     (define mouse-position #f)
     
-    (define mouse-labeled-point-for-selected #f)
-
     (define drawing-width (- width (* 2 padding)))
     (define drawing-height (- height (* 2 padding)))
     (define rect (drawable-polygons->bounding-rect drawable-polygons))
@@ -126,8 +124,8 @@
 
      (define/public (draw-mouse-label-if-needed)
       (cond 
-        [(not (equal? mouse-labeled-point-for-selected #f))
-          (draw-mouse-label mouse-labeled-point-for-selected (get-dc))]
+        [(not (equal? (mouse-labeled-point-for-selected) #f))
+          (draw-mouse-label (mouse-labeled-point-for-selected) (get-dc))]
         [else null]))
 
     (define (draw-reference-image image x y)
@@ -163,7 +161,6 @@
                        drawable-polygons))])
          ]
         ['left-down
-         (update-mouse-labeled-point-for-selected mouse-p)
          (cond
            [(in-draw-mode?) (draw-mode-mouse-down mouse-p)]
            [else
@@ -181,7 +178,6 @@
             ;todo: add ability to rotate through overlapping bones
             ])
          ])
-      (update-mouse-labeled-point-for-selected mouse-p)
       (refresh))
     
     (define (draw-mode-mouse-down mouse-p)
@@ -189,12 +185,12 @@
        interface-mode-state
        (append
         (draw-mode-state-drawn-points interface-mode-state)
-        (list mouse-labeled-point-for-selected)))
+        (list (mouse-labeled-point-for-selected))))
                
       (display
        (string-append
         (if (draw-mode-state-just-entered? interface-mode-state) "" ", ")
-        (labeled-point-label mouse-labeled-point-for-selected)))
+        (labeled-point-label (mouse-labeled-point-for-selected))))
       (set-draw-mode-state-just-entered?! interface-mode-state #f))
 
     (define/override (on-char ke)
@@ -269,7 +265,7 @@
             (name-bone-mode-state
              ""
              mouse-position
-             (labeled-point-label mouse-labeled-point-for-selected)
+             (labeled-point-label (mouse-labeled-point-for-selected))
              (car (selected))))
 
       (define new-bone-name-dialog
@@ -298,7 +294,6 @@
 
       
     (define (enable-draw-mode name-bone-mode-state)
-      (set! interface-mode DRAW-MODE)
       (send interface-mode-message set-label DRAW-MODE-LABEL)
       (cond
         [name-bone-mode-state
@@ -314,14 +309,15 @@
           (display (string-append (name-bone-mode-state-name name-bone-mode-state) " = "))
           ]
         [else
-         (define label (if mouse-labeled-point-for-selected
-                           (labeled-point-label mouse-labeled-point-for-selected)
+         (define label (if (mouse-labeled-point-for-selected)
+                           (labeled-point-label (mouse-labeled-point-for-selected))
                            #f))
          (define selected-polygon (if (equal? (selected) '())
                                       #f
                                       (car (selected))))
          (set! interface-mode-state
-            (draw-mode-state #t #f '() mouse-position label #f selected-polygon))]))
+            (draw-mode-state #t #f '() mouse-position label #f selected-polygon))])
+      (set! interface-mode DRAW-MODE))
           
 
     (define (end-draw-mode)
@@ -363,28 +359,26 @@
 
     ;todo, why save state here? this really should be a function for "mouse-labeled-point-for-selected"
     ;esp since we save the mouse point anyeway (maybe that's why, maybe we never used to save the mouse point) 
-    (define (update-mouse-labeled-point-for-selected mouse-point)
+    (define (mouse-labeled-point-for-selected)
       (cond
         [(and (equal? (selected) '()) (not (in-draw-mode?)))
-         (set! mouse-labeled-point-for-selected #f)]
+         #f]
         [else
          (define
            label-point
            (if (equal? (selected) '())
-               (subtract-points mouse-point (draw-mode-state-draw-origin interface-mode-state))
+               (subtract-points mouse-position (draw-mode-state-draw-origin interface-mode-state))
                                 
                (if (and (in-draw-mode?) (draw-mode-state-use-initial-mouse-as-origin? interface-mode-state))
                    (divide-point
                     (point-invert-y
-                     (rotate-point (subtract-points mouse-point (draw-mode-state-draw-origin interface-mode-state))
+                     (rotate-point (subtract-points mouse-position (draw-mode-state-draw-origin interface-mode-state))
                                    (placement-angle (drawable-polygon-original-placement (car (selected))))))
                     scale)
                    
-                   (screen-point-to-polygon-point mouse-point (car (selected))))))
-         (set!
-          mouse-labeled-point-for-selected
+                   (screen-point-to-polygon-point mouse-position (car (selected))))))
           (point->drawable-labeled-point
-           (screen-point-to-root-polygon-point mouse-point)
-           label-point))]))
+           (screen-point-to-root-polygon-point mouse-position)
+           label-point)]))
     
    ))
