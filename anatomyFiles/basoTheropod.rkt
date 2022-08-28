@@ -40,15 +40,40 @@ tibia ~ tarsi = [-294, -53] ~ [0, 0], 0
 metatarsals = [0, 0], [2, -15], [-24, -25], [-58, -43], [-116, -92], [-121, -79], [-130, -63], [-89, -35], [-22, 5], [-15, 11], [-7, 11]
 tarsi ~ metatarsals = [-24, -1] ~ [0, 0], 0
 
-//TODO break into smaller bones? Probably need to to get the correct rotation
+
 smallPedalPhalange = [0, 0], [-10, -5], [-34, -12], [-54, -16], [-72, -10], [-84, 2], [-66, -1], [-51, -3], [-34, 1], [-16, 4]
 metatarsals ~ smallPedalPhalange = [-83, -33] ~ [0, 0], 0
 
-mediumPedalPhalange = [6, -9], [-14, -16], [-33, -27], [-51, -46], [-59, -66], [-58, -87], [-54, -111], [-68, -130], [-69, -113], [-73, -95], [-78, -73], [-70, -42], [-48, -19], [-42, -11], [-25, -6], [-14, 6], [-3, 9]
-metatarsals ~ mediumPedalPhalange = [-127, -72] ~ [0, 0], 0
+middleFoot1 = [-4, -4], [-13, 3], [-24, -10], [-38, -14], [-47, -18], [-47, -31], [-37, -38], [-26, -26], [-9, -20], [1, -20]
+metatarsals ~ middleFoot1 = [-123, -63] ~ [0, 0], 0
 
-largePhalange = [-1, -3], [-4, -8], [-19, -14], [-31, -21], [-41, -41], [-41, -70], [-23, -91], [-4, -104], [8, -133], [-3, -122], [-22, -110], [-45, -101], [-63, -73], [-61, -37], [-34, -8], [-7, 3]
-metatarsals ~ largePhalange = [-122, -89] ~ [0, 0], 0
+middleFoot2 = [-5, 6], [-14, -2], [-27, -9], [-26, -18], [-18, -26], [-11, -17], [0, -8], [4, -3]
+middleFoot1 ~ middleFoot2 = [-37, -26] ~ [0, 0], 0
+
+middleFoot3 = [-5, 5], [-14, -8], [-18, -22], [-21, -32], [-13, -32], [-6, -35], [-5, -24], [-3, -11], [5, -6]
+middleFoot2 ~  middleFoot3 = [-20, -15] ~ [0, 0], 0
+
+middleFoot4 = [-3, -1], [-9, -2], [-4, -13], [-9, -24], [5, -26], [5, -17], [6, -6]
+middleFoot3 ~ middleFoot4 = [-11, -29] ~ [0, 0], 0
+
+middleFoot5 = [-7, -3], [-1, -15], [1, -28], [0, -41], [10, -26], [10, -13], [4, -2]
+middleFoot4 ~ middleFoot5 = [-1, -20] ~ [0, 0], 0
+
+frontFoot1 = [-1, 4], [-8, 8], [-30, -2], [-51, -17], [-49, -25], [-34, -20], [-14, -11], [1, -6]
+metatarsals ~ frontFoot1 = [-117, -87] ~ [0, 0], 0
+
+frontFoot2 = [0, -1], [-6, 2], [-17, -11], [-16, -17], [-4, -21], [3, -9]
+frontFoot1 ~ frontFoot2 = [-41, -16] ~ [0, 0], 0
+
+frontFoot3 = [0, 3], [-9, 1], [-11, -14], [-12, -24], [-17, -33], [-12, -42], [-4, -41], [0, -37], [-4, -24], [2, -12], [7, -3]
+frontFoot2 ~ frontFoot3 = [-9, -14] ~ [0, 0], 0
+
+frontFoot4 = [-5, 1], [-5, -12], [2, -20], [9, -30], [15, -40], [23, -40], [25, -27], [18, -16], [14, -7], [8, 1]
+frontFoot3 ~ frontFoot4 = [-8, -35] ~ [0, 0], 0
+
+frontFoot5 = [7, 6], [20, -4], [34, -16], [40, -37], [28, -25], [12, -16], [0, -12]
+frontFoot4 ~ frontFoot5 = [21, -30] ~ [0, 0], 0
+
 
 
 //second leg
@@ -71,11 +96,36 @@ tarsiBack ~ metatarsalsBack = [-24, -1] ~ [0, 0], -80
 smallPedalPhalangeBack = smallPedalPhalange.duplicate
 metatarsalsBack ~ smallPedalPhalangeBack = [-83, -33] ~ [0, 0], 0
 
-mediumPedalPhalangeBack = mediumPedalPhalange.duplicate
-metatarsalsBack ~ mediumPedalPhalangeBack = [-127, -72] ~ [0, 0], 0
+middleFoot1Back = middleFoot1.duplicate
+metatarsalsBack ~ middleFoot1Back = [-123, -63] ~ [0, 0], 10
 
-largePhalangeBack = largePhalange.duplicate
-metatarsalsBack ~ largePhalangeBack = [-122, -89] ~ [0, 0], 0
+middleFoot2Back = middleFoot2.duplicate
+middleFoot1Back ~ middleFoot2Back = [-37, -26] ~ [0, 0], 30
+
+middleFoot3Back = middleFoot3.duplicate
+middleFoot2Back ~  middleFoot3Back = [-20, -15] ~ [0, 0], 20
+
+middleFoot4Back = middleFoot4.duplicate
+middleFoot3Back ~ middleFoot4Back = [-11, -29] ~ [0, 0], 20
+
+middleFoot5Back = middleFoot5.duplicate
+middleFoot4Back ~ middleFoot5Back = [-1, -20] ~ [0, 0], 20
+
+frontFoot1Back = frontFoot1.duplicate
+metatarsalsBack ~ frontFoot1Back = [-117, -87] ~ [0, 0], 10
+
+frontFoot2Back = frontFoot2.duplicate
+frontFoot1Back ~ frontFoot2Back = [-41, -16] ~ [0, 0], 30
+
+frontFoot3Back = frontFoot3.duplicate
+frontFoot2Back ~ frontFoot3Back = [-9, -14] ~ [0, 0], 20
+
+frontFoot4Back = frontFoot4.duplicate
+frontFoot3Back ~ frontFoot4Back = [-8, -35] ~ [0, 0], 30
+
+frontFoot5Back = frontFoot5.duplicate
+frontFoot4Back ~ frontFoot5Back = [21, -30] ~ [0, 0], 30
+
 
 
 
@@ -109,7 +159,7 @@ humerus ~ ulna = [-118, -91] ~ [0, 0], 0
 
 // Hand
 // From a pracical stand point, for now I've just modeled the carpals as one bone.
-// Maybe we need bones that can have multiple parts, are bones that can be joined to form one unit?
+// Maybe we need bones that can have multiple parts, or bones that can be joined to form one unit?
 carpals = [4, -1], [13, 3], [22, -10], [8, -19], [-5, -22], [-19, -26], [-22, -16], [-13, -13], [-2, -10]
 radius ~ carpals = [96, -107] ~ [0, 0], 0
 
@@ -156,11 +206,9 @@ posteriorMetacarpal = [0, 0], [7, 0], [8, -18], [15, -44], [7, -47], [0, -26], [
 carpals ~ posteriorMetacarpal = [-18, -26] ~ [0, 0], 0
 
 
-neckTemp = [26, 21], [44, 22], [43, -10], [21, -8]
-dorsalSpine ~ neckTemp = [833, 98] ~ [0, 0], 0
-
+//head
 cranium = [4, 15], [21, 32], [50, 27], [65, 20], [80, 19], [91, 18], [105, 8], [117, -1], [170, -25], [213, -45], [240, -53], [257, -73], [263, -93], [261, -110], [253, -124], [233, -113], [207, -110], [181, -104], [159, -99], [121, -85], [95, -74], [78, -68], [42, -65], [17, -61], [-14, -52], [-55, -48], [-55, -39], [-26, -39], [-13, -9], [-13, 12], [-4, 19]
-neckTemp ~ cranium = [34, 8] ~ [0, 0], 0
+dorsalSpine ~ cranium = [867, 106] ~ [0, 0], 0
 
 mandible = [3, 0], [8, -7], [38, -22], [61, -32], [82, -54], [106, -86], [123, -115], [146, -151], [174, -177], [194, -193], [200, -205], [183, -210], [165, -200], [132, -168], [97, -136], [71, -121], [53, -104], [32, -77], [15, -53], [1, -28], [-11, -12], [-9, 4], [-1, 12], [5, 9]
 cranium ~ mandible = [-39, -45] ~ [0, 0], 0
@@ -169,6 +217,9 @@ cranium ~ mandible = [-39, -45] ~ [0, 0], 0
 tail = [0, 9], [0, -51], [-42, -105], [-86, -133], [-260, -121], [-488, -98], [-670, -81], [-837, -67], [-988, -67], [-1158, -65], [-1328, -93], [-1458, -137], [-1558, -170], [-1575, -170], [-1530, -144], [-1414, -100], [-1282, -60], [-1130, -30], [-958, -19], [-819, -7], [-672, -5], [-472, 16], [-305, 28], [-149, 40], [-58, 53], [-16, 65]
 sacrum ~ tail = [-79, -10] ~ [0, 0], 0
 
+body :soft = [0, 0], [10, 10], [20, 20]
+
+//TODO being able to reference bone.origin might be useful (in case you dont' want soemthing like bone[1])
 
 print illium
 print dorsalSpine
